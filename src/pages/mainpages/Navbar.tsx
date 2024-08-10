@@ -86,7 +86,7 @@ export const Navbar:React.FunctionComponent=()=> {
                   <Button
                     className="bg-gradient-to-r from-pink-500 to-purple-500 text-white font-bold py-3 px-6 rounded-md shadow-md hover:scale-105 transition duration-300"
                     size="sm"
-                    onClick={() => navigate("/Login")}
+                    onClick={() => navigate("/auth")}
                   >
                     Sign in 
                   </Button>
