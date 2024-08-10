@@ -1,9 +1,17 @@
-import { Button } from "./components/ui/button";
+import { Routes, Route } from "react-router-dom";
 
-const  App:React.FC=()=> {
-  return <div className="bg-black min-h-screen">
-    <Button variant="destructive"> this is a </Button>
-  </div>;
-}
+import Home from "./pages/mainpages/Home";
+import Navbar from "./pages/mainpages/Navbar";
+
+const App: React.FunctionComponent = () => {
+  return (
+    <>
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<Home />} />
+      </Routes>
+    </>
+  );
+};
 
 export default App;
