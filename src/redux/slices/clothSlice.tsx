@@ -16,6 +16,27 @@ const initialState: clothState = {
   recommandedCloths: LoadData() || [],
   isLoading: false,
 };
+export const WearCloth = createAsyncThunk(
+  "cloths/wear",
+  async (params: { condition: string; id: string }, { rejectWithValue }) => {
+    try {
+      const { condition, id } = params;
+      const response = await clothInstance.post(
+        `/cloth/wear/${id}`,
+        { condition },
+        {
+          withCredentials: true,
+        }
+      );
+      return response.data;
+    } catch (error: any) {
+      if (error.response && error.response.data) {
+        rejectWithValue(error.response?.data?.message);
+      }
+      rejectWithValue("Unkown error");
+    }
+  }
+);
 export const GetRecommandedCloths = createAsyncThunk(
   "cloths/Recommanded",
   async (params: { lat: number; lon: number }, { rejectWithValue }) => {
