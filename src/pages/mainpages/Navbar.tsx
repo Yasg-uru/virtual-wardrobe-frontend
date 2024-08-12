@@ -21,7 +21,7 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ModeToggle } from "@/components/mode-toggle"
+import { ModeToggle } from "@/components/mode-toggle";
 // import procoders from "../../../public/procoders.jpg";
 // import { Input } from "@/components/ui/input";
 import { Link, useNavigate } from "react-router-dom";
@@ -29,16 +29,17 @@ import { Link, useNavigate } from "react-router-dom";
 // import { Logout } from "@/redux/slices/authSlice";
 import { useToast } from "@/components/ui/use-toast";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useAppSelector } from "@/redux/hook";
 // import SearchBar from "../coursepages/SearchBar";
-export const Navbar:React.FunctionComponent=()=> {
+export const Navbar: React.FunctionComponent = () => {
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
-//   const dispatch = useAppDispatch();
+  //   const dispatch = useAppDispatch();
   const { toast } = useToast();
 
-//   const { isAuthenticated, profileUrl, isLoading, name } = useAppSelector(
-//     (state) => state.auth
-//   );
+  const { isAuthenticated, Loading, userInfo } = useAppSelector(
+    (state) => state.auth
+  );
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
@@ -82,29 +83,26 @@ export const Navbar:React.FunctionComponent=()=> {
               <>
                 <ModeToggle />
 
-                {/* {!isAuthenticated ? ( */}
+                {!isAuthenticated ? (
                   <Button
                     className="bg-gradient-to-r from-pink-500 to-purple-500 text-white font-bold py-3 px-6 rounded-md shadow-md hover:scale-105 transition duration-300"
                     size="sm"
                     onClick={() => navigate("/auth")}
                   >
-                    Sign in 
+                    Sign in
                   </Button>
-                {/* ) : ( */}
+                ) : (
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                      {/* <div className="avatar">
-                        <div className="ring-primary ring-offset-base-100 w-12 rounded-full ring-0 ring-offset-[0.2px]">
-                          <img src={profileUrl} />
-                        </div>
-                      </div> */}
                       <Avatar>
                         <AvatarImage src={"profileUrl"} alt="@shadcn" />
                         <AvatarFallback className="font-bold text-xl dark:bg-black bg-red-400 cursor-pointer">
-                          {/* {name.split(" ")[0][0].toUpperCase()}
-                          {name.split(" ").length >= 2
-                            ? name.split(" ")[1][0].toUpperCase()
-                            : ""} */}
+                          {userInfo?.username.split(" ")[0][0].toUpperCase()}
+                          {userInfo &&
+                          userInfo.username &&
+                          userInfo?.username?.split(" ").length >= 2
+                            ? userInfo?.username.split(" ")[1][0].toUpperCase()
+                            : ""}
                         </AvatarFallback>
                       </Avatar>
                     </DropdownMenuTrigger>
@@ -163,16 +161,16 @@ export const Navbar:React.FunctionComponent=()=> {
                         //   }}
                         >
                           {/* {isLoading ? ( */}
-                            <Loader2 className="h-6 w-6 animate-spin" />
+                          <Loader2 className="h-6 w-6 animate-spin" />
                           {/* ) : ( */}
-                            "Log out"
+                          "Log out"
                           {/* )} */}
                         </span>
                         <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
-                {/* )} */}
+                )}
               </>
             </div>
           </div>
@@ -232,94 +230,94 @@ export const Navbar:React.FunctionComponent=()=> {
               <ModeToggle />
 
               {/* {!isAuthenticated ? ( */}
-                <Button
-                  className="bg-gradient-to-r from-pink-500 to-purple-500 text-white font-bold py-3 px-6 rounded-md shadow-md hover:scale-105 transition duration-300"
-                  size="sm"
-                  onClick={() => navigate("/Login")}
-                >
-                  Sign in 
-                </Button>
+              <Button
+                className="bg-gradient-to-r from-pink-500 to-purple-500 text-white font-bold py-3 px-6 rounded-md shadow-md hover:scale-105 transition duration-300"
+                size="sm"
+                onClick={() => navigate("/Login")}
+              >
+                Sign in
+              </Button>
               {/* ) : ( */}
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    {/* <div className="avatar">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  {/* <div className="avatar">
                         <div className="ring-primary ring-offset-base-100 w-12 rounded-full ring-0 ring-offset-[0.2px]">
                           <img src={profileUrl} />
                         </div>
                       </div> */}
-                    <Avatar>
-                      <AvatarImage src={"profileUrl"} alt="@shadcn" />
-                      <AvatarFallback className="font-bold text-xl dark:bg-black bg-red-400 cursor-pointer">
-                        {/* {name.split(" ")[0][0].toUpperCase()}
+                  <Avatar>
+                    <AvatarImage src={"profileUrl"} alt="@shadcn" />
+                    <AvatarFallback className="font-bold text-xl dark:bg-black bg-red-400 cursor-pointer">
+                      {/* {name.split(" ")[0][0].toUpperCase()}
                         {name.split(" ").length >= 2
                           ? name.split(" ")[1][0].toUpperCase()
                           : ""} */}
-                      </AvatarFallback>
-                    </Avatar>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent className="w-56">
-                    <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuGroup>
-                      <DropdownMenuItem>
-                        <User className="mr-2 h-4 w-4" />
-                        <span>Profile</span>
-                        <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
-                      </DropdownMenuItem>
-                      <DropdownMenuItem>
-                        <CreditCard className="mr-2 h-4 w-4" />
-                        <span onClick={() => navigate("/mycourse")}>
-                          My Courses
-                        </span>
-                        <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
-                      </DropdownMenuItem>
-                      <DropdownMenuItem>
-                        <Settings className="mr-2 h-4 w-4" />
-                        <span>Settings</span>
-                        <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
-                      </DropdownMenuItem>
-                    </DropdownMenuGroup>
-                    <DropdownMenuSeparator />
-
-                    <DropdownMenuSeparator />
-
+                    </AvatarFallback>
+                  </Avatar>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-56">
+                  <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuGroup>
                     <DropdownMenuItem>
-                      <LifeBuoy className="mr-2 h-4 w-4" />
-                      <span>Support</span>
+                      <User className="mr-2 h-4 w-4" />
+                      <span>Profile</span>
+                      <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
                     </DropdownMenuItem>
-
-                    <DropdownMenuSeparator />
                     <DropdownMenuItem>
-                      <LogOut className="mr-2 h-4 w-4" />
-                      <span
-                        // onClick={() => {
-                        //   dispatch(Logout())
-                        //     .unwrap()
-                        //     .then(() => {
-                        //       toast({
-                        //         title: "Logged out successfully",
-                        //         variant: "default",
-                        //       });
-                        //       navigate("/Login");
-                        //     })
-                        //     .catch(() => {
-                        //       toast({
-                        //         title: "Failed to Logout ",
-                        //         description: "Error , Please Try again latter",
-                        //       });
-                        //     });
-                        // }}
-                      >
-                        {/* {isLoading ? ( */}
-                          <Loader2 className="h-6 w-6 animate-spin" />
-                        {/* ) : ( */}
-                          "Log out"
-                        {/* )} */}
+                      <CreditCard className="mr-2 h-4 w-4" />
+                      <span onClick={() => navigate("/mycourse")}>
+                        My Courses
                       </span>
-                      <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
+                      <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
                     </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
+                    <DropdownMenuItem>
+                      <Settings className="mr-2 h-4 w-4" />
+                      <span>Settings</span>
+                      <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
+                    </DropdownMenuItem>
+                  </DropdownMenuGroup>
+                  <DropdownMenuSeparator />
+
+                  <DropdownMenuSeparator />
+
+                  <DropdownMenuItem>
+                    <LifeBuoy className="mr-2 h-4 w-4" />
+                    <span>Support</span>
+                  </DropdownMenuItem>
+
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem>
+                    <LogOut className="mr-2 h-4 w-4" />
+                    <span
+                    // onClick={() => {
+                    //   dispatch(Logout())
+                    //     .unwrap()
+                    //     .then(() => {
+                    //       toast({
+                    //         title: "Logged out successfully",
+                    //         variant: "default",
+                    //       });
+                    //       navigate("/Login");
+                    //     })
+                    //     .catch(() => {
+                    //       toast({
+                    //         title: "Failed to Logout ",
+                    //         description: "Error , Please Try again latter",
+                    //       });
+                    //     });
+                    // }}
+                    >
+                      {/* {isLoading ? ( */}
+                      <Loader2 className="h-6 w-6 animate-spin" />
+                      {/* ) : ( */}
+                      "Log out"
+                      {/* )} */}
+                    </span>
+                    <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
               {/* )} */}
             </>
           </div>
@@ -328,5 +326,5 @@ export const Navbar:React.FunctionComponent=()=> {
       </div>
     </nav>
   );
-}
+};
 export default Navbar;

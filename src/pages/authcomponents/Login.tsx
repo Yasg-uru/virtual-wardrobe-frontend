@@ -14,6 +14,7 @@ import { useAppDispatch, useAppSelector } from "@/redux/hook";
 import { userLogin } from "@/redux/slices/authSlice";
 import LoginSchema from "@/schema/authSchema/Login";
 import { Loader2 } from "lucide-react";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import { z } from "zod";
@@ -21,8 +22,9 @@ import { z } from "zod";
 const Login: React.FunctionComponent = () => {
   const dispatch = useAppDispatch();
   const { toast } = useToast();
-  const { Loading } = useAppSelector((state) => state.auth);
+  const Loading = useAppSelector((state) => state.auth.Loading);
   const form = useForm<z.infer<typeof LoginSchema>>({
+    resolver: zodResolver(LoginSchema),
     defaultValues: {
       email: "",
       password: "",
@@ -35,14 +37,14 @@ const Login: React.FunctionComponent = () => {
           title: "Logged in successfully",
         });
       })
-      .catch(() => {
+      .catch((error) => {
         toast({
-          title: "failed to login ",
+          title: error?.message,
         });
       });
   };
   return (
-    <div className="w-full max-w-md p-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
+    <div className="w-full max-w-md p-8 bg-white rounded-lg shadow-md dark:bg-slate-900">
       <h2 className="text-2xl font-bold mb-6 text-center text-gray-800 dark:text-gray-200">
         Login
       </h2>
@@ -60,7 +62,7 @@ const Login: React.FunctionComponent = () => {
                   <Input
                     placeholder="you@example.com"
                     type="email"
-                    className="border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-700 dark:focus:ring-indigo-400 dark:placeholder-gray-400"
+                    className="border-gray-300 rounded-md shadow-sm focus:ring-red-500 dark:border-red-600 dark:bg-gray-700 dark:focus:ring-red-400 dark:placeholder-gray-400"
                     {...field}
                   />
                 </FormControl>
@@ -96,7 +98,7 @@ const Login: React.FunctionComponent = () => {
           />
           <Button
             type="submit"
-             className="w-full py-2 bg-gradient-to-r from-pink-500 to-pink-600 text-white rounded-md shadow-lg hover:from-pink-600 hover:to-pink-700 focus:outline-none focus:ring-2 focus:ring-pink-400 dark:bg-gradient-to-r dark:from-pink-600 dark:to-pink-500 dark:hover:from-pink-700 dark:hover:to-pink-600 dark:focus:ring-pink-500"
+            className="w-full py-2 bg-gradient-to-r from-pink-500 to-pink-600 text-white rounded-md shadow-lg hover:from-pink-600 hover:to-pink-700 focus:outline-none focus:ring-2 focus:ring-pink-400 dark:bg-gradient-to-r dark:from-pink-600 dark:to-pink-500 dark:hover:from-pink-700 dark:hover:to-pink-600 dark:focus:ring-pink-500"
           >
             {Loading ? <Loader2 className="h-6 w-6 animate-spin" /> : "Login"}
           </Button>

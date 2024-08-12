@@ -1,7 +1,8 @@
 export interface AuthState {
   Loading: boolean;
   userInfo: User | null;
-
+  isAuthenticated:boolean;
+  
 }
 export interface User {
   _id: string;
