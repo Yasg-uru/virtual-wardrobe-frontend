@@ -57,16 +57,16 @@ export const Navbar: React.FunctionComponent = () => {
                 <Link to="/">Home</Link>
 
                 <Link
-                  to="/about"
+                  to="/add"
                   className="text-gray-900 dark:text-white hover:bg-gray-700 dark:hover:bg-gray-900 px-3 py-2 rounded-md text-sm font-medium"
                 >
-                  About
+                  + Add cloth
                 </Link>
                 <Link
-                  to="/services"
+                  to="/collections"
                   className="text-gray-900 dark:text-white hover:bg-gray-700 dark:hover:bg-gray-900 px-3 py-2 rounded-md text-sm font-medium"
                 >
-                  Services
+                  Collections
                 </Link>
                 <Link
                   to="/contact"

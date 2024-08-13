@@ -1,6 +1,10 @@
 import { clothInstance } from "@/helper/axiosInstance";
+import clothSchema from "@/schema/clothschema/createCloth";
 import { clothState, IClothItem } from "@/types/clothState";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import axios from "axios";
+import { z } from "zod";
+
 const savedata = (cloths: IClothItem[]) => {
   sessionStorage.setItem("cloths", JSON.stringify(cloths));
 };
@@ -12,9 +16,11 @@ const LoadData = (): IClothItem[] => {
   }
   return [];
 };
+
 const initialState: clothState = {
   recommandedCloths: LoadData() || [],
   isLoading: false,
+  collections: [],
 };
 export const WearCloth = createAsyncThunk(
   "cloths/wear",
@@ -34,6 +40,44 @@ export const WearCloth = createAsyncThunk(
         rejectWithValue(error.response?.data?.message);
       }
       rejectWithValue("Unkown error");
+    }
+  }
+);
+export const AddUserCloth = createAsyncThunk(
+  "cloth/AddCloth",
+  async (formData: z.infer<typeof clothSchema>, { rejectWithValue }) => {
+    try {
+      console.log("this is a formdata: ", formData);
+      const response = await clothInstance.post("/cloth/create", formData, {
+        withCredentials: true,
+      });
+      return response.data;
+    } catch (error: any) {
+      if (error.response && error.response.data) {
+        rejectWithValue(error.response?.data?.message);
+      }
+      rejectWithValue("Unkown error");
+    }
+  }
+);
+export const GetCollections = createAsyncThunk(
+  "cloths/collections",
+  async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:5001/cloth/collections",
+        {
+          withCredentials: true,
+        }
+      );
+      console.log("this is a response data :", response.data);
+      return response.data;
+    } catch (error: any) {
+      // if (error.response && error.response.data) {
+      //   rejectWithValue(error.response?.data?.message);
+      // }
+      // rejectWithValue("Unkown error");
+      throw error;
     }
   }
 );
@@ -78,6 +122,16 @@ const clothSlice = createSlice({
       state.isLoading = true;
     });
     builder.addCase(GetRecommandedCloths.rejected, (state) => {
+      state.isLoading = false;
+    });
+    builder.addCase(GetCollections.fulfilled, (state, action) => {
+      state.collections = action.payload?.Collections;
+      state.isLoading = false;
+    });
+    builder.addCase(GetCollections.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(GetCollections.rejected, (state) => {
       state.isLoading = false;
     });
   },

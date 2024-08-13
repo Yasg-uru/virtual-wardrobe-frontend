@@ -69,7 +69,7 @@ const Login: React.FunctionComponent = () => {
                 <FormDescription className="text-xs text-gray-500 dark:text-gray-400">
                   Your email address or username.
                 </FormDescription>
-                <FormMessage />
+                <FormMessage className="font-bold italic" />
               </FormItem>
             )}
           />
@@ -92,7 +92,7 @@ const Login: React.FunctionComponent = () => {
                 <FormDescription className="text-xs text-gray-500 dark:text-gray-400">
                   Your account password.
                 </FormDescription>
-                <FormMessage />
+                <FormMessage className="italic font-bold" />
               </FormItem>
             )}
           />
