@@ -81,6 +81,23 @@ export const GetCollections = createAsyncThunk(
     }
   }
 );
+export const filterCloth = createAsyncThunk(
+  "cloths/filter",
+  async (formData: any, { rejectWithValue }) => {
+    try {
+      const response = await clothInstance.get(`/cloth/filter`, {
+        params: formData,
+        withCredentials: true,
+      });
+      return response.data;
+    } catch (error: any) {
+      if (error.response && error.response.data) {
+        rejectWithValue(error.response.data?.message);
+      }
+      rejectWithValue("unkown error");
+    }
+  }
+);
 export const GetRecommandedCloths = createAsyncThunk(
   "cloths/Recommanded",
   async (params: { lat: number; lon: number }, { rejectWithValue }) => {
@@ -132,6 +149,16 @@ const clothSlice = createSlice({
       state.isLoading = true;
     });
     builder.addCase(GetCollections.rejected, (state) => {
+      state.isLoading = false;
+    });
+    builder.addCase(filterCloth.fulfilled, (state, action) => {
+      state.collections = action.payload?.results;
+      state.isLoading = false;
+    });
+    builder.addCase(filterCloth.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(filterCloth.rejected, (state) => {
       state.isLoading = false;
     });
   },

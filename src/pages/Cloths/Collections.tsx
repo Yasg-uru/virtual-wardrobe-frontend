@@ -4,6 +4,7 @@ import { useAppDispatch, useAppSelector } from "@/redux/hook";
 import { GetCollections } from "@/redux/slices/clothSlice";
 import { Loader2 } from "lucide-react";
 import { useEffect } from "react";
+import FilterCompo from "./Drawer";
 
 const Collections: React.FunctionComponent = () => {
   const { toast } = useToast();
@@ -33,8 +34,9 @@ const Collections: React.FunctionComponent = () => {
   return (
     <div className="min-h-screen flex flex-col gap-2 p-5">
       <h1 className="text-2xl font-bold text-red-500 text-center">
-        Recommanded Cloths According To Weather
+        Your wardrobe collections
       </h1>
+      <FilterCompo collections={collections} />
       <div className="flex flex-wrap gap-2 mx-auto ">
         {collections.length > 0 &&
           collections.map((cloth) => (
