@@ -8,6 +8,7 @@ import Verify from "./pages/authcomponents/VerifyComponent";
 import ClothDetail from "./pages/Cloths/ClothDetails";
 import AddCloth from "./pages/Cloths/AddCloth";
 import Collections from "./pages/Cloths/Collections";
+import SerachDetails from "./pages/Cloths/CothDetailBysearch";
 
 const App: React.FunctionComponent = () => {
   return (
@@ -21,6 +22,7 @@ const App: React.FunctionComponent = () => {
         <Route path="/detail/:id" element={<ClothDetail />} />
         <Route path="/add" element={<AddCloth />} />
         <Route path="/collections" element={<Collections />} />
+        <Route path="/searchDetail/:clothId" element={<SerachDetails/>}/>
       </Routes>
     </>
   );

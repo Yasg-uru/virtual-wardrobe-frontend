@@ -4,6 +4,7 @@ import { useDebounce, useFavicon } from "@uidotdev/usehooks";
 import { useAppDispatch, useAppSelector } from "@/redux/hook";
 import { SearchCloths } from "@/redux/slices/clothSlice";
 import { useToast } from "@/components/ui/use-toast";
+import { useNavigate } from "react-router-dom";
 const SearchBar: React.FunctionComponent = () => {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [isResultVisible, setIsResultVisible] = useState<boolean>(false);
@@ -13,30 +14,19 @@ const SearchBar: React.FunctionComponent = () => {
   const dispatch = useAppDispatch();
   const { searchResults } = useAppSelector((state) => state.cloth);
   const { toast } = useToast();
+  const navigate = useNavigate();
 
+  const HandleNavigate = (clothId: string) => {
+    navigate(`/searchDetail/${clothId}`);
+  };
   useEffect(() => {
     if (debounceSearchTerm) {
-      dispatch(SearchCloths({ searchQuery: debounceSearchTerm }))
-        // .then(() => {
-        //   if (searchResults.length === 0) {
-        //     setIsNotResultFound(true);
-        //     toast({
-        //       title: "Sorry no results found",
-        //     });
-        //     return;
-        //   } else {
-        //     setIsNotResultFound(false);
-        //   }
-        //   toast({
-        //     title: "Searched successfully",
-        //   });
-        // })
-        .catch(() => {
-          setIsNotResultFound(true);
-          toast({
-            title: "failed to search",
-          });
+      dispatch(SearchCloths({ searchQuery: debounceSearchTerm })).catch(() => {
+        setIsNotResultFound(true);
+        toast({
+          title: "failed to search",
         });
+      });
     }
   }, [debounceSearchTerm]);
   useEffect(() => {
@@ -84,6 +74,7 @@ const SearchBar: React.FunctionComponent = () => {
             <li
               key={result._id}
               className="p-2 hover:bg-gray-200 cursor-pointer dark:hover:bg-gray-700"
+              onClick={() => HandleNavigate(result._id)}
             >
               <div className="flex items-center">
                 <img

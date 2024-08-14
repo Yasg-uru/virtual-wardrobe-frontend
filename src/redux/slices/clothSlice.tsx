@@ -8,6 +8,17 @@ import { z } from "zod";
 const savedata = (cloths: IClothItem[]) => {
   sessionStorage.setItem("cloths", JSON.stringify(cloths));
 };
+const saveSearchData = (cloths: IClothItem[]) => {
+  sessionStorage.setItem("search", JSON.stringify(cloths));
+};
+const LoadSearchResults = (): IClothItem[] => {
+  const data = sessionStorage.getItem("search");
+  if (data) {
+    const parsedData = JSON.parse(data);
+    return parsedData;
+  }
+  return [];
+};
 const LoadData = (): IClothItem[] => {
   const data = sessionStorage.getItem("cloths");
   if (data) {
@@ -21,7 +32,7 @@ const initialState: clothState = {
   recommandedCloths: LoadData() || [],
   isLoading: false,
   collections: [],
-  searchResults: [],
+  searchResults: LoadSearchResults() || [],
 };
 export const WearCloth = createAsyncThunk(
   "cloths/wear",
@@ -181,7 +192,8 @@ const clothSlice = createSlice({
       state.isLoading = false;
     });
     builder.addCase(SearchCloths.fulfilled, (state, action) => {
-      state.searchResults = action.payload?.result ;
+      state.searchResults = action.payload?.result;
+      saveSearchData(state.searchResults);
     });
   },
 });
