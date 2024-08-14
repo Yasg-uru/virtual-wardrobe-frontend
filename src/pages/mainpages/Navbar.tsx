@@ -30,6 +30,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useAppSelector } from "@/redux/hook";
+import SearchBar from "./Search";
 // import SearchBar from "../coursepages/SearchBar";
 export const Navbar: React.FunctionComponent = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -74,7 +75,7 @@ export const Navbar: React.FunctionComponent = () => {
                 >
                   Contact
                 </Link>
-                {/* <SearchBar /> */}
+                <SearchBar />
               </div>
             </div>
           </div>

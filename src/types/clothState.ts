@@ -1,7 +1,7 @@
 export interface clothState {
   recommandedCloths: IClothItem[];
   collections: IClothItem[];
-
+  searchResults:IClothItem[];
   isLoading: boolean;
 }
 export interface IClothItem {

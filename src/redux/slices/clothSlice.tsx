@@ -21,6 +21,7 @@ const initialState: clothState = {
   recommandedCloths: LoadData() || [],
   isLoading: false,
   collections: [],
+  searchResults: [],
 };
 export const WearCloth = createAsyncThunk(
   "cloths/wear",
@@ -99,6 +100,26 @@ export const filterCloth = createAsyncThunk(
     }
   }
 );
+export const SearchCloths = createAsyncThunk(
+  "cloths/search",
+  async (params: { searchQuery: string }, { rejectWithValue }) => {
+    try {
+      const { searchQuery } = params;
+      const response = await clothInstance.get(
+        `/cloth/search?searchQuery=${searchQuery}`,
+        {
+          withCredentials: true,
+        }
+      );
+      return response.data;
+    } catch (error: any) {
+      if (error.response && error.response?.data) {
+        rejectWithValue(error.response.data.message);
+      }
+      rejectWithValue("unkown error ");
+    }
+  }
+);
 export const GetRecommandedCloths = createAsyncThunk(
   "cloths/Recommanded",
   async (params: { lat: number; lon: number }, { rejectWithValue }) => {
@@ -158,6 +179,9 @@ const clothSlice = createSlice({
     });
     builder.addCase(filterCloth.rejected, (state) => {
       state.isLoading = false;
+    });
+    builder.addCase(SearchCloths.fulfilled, (state, action) => {
+      state.searchResults = action.payload?.result ;
     });
   },
 });
