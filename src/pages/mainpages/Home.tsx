@@ -5,12 +5,10 @@ import { GetRecommandedCloths } from "@/redux/slices/clothSlice";
 import { Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
 
-
 const Home: React.FunctionComponent = () => {
   const [lat, setLat] = useState<number | null>(null);
   const [lon, setLon] = useState<number | null>(null);
- 
-
+  const [isLocationSet,setIsLocationSet]=useState<boolean>(false);
   const dispatch = useAppDispatch();
   const { recommandedCloths, isLoading } = useAppSelector(
     (state) => state.cloth
@@ -22,9 +20,11 @@ const Home: React.FunctionComponent = () => {
       navigator.geolocation.getCurrentPosition((position) => {
         setLat(position.coords.latitude);
         setLon(position.coords.longitude);
+        setIsLocationSet(true);
+
       });
     }
-    if (lat && lon) {
+    if (isLocationSet && lat && lon) {
       dispatch(GetRecommandedCloths({ lat, lon }))
         .then(() => {
           toast({
@@ -39,7 +39,7 @@ const Home: React.FunctionComponent = () => {
           });
         });
     }
-  }, [lat, lon]);
+  }, [lat, lon,isLocationSet,toast,dispatch]);
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -55,7 +55,7 @@ const Home: React.FunctionComponent = () => {
       <div className="flex flex-wrap gap-2 mx-auto ">
         {recommandedCloths.length > 0 &&
           recommandedCloths.map((cloth) => (
-            <CardComponent  key={cloth._id} cloth={cloth} />
+            <CardComponent key={cloth._id} cloth={cloth} />
           ))}
       </div>
     </div>
