@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
+import "./Custom.css";
 import {
   Sheet,
   SheetClose,
@@ -138,9 +139,9 @@ const FilterCompo: React.FunctionComponent<Props> = ({ collections }) => {
           title: "Filtered succcessfully",
         });
       })
-      .catch(() => {
+      .catch((error) => {
         toast({
-          title: "failed to filter cloths ",
+          title: error,
           variant: "destructive",
         });
       });
@@ -165,7 +166,7 @@ const FilterCompo: React.FunctionComponent<Props> = ({ collections }) => {
             Apply filters to find your cloth easily from your wardrobe.
           </SheetDescription>
         </SheetHeader>
-        <ScrollArea className="h-[60vh] rounded-md border p-4">
+        <ScrollArea className="h-[60vh] rounded-md border p-4 scrollbar-custom">
           {/* Section for Category and Condition Filters */}
           <div className="w-full p-4 space-y-6">
             <div className="flex gap-2 flex-wrap justify-between">

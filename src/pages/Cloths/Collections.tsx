@@ -2,14 +2,15 @@ import { useToast } from "@/components/ui/use-toast";
 import CardComponent from "@/helper/card";
 import { useAppDispatch, useAppSelector } from "@/redux/hook";
 import { GetCollections } from "@/redux/slices/clothSlice";
-import { Loader2 } from "lucide-react";
-import { useEffect } from "react";
+import { Loader2, RefreshCcw } from "lucide-react";
+import { useEffect, useState } from "react";
 import FilterCompo from "./Drawer";
+import { Button } from "@/components/ui/button";
 
 const Collections: React.FunctionComponent = () => {
   const { toast } = useToast();
-
   const dispatch = useAppDispatch();
+  const [loading, setLoading] = useState<boolean>(false);
   const { collections, isLoading } = useAppSelector((state) => state.cloth);
   useEffect(() => {
     dispatch(GetCollections())
@@ -24,10 +25,31 @@ const Collections: React.FunctionComponent = () => {
         });
       });
   }, []);
+  const Handlerefresh = () => {
+    setLoading(true);
+    window.location.reload();
+    setLoading(false);
+  };
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <Loader2 className="animate-spin h-32 w-32" />
+      </div>
+    );
+  }
+  if (collections.length === 0) {
+    return (
+      <div className="min-h-screen flex justify-center items-center flex-col ">
+        <h1 className="font-bold text-2xl text-red-500">
+          Sorry No results found
+        </h1>
+        <Button
+          onClick={Handlerefresh}
+          className="bg-gradient-to-r from-pink-500 to-purple-500 text-white font-bold py-3 px-6 rounded-md shadow-md hover:scale-105 transition duration-300"
+        >
+          Refresh
+          <RefreshCcw className={`${isLoading ? "animate-spin" : ""}`} />
+        </Button>
       </div>
     );
   }
