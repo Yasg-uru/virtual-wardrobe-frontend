@@ -6,6 +6,12 @@ export interface clothState {
   mostworn: IClothItem[];
   underUtilizedCloths:IClothItem[];
   isLoading: boolean;
+  Notification:notificationSchema | null;
+}
+export interface notificationSchema{
+  title:string ;
+  reminder:string ;
+
 }
 export interface IClothItem {
   _id: string;

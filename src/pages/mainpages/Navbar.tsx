@@ -30,6 +30,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useAppDispatch, useAppSelector } from "@/redux/hook";
 import SearchBar from "./Search";
 import { GetWearAnalysis } from "@/redux/slices/clothSlice";
+import Notification from "./Notification";
 
 export const Navbar: React.FunctionComponent = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -99,7 +100,7 @@ export const Navbar: React.FunctionComponent = () => {
             <div className="ml-4 flex items-center gap-6 md:ml-6">
               <>
                 <ModeToggle />
-
+                <Notification />
                 {!isAuthenticated ? (
                   <Button
                     className="bg-gradient-to-r from-pink-500 to-purple-500 text-white font-bold py-3 px-6 rounded-md shadow-md hover:scale-105 transition duration-300 animate-bounce hover:animate-none"

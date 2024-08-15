@@ -61,6 +61,7 @@ const initialState: clothState = {
   leastWorn: LoadleastmostWorn().leastworn || [],
   mostworn: LoadleastmostWorn().mostworn || [],
   underUtilizedCloths: LoadleastmostWorn().underutilized || [],
+  Notification: null,
 };
 export const WearCloth = createAsyncThunk(
   "cloths/wear",
@@ -195,6 +196,22 @@ export const GetWearAnalysis = createAsyncThunk(
     }
   }
 );
+export const GetNotification = createAsyncThunk(
+  "cloths/notifications",
+  async (params: { ex: string }, { rejectWithValue }) => {
+    try {
+      const response = await clothInstance.get("/cloth/reminder", {
+        withCredentials: true,
+      });
+      return response.data;
+    } catch (error: any) {
+      if (error.response && error.response.data) {
+        return rejectWithValue(error.response.data.message);
+      }
+      return rejectWithValue("unkown error");
+    }
+  }
+);
 const clothSlice = createSlice({
   name: "cloth",
   initialState,
@@ -245,6 +262,16 @@ const clothSlice = createSlice({
       state.mostworn = mostWorn;
       state.underUtilizedCloths = underUtilizedCloths;
       saveAnalysis(state.leastWorn, state.mostworn, state.underUtilizedCloths);
+    });
+    builder.addCase(GetNotification.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.Notification = action.payload;
+    });
+    builder.addCase(GetNotification.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(GetNotification.rejected, (state) => {
+      state.isLoading = false;
     });
   },
 });
