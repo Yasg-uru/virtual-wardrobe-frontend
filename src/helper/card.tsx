@@ -7,7 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-
+import { MdDelete } from "react-icons/md";
 import { IClothItem } from "@/types/clothState";
 type props = {
   cloth: IClothItem;
@@ -27,6 +27,7 @@ import {
 import { useAppDispatch } from "@/redux/hook";
 import { WearCloth } from "@/redux/slices/clothSlice";
 import { useToast } from "@/components/ui/use-toast";
+import DeleteDialog from "./DeleteDialog";
 const CardComponent: React.FunctionComponent<props> = ({ cloth }) => {
   const [isWear, setIsWear] = useState<boolean>(false);
   const [condition, setCondition] = useState<string>(cloth.condition);
@@ -52,7 +53,7 @@ const CardComponent: React.FunctionComponent<props> = ({ cloth }) => {
       });
   };
   return (
-    <Card className="w-[400px] cursor-pointer">
+    <Card className="w-[400px] cursor-pointer relative">
       <CardHeader>
         <img
           className="h-96"
@@ -125,7 +126,7 @@ const CardComponent: React.FunctionComponent<props> = ({ cloth }) => {
           Lastworn : {new Date(cloth.lastWorn).toDateString()}
         </p>
       </CardContent>
-      <CardFooter className=" flex flex-col gap-1">
+      <CardFooter className=" flex flex-col gap-1 relative">
         {cloth.isFavorite && (
           <p className="font-semibold text-green-500">Favourate</p>
         )}
@@ -139,6 +140,7 @@ const CardComponent: React.FunctionComponent<props> = ({ cloth }) => {
           View Detail
         </Link>
       </CardFooter>
+      <DeleteDialog Brand={cloth.brand} clothId={cloth._id} />
     </Card>
   );
 };

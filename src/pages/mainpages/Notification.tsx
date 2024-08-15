@@ -42,7 +42,7 @@ const Notification: React.FunctionComponent = () => {
           />
         </Button>
       </PopoverTrigger>
-      {isLoading ? (
+      {isLoading && !Notification ? (
         <PopoverContent className="w-80 flex justify-center items-center flex-col gap-2 p-5">
           <Skeleton className="h-6 w-3/4 rounded-md animate-pulse" />
           <Skeleton className="h-4 w-2/3 rounded-md animate-pulse" />

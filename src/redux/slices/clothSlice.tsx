@@ -212,6 +212,21 @@ export const GetNotification = createAsyncThunk(
     }
   }
 );
+export const DeleteCloth = createAsyncThunk(
+  "cloths/delete",
+  async (params: { clothId: string }, { rejectWithValue }) => {
+    try {
+      const { clothId } = params;
+      const response = await clothInstance.delete(`/${clothId}`);
+      return response.data;
+    } catch (error: any) {
+      if (error.response && error.response.data) {
+        return rejectWithValue(error.response.data.message);
+      }
+      return rejectWithValue("Unkown error");
+    }
+  }
+);
 const clothSlice = createSlice({
   name: "cloth",
   initialState,
