@@ -102,7 +102,7 @@ export const Navbar: React.FunctionComponent = () => {
 
                 {!isAuthenticated ? (
                   <Button
-                    className="bg-gradient-to-r from-pink-500 to-purple-500 text-white font-bold py-3 px-6 rounded-md shadow-md hover:scale-105 transition duration-300"
+                    className="bg-gradient-to-r from-pink-500 to-purple-500 text-white font-bold py-3 px-6 rounded-md shadow-md hover:scale-105 transition duration-300 animate-bounce hover:animate-none"
                     size="sm"
                     onClick={() => navigate("/auth")}
                   >

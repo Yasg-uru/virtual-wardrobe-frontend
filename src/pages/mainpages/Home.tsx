@@ -1,5 +1,6 @@
 import { useToast } from "@/components/ui/use-toast";
 import CardComponent from "@/helper/card";
+import SkeletonCard from "@/helper/SkeletonCard";
 import { useAppDispatch, useAppSelector } from "@/redux/hook";
 import { GetRecommandedCloths } from "@/redux/slices/clothSlice";
 import { Loader2 } from "lucide-react";
@@ -39,24 +40,32 @@ const Home: React.FunctionComponent = () => {
         });
     }
   }, [lat, lon, isLocationSet, toast, dispatch]);
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Loader2 className="animate-spin h-32 w-32" />
-      </div>
-    );
-  }
+  // if (isLoading) {
+  //   return (
+  //     <div className="min-h-screen flex items-center justify-center">
+  //       <Loader2 className="animate-spin h-32 w-32" />
+  //     </div>
+  //   );
+  // }
   return (
     <div className="min-h-screen flex flex-col gap-2 p-5">
       <h1 className="text-2xl font-bold text-red-500 text-center">
         Recommanded Cloths According To Weather
       </h1>
-      <div className="flex flex-wrap gap-2 mx-auto ">
-        {recommandedCloths.length > 0 &&
-          recommandedCloths.map((cloth) => (
-            <CardComponent key={cloth._id} cloth={cloth} />
-          ))}
-      </div>
+      {isLoading ? (
+        <div className="flex flex-wrap gap-2 mx-auto">
+          {Array.from({ length: 6 }).map((_, index) => {
+            return <SkeletonCard key={index} />;
+          })}
+        </div>
+      ) : (
+        <div className="flex flex-wrap gap-2 mx-auto ">
+          {recommandedCloths.length > 0 &&
+            recommandedCloths.map((cloth) => (
+              <CardComponent key={cloth._id} cloth={cloth} />
+            ))}
+        </div>
+      )}
     </div>
   );
 };

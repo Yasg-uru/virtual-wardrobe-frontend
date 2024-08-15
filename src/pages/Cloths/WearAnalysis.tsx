@@ -1,31 +1,61 @@
 import { Button } from "@/components/ui/button";
 import CardComponent from "@/helper/card";
 import { useAppSelector } from "@/redux/hook";
-import React, { useRef } from "react";
-import { AiOutlineWarning } from "react-icons/ai";
+import React, { useEffect, useRef, useState } from "react";
+import { AiOutlineArrowUp, AiOutlineWarning } from "react-icons/ai";
 
 const WearAnalysis: React.FunctionComponent = () => {
   const { leastWorn, mostworn, underUtilizedCloths } = useAppSelector(
     (state) => state.cloth
   );
-const MostWornRef=useRef<HTMLDivElement>(null);
-const LeastWornRef=useRef<HTMLDivElement>(null);
-const underutilizedRef=useRef<HTMLDivElement>(null);
-const scrollToSection=(ref:React.RefObject<HTMLDivElement>)=>{
-if(ref.current){
-  ref.current.scrollIntoView({behavior:"smooth"})
-}
-}
+  const MostWornRef = useRef<HTMLDivElement>(null);
+  const LeastWornRef = useRef<HTMLDivElement>(null);
+  const underutilizedRef = useRef<HTMLDivElement>(null);
+  const [showBackToTop, setShowBackToTop] = useState<boolean>(false);
+
+  const scrollToSection = (ref: React.RefObject<HTMLDivElement>) => {
+    if (ref.current) {
+      ref.current.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+  const scrollToTop = () => {
+    window.scroll({ top: 0, behavior: "smooth" });
+  };
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 300) {
+        setShowBackToTop(true);
+      } else {
+        setShowBackToTop(false);
+      }
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
   return (
     <div className="min-h-screen flex flex-col gap-16 p-8 bg-gradient-to-br from-gray-100 via-gray-200 to-gray-300 dark:from-gray-800 dark:via-gray-900 dark:to-black">
       <div className="flex gap-3">
-        <button  type="button" className="btn btn-outline btn-accent" onClick={()=>scrollToSection(MostWornRef)}>
+        <button
+          type="button"
+          className="btn btn-outline btn-accent animate-pulse shadow-2xl "
+          onClick={() => scrollToSection(MostWornRef)}
+        >
           Most Worn
         </button>
-        <button type="button" className="btn btn-outline btn-accent"onClick={()=>scrollToSection(LeastWornRef)}>
+        <button
+          type="button"
+          className="btn btn-outline btn-accent animate-pulse shadow-2xl "
+          onClick={() => scrollToSection(LeastWornRef)}
+        >
           Least Worn
         </button>
-        <button type="button" className="btn btn-outline btn-accent"onClick={()=>scrollToSection(underutilizedRef)}>
+        <button
+          type="button"
+          className="btn btn-outline btn-accent animate-pulse shadow-2xl "
+          onClick={() => scrollToSection(underutilizedRef)}
+        >
           underutilized cloths
         </button>
       </div>
@@ -92,6 +122,18 @@ if(ref.current){
           )}
         </div>
       </div>
+      {showBackToTop && (
+        <button
+          type="button"
+          onClick={scrollToTop}
+          className="fixed animate-bounce bottom-4 right-4 p-3 bg-accent text-white rounded-full shadow-lg hover:bg-accent-focus focus:outline-none"
+        >
+          <AiOutlineArrowUp
+            size={34}
+            className="dark:text-white font-bold text-red-500 animate-pulse"
+          />
+        </button>
+      )}
     </div>
   );
 };
