@@ -21,12 +21,15 @@ const SearchBar: React.FunctionComponent = () => {
   };
   useEffect(() => {
     if (debounceSearchTerm) {
-      dispatch(SearchCloths({ searchQuery: debounceSearchTerm })).catch(() => {
-        setIsNotResultFound(true);
-        toast({
-          title: "failed to search",
-        });
-      });
+      dispatch(SearchCloths({ searchQuery: debounceSearchTerm })).catch(
+        (error: any) => {
+          console.log("this is a error", error);
+          setIsNotResultFound(true);
+          toast({
+            title: error,
+          });
+        }
+      );
     }
   }, [debounceSearchTerm]);
   useEffect(() => {

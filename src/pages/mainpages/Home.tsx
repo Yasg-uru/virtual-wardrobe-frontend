@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 const Home: React.FunctionComponent = () => {
   const [lat, setLat] = useState<number | null>(null);
   const [lon, setLon] = useState<number | null>(null);
-  const [isLocationSet,setIsLocationSet]=useState<boolean>(false);
+  const [isLocationSet, setIsLocationSet] = useState<boolean>(false);
   const dispatch = useAppDispatch();
   const { recommandedCloths, isLoading } = useAppSelector(
     (state) => state.cloth
@@ -21,7 +21,6 @@ const Home: React.FunctionComponent = () => {
         setLat(position.coords.latitude);
         setLon(position.coords.longitude);
         setIsLocationSet(true);
-
       });
     }
     if (isLocationSet && lat && lon) {
@@ -39,7 +38,7 @@ const Home: React.FunctionComponent = () => {
           });
         });
     }
-  }, [lat, lon,isLocationSet,toast,dispatch]);
+  }, [lat, lon, isLocationSet, toast, dispatch]);
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">

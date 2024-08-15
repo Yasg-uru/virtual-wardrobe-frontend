@@ -2,7 +2,7 @@ import { clothInstance } from "@/helper/axiosInstance";
 import clothSchema from "@/schema/clothschema/createCloth";
 import { clothState, IClothItem } from "@/types/clothState";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { z } from "zod";
 
 const savedata = (cloths: IClothItem[]) => {
@@ -27,12 +27,40 @@ const LoadData = (): IClothItem[] => {
   }
   return [];
 };
+const LoadleastmostWorn = (): {
+  leastworn: IClothItem[];
+  mostworn: IClothItem[];
+  underutilized: IClothItem[];
+} => {
+  const leastData = sessionStorage.getItem("least");
+  const mostData = sessionStorage.getItem("most");
+  const underUtilizedCloths = sessionStorage.getItem("underutilized");
+  if (leastData && mostData && underUtilizedCloths) {
+    const leastworn = JSON.parse(leastData);
+    const mostworn = JSON.parse(mostData);
+    const underutilized = JSON.parse(underUtilizedCloths);
+    return { leastworn, mostworn, underutilized };
+  }
+  return { leastworn: [], mostworn: [], underutilized: [] };
+};
+const saveAnalysis = (
+  learstWorn: IClothItem[],
+  mostWorn: IClothItem[],
+  underutilized: IClothItem[]
+): void => {
+  sessionStorage.setItem("least", JSON.stringify(learstWorn));
+  sessionStorage.setItem("most", JSON.stringify(mostWorn));
+  sessionStorage.setItem("underutilized", JSON.stringify(underutilized));
+};
 
 const initialState: clothState = {
   recommandedCloths: LoadData() || [],
   isLoading: false,
   collections: [],
   searchResults: LoadSearchResults() || [],
+  leastWorn: LoadleastmostWorn().leastworn || [],
+  mostworn: LoadleastmostWorn().mostworn || [],
+  underUtilizedCloths: LoadleastmostWorn().underutilized || [],
 };
 export const WearCloth = createAsyncThunk(
   "cloths/wear",
@@ -66,9 +94,9 @@ export const AddUserCloth = createAsyncThunk(
       return response.data;
     } catch (error: any) {
       if (error.response && error.response.data) {
-        rejectWithValue(error.response?.data?.message);
+        return rejectWithValue(error.response?.data?.message);
       }
-      rejectWithValue("Unkown error");
+      return rejectWithValue("Unkown error");
     }
   }
 );
@@ -105,9 +133,9 @@ export const filterCloth = createAsyncThunk(
     } catch (error: any) {
       console.log("this is a error :", error);
       if (error.response && error.response.data) {
-        rejectWithValue(error.response?.data?.message);
+        return rejectWithValue(error.response?.data?.message);
       }
-      rejectWithValue("unkown error");
+      return rejectWithValue("unkown error");
     }
   }
 );
@@ -124,10 +152,9 @@ export const SearchCloths = createAsyncThunk(
       );
       return response.data;
     } catch (error: any) {
-      if (error.response && error.response?.data) {
-        rejectWithValue(error.response.data.message);
-      }
-      rejectWithValue("unkown error ");
+      console.log("this is a error:", AxiosError);
+      return rejectWithValue(error.response.data.message);
+      // rejectWithValue("unkown error ");
     }
   }
 );
@@ -152,7 +179,22 @@ export const GetRecommandedCloths = createAsyncThunk(
     }
   }
 );
-
+export const GetWearAnalysis = createAsyncThunk(
+  "cloths/wearanlysis",
+  async (params: { ex: string }, { rejectWithValue }) => {
+    try {
+      const response = await clothInstance.get(`/cloth/wear/analysis`, {
+        withCredentials: true,
+      });
+      return response.data;
+    } catch (error: any) {
+      if (error.response && error.response.data) {
+        return rejectWithValue(error.response.data?.message);
+      }
+      return rejectWithValue("unkown error");
+    }
+  }
+);
 const clothSlice = createSlice({
   name: "cloth",
   initialState,
@@ -194,6 +236,15 @@ const clothSlice = createSlice({
     builder.addCase(SearchCloths.fulfilled, (state, action) => {
       state.searchResults = action.payload?.result;
       saveSearchData(state.searchResults);
+    });
+    builder.addCase(GetWearAnalysis.fulfilled, (state, action) => {
+      const { leastWorn, mostWorn, underUtilizedCloths } =
+        action.payload?.wornData;
+
+      state.leastWorn = leastWorn;
+      state.mostworn = mostWorn;
+      state.underUtilizedCloths = underUtilizedCloths;
+      saveAnalysis(state.leastWorn, state.mostworn, state.underUtilizedCloths);
     });
   },
 });

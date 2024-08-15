@@ -10,7 +10,7 @@ import {
   Loader2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-
+import { TbBrandGoogleAnalytics } from "react-icons/tb";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -22,20 +22,20 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { ModeToggle } from "@/components/mode-toggle";
-// import procoders from "../../../public/procoders.jpg";
-// import { Input } from "@/components/ui/input";
+
 import { Link, useNavigate } from "react-router-dom";
-// import { useAppDispatch, useAppSelector } from "@/redux/hook";
-// import { Logout } from "@/redux/slices/authSlice";
+
 import { useToast } from "@/components/ui/use-toast";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { useAppSelector } from "@/redux/hook";
+import { useAppDispatch, useAppSelector } from "@/redux/hook";
 import SearchBar from "./Search";
-// import SearchBar from "../coursepages/SearchBar";
+import { GetWearAnalysis } from "@/redux/slices/clothSlice";
+
 export const Navbar: React.FunctionComponent = () => {
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
-  //   const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch();
+
   const { toast } = useToast();
 
   const { isAuthenticated, Loading, userInfo } = useAppSelector(
@@ -44,7 +44,23 @@ export const Navbar: React.FunctionComponent = () => {
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
-
+  const handleWearAnalysis = () => {
+    dispatch(GetWearAnalysis({ ex: "" }))
+      .unwrap()
+      .then(() => {
+        toast({
+          title: "fetched successfully your analysis",
+        });
+        navigate("/wear/analysis");
+      })
+      .catch((error: any) => {
+        console.log("this is a error in the action dispatch:", error);
+        toast({
+          title: error,
+          variant: "destructive",
+        });
+      });
+  };
   return (
     <nav className="bg-white dark:bg-gray-800 shadow-lg">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -123,10 +139,14 @@ export const Navbar: React.FunctionComponent = () => {
                           </span>
                           <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
                         </DropdownMenuItem>
-                        <DropdownMenuItem>
-                          <Settings className="mr-2 h-4 w-4" />
-                          <span>Settings</span>
-                          <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
+                        <DropdownMenuItem
+                          className="space-x-2"
+                          onClick={handleWearAnalysis}
+                        >
+                          <TbBrandGoogleAnalytics size={26} color="green" />
+
+                          <span>Wear Analysis</span>
+                          <DropdownMenuShortcut>⌘w</DropdownMenuShortcut>
                         </DropdownMenuItem>
                       </DropdownMenuGroup>
                       <DropdownMenuSeparator />
