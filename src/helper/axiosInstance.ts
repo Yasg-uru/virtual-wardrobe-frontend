@@ -5,5 +5,4 @@ export const authInstance = axios.create({
 });
 export const clothInstance = axios.create({
   baseURL: "http://localhost:5001",
-  timeout: 1000,
 });

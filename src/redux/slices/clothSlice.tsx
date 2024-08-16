@@ -1,4 +1,9 @@
 import { clothInstance } from "@/helper/axiosInstance";
+import {
+  Formdata,
+  SeasonSuitability,
+  WeatherSuitability,
+} from "@/pages/Cloths/AddCloth";
 import clothSchema from "@/schema/clothschema/createCloth";
 import { clothState, IClothItem } from "@/types/clothState";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
@@ -86,18 +91,71 @@ export const WearCloth = createAsyncThunk(
 );
 export const AddUserCloth = createAsyncThunk(
   "cloth/AddCloth",
-  async (formData: z.infer<typeof clothSchema>, { rejectWithValue }) => {
+  async (formData: Formdata, { rejectWithValue }) => {
     try {
+      const formDataToSend = new FormData();
+
+      // Append image file
+      if (formData.imageurl) {
+        formDataToSend.append("imageurl", formData.imageurl);
+      }
+
+      // Append the date as a string (if present)
+      if (formData.purchaseDate) {
+        formDataToSend.append(
+          "purchaseDate",
+          formData.purchaseDate.toISOString()
+        );
+      }
+
+      // Append other form fields
+      formDataToSend.append("category", formData.category);
+      formDataToSend.append("size", formData.size);
+      formDataToSend.append("brand", formData.brand);
+
+      formDataToSend.append("material", formData.material);
+      formDataToSend.append("color", formData.color);
+      formDataToSend.append("tags", formData.tags);
+      formDataToSend.append("cost", formData.cost.toString());
+      formDataToSend.append("isFavorite", formData.isFavorite.toString());
+      formDataToSend.append("isArchived", formData.isArchived.toString());
+
+      // Append season suitability
+      // Object.keys(formData.seasonSuitability).forEach((key) => {
+      //   formDataToSend.append(
+      //     `seasonSuitability.${key}`,
+      //     formData.seasonSuitability[key as keyof SeasonSuitability].toString()
+      //   );
+      // });
+
+      // Append weather suitability
+      // Object.keys(formData.weatherSuitability).forEach((key) => {
+      //   formDataToSend.append(
+      //     `weatherSuitability.${key}`,
+      //     formData.weatherSuitability[
+      //       key as keyof WeatherSuitability
+      //     ].toString()
+      //   );
+      // });
+      formDataToSend.append("seasonSuitability", JSON.stringify(formData.seasonSuitability));
+      formDataToSend.append("weatherSuitability", JSON.stringify(formData.weatherSuitability));
+      
       console.log("this is a formdata: ", formData);
-      const response = await clothInstance.post("/cloth/create", formData, {
-        withCredentials: true,
-      });
+      const response = await clothInstance.post(
+        "/cloth/create",
+        formDataToSend,
+        {
+          withCredentials: true,
+        }
+      );
       return response.data;
     } catch (error: any) {
-      if (error.response && error.response.data) {
-        return rejectWithValue(error.response?.data?.message);
-      }
-      return rejectWithValue("Unkown error");
+      console.log("this is a error :", error);
+
+      // if (error.response && error.response.data) {
+      return rejectWithValue(error.response.data.message);
+      // }
+      // return rejectWithValue("Unkown error");
     }
   }
 );

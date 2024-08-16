@@ -16,7 +16,7 @@ const clothSchema = z.object({
   size: z.string().optional(), // Optional string field for size
   brand: z.string().optional(), // Optional string field for brand
   material: z.string().optional(), // Optional string field for material
-  tags: z.array(z.string()).optional(), // Array of strings for tags
+  tags: z.array(z.string().transform((val)=>val.split(","))).optional(), // Array of strings for tags
   purchaseDate: z.string().transform((val) => new Date(val)), // Date in ISO string format
   condition: z.string().optional(), // Optional string field for condition
   wearcount: z.number().int().nonnegative().optional(), // Integer number for wear count
@@ -29,17 +29,17 @@ const clothSchema = z.object({
   isArchived: z.string().min(1, "archive is required"), // Boolean field for archived status
   isFormal: z.boolean().optional(), // Optional boolean field for formal status
   weatherSuitability: z.object({
-    isRainSuitable: z.string(),
-    isWindSuitable: z.string(),
-    isSunnySuitable: z.string(),
-    isCloudySuitable: z.string(),
-    isSnowySuitable: z.string(),
+    isRainSuitable: z.boolean(),
+    isWindSuitable: z.boolean(),
+    isSunnySuitable: z.boolean(),
+    isCloudySuitable: z.boolean(),
+    isSnowySuitable: z.boolean(),
   }), // Object with weather suitability booleans
   seasonSuitability: z.object({
-    isWinter: z.string(),
-    isSummer: z.string(),
-    isSpring: z.string(),
-    isAutumn: z.string(),
+    isWinter: z.boolean(),
+    isSummer: z.boolean(),
+    isSpring: z.boolean(),
+    isAutumn: z.boolean(),
   }), // Object with season suitability booleans
 });
 
