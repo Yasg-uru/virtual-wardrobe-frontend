@@ -137,9 +137,15 @@ export const AddUserCloth = createAsyncThunk(
       //     ].toString()
       //   );
       // });
-      formDataToSend.append("seasonSuitability", JSON.stringify(formData.seasonSuitability));
-      formDataToSend.append("weatherSuitability", JSON.stringify(formData.weatherSuitability));
-      
+      formDataToSend.append(
+        "seasonSuitability",
+        JSON.stringify(formData.seasonSuitability)
+      );
+      formDataToSend.append(
+        "weatherSuitability",
+        JSON.stringify(formData.weatherSuitability)
+      );
+
       console.log("this is a formdata: ", formData);
       const response = await clothInstance.post(
         "/cloth/create",
@@ -345,6 +351,15 @@ const clothSlice = createSlice({
     });
     builder.addCase(GetNotification.rejected, (state) => {
       state.isLoading = false;
+    });
+    builder.addCase(AddUserCloth.fulfilled, (state) => {
+      state.isLoading = false;
+    });
+    builder.addCase(AddUserCloth.rejected, (state) => {
+      state.isLoading = false;
+    });
+    builder.addCase(AddUserCloth.pending, (state) => {
+      state.isLoading = true;
     });
   },
 });
