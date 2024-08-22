@@ -5,6 +5,7 @@ import SignUpSchema from "@/schema/authSchema/SignupSchema";
 import LoginSchema from "@/schema/authSchema/Login";
 import { AuthState, User } from "@/types/Authstate";
 import { VerifyFormSchema } from "@/pages/authcomponents/VerifyComponent";
+import { ForgotPasswordSchema } from "@/schema/authSchema/forgotPassword";
 const LoadData = (): User | null => {
   const data = localStorage.getItem("user");
   if (data) {
@@ -71,6 +72,33 @@ export const userLogin = createAsyncThunk(
     }
   }
 );
+export const ForgotPassword = createAsyncThunk(
+  "auth/forgotpassword",
+  async (
+    formdata: z.infer<typeof ForgotPasswordSchema>,
+    { rejectWithValue }
+  ) => {
+    try {
+      const response = await authInstance.post(
+        `/user/forgotpassword/${formdata.email}`,
+        {},
+        {
+          withCredentials: true,
+        }
+      );
+      return response.data;
+    } catch (error: any) {
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.message
+      ) {
+        return rejectWithValue(error.response.data.message);
+      }
+      // return rejectWithValue("unknown error");
+    }
+  }
+);
 const authSlice = createSlice({
   name: "auth",
   initialState,
@@ -95,6 +123,15 @@ const authSlice = createSlice({
     });
     builder.addCase(userSignUp.rejected, (state) => {
       state.Loading = false;
+    });
+    builder.addCase(ForgotPassword.fulfilled, (state) => {
+      state.Loading = false;
+    });
+    builder.addCase(ForgotPassword.rejected, (state) => {
+      state.Loading = false;
+    });
+    builder.addCase(ForgotPassword.pending, (state) => {
+      state.Loading = true;
     });
   },
 });
