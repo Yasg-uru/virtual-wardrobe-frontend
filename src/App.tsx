@@ -11,6 +11,7 @@ import Collections from "./pages/Cloths/Collections";
 import SerachDetails from "./pages/Cloths/CothDetailBysearch";
 import WearAnalysis from "./pages/Cloths/WearAnalysis";
 import ForgotPass from "./pages/authcomponents/ForgotPass";
+import ResetPass from "./pages/authcomponents/ResetPass";
 
 const App: React.FunctionComponent = () => {
   return (
@@ -19,6 +20,7 @@ const App: React.FunctionComponent = () => {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/auth" element={<Tabcomponent />} />
+        <Route path="/Reset-password/:token" element={<ResetPass />} />
         <Route path="/forgot-password" element={<ForgotPass />} />
         <Route path="/verify/:email" element={<Verify />} />
         <Route path="/detail/:id" element={<ClothDetail />} />

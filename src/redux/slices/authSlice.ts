@@ -6,6 +6,7 @@ import LoginSchema from "@/schema/authSchema/Login";
 import { AuthState, User } from "@/types/Authstate";
 import { VerifyFormSchema } from "@/pages/authcomponents/VerifyComponent";
 import { ForgotPasswordSchema } from "@/schema/authSchema/forgotPassword";
+import { ResetPasswordSchema } from "@/schema/authSchema/ResetPass";
 const LoadData = (): User | null => {
   const data = localStorage.getItem("user");
   if (data) {
@@ -99,6 +100,34 @@ export const ForgotPassword = createAsyncThunk(
     }
   }
 );
+export const ResetPassword = createAsyncThunk(
+  "auth/resetpassword",
+  async (
+    formdata: z.infer<typeof ResetPasswordSchema>,
+    { rejectWithValue }
+  ) => {
+    try {
+      const response = await authInstance.post(
+        `/user/reset/${formdata.token}`,
+        { password: formdata.newPassword },
+        {
+          withCredentials: true,
+        }
+      );
+      return response.data;
+    } catch (error: any) {
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.message
+      ) {
+        return rejectWithValue(error.response.data.message);
+      }
+      // return rejectWithValue("unknown error");
+    }
+  }
+);
+
 const authSlice = createSlice({
   name: "auth",
   initialState,
@@ -132,6 +161,15 @@ const authSlice = createSlice({
     });
     builder.addCase(ForgotPassword.pending, (state) => {
       state.Loading = true;
+    });
+    builder.addCase(ResetPassword.pending, (state) => {
+      state.Loading = true;
+    });
+    builder.addCase(ResetPassword.fulfilled, (state) => {
+      state.Loading = false;
+    });
+    builder.addCase(ResetPassword.rejected, (state) => {
+      state.Loading = false;
     });
   },
 });
