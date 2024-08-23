@@ -191,6 +191,13 @@ const CardComponent: React.FunctionComponent<props> = ({ cloth }) => {
   const dispatch = useAppDispatch();
 
   const wearCloth = () => {
+    if (condition === cloth.condition) {
+      toast({
+        title: "Please Select Another condition ",
+        variant: "destructive",
+      });
+      return;
+    }
     dispatch(WearCloth({ condition, id: cloth._id }))
       .then(() => {
         toast({
@@ -240,9 +247,7 @@ const CardComponent: React.FunctionComponent<props> = ({ cloth }) => {
           <div className="flex gap-2 w-full items-center">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button className="w-full bg-gradient-to-r from-purple-600 via-pink-500 to-red-500 text-white font-bold py-3 px-6 rounded-lg shadow-md hover:scale-105 transition transform duration-300">
-                  {condition}
-                </Button>
+                <Button className="w-full bg-red-600 opacity-85 hover:bg-red-600 text-white">Change Condition</Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-56">
                 <DropdownMenuLabel>Condition</DropdownMenuLabel>

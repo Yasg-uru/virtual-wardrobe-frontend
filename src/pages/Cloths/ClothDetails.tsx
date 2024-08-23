@@ -1,14 +1,12 @@
-
 import { useToast } from "@/components/ui/use-toast";
 import { useAppDispatch, useAppSelector } from "@/redux/hook";
 import { GetClothDetails } from "@/redux/slices/clothSlice";
 import { IClothItem } from "@/types/clothState";
 import { Loader2 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 
 const ClothDetail: React.FunctionComponent = () => {
-  // const [cloth, setCloth] = useState<IClothItem | null>(null);
   const cloth = useAppSelector((state) => state.cloth.ClothInfo);
   const { isLoading } = useAppSelector((state) => state.cloth);
   const { id } = useParams();
@@ -21,7 +19,7 @@ const ClothDetail: React.FunctionComponent = () => {
         .unwrap()
         .then(() => {
           toast({
-            title: "Successfull fetched cloth details",
+            title: "Successfully fetched cloth details",
           });
         })
         .catch((error: any) => {
@@ -30,14 +28,15 @@ const ClothDetail: React.FunctionComponent = () => {
           });
         });
     }
-  }, [id, cloth, dispatch]);
-  // if (isLoading) {
-  //   return (
-  //     <div className="min-h-screen flex items-center justify-center p-4">
-  //       <Loader2 className="h-11 w-11 animate-spin" />
-  //     </div>
-  //   );
-  // }
+  }, [id, dispatch, toast]);
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center p-4">
+        <Loader2 className="h-10 w-10 animate-spin text-purple-600 dark:text-purple-400" />
+      </div>
+    );
+  }
 
   if (!cloth) {
     return (
@@ -50,8 +49,8 @@ const ClothDetail: React.FunctionComponent = () => {
   }
 
   return (
-    <div className="min-h-screen p-4 lg:p-8 flex flex-col gap-8 bg-gradient-to-b from-gray-900 to-gray-700 dark:from-gray-900 dark:to-gray-800">
-      <h1 className="text-center text-4xl font-extrabold text-purple-600 mb-6">
+    <div className="min-h-screen p-4 lg:p-8 flex flex-col gap-8 bg-gradient-to-b from-gray-100 to-gray-300 dark:from-gray-900 dark:to-gray-800">
+      <h1 className="text-center text-4xl font-extrabold text-purple-700 dark:text-purple-500 mb-6">
         Cloth Detail
       </h1>
       <div className="flex justify-center mb-6">
@@ -139,35 +138,43 @@ const ClothDetail: React.FunctionComponent = () => {
 
         {/* Season Suitability */}
         <div className="mt-6">
-          <h2 className="text-2xl font-semibold text-purple-600 mb-3">
+          <h2 className="text-2xl font-semibold text-purple-700 dark:text-purple-500 mb-3">
             Season Suitability
           </h2>
           <ul className="list-disc pl-5">
             <li
-              className={`text-${
-                cloth.seasonSuitability.isWinter ? "green" : "red"
-              }-500 font-semibold`}
+              className={`${
+                cloth.seasonSuitability.isWinter
+                  ? "text-green-600 dark:text-green-400"
+                  : "text-red-600 dark:text-red-400"
+              } font-semibold`}
             >
               Winter
             </li>
             <li
-              className={`text-${
-                cloth.seasonSuitability.isSummer ? "yellow" : "red"
-              }-500 font-semibold`}
+              className={`${
+                cloth.seasonSuitability.isSummer
+                  ? "text-yellow-600 dark:text-yellow-400"
+                  : "text-red-600 dark:text-red-400"
+              } font-semibold`}
             >
               Summer
             </li>
             <li
-              className={`text-${
-                cloth.seasonSuitability.isSpring ? "green" : "red"
-              }-500 font-semibold`}
+              className={`${
+                cloth.seasonSuitability.isSpring
+                  ? "text-green-600 dark:text-green-400"
+                  : "text-red-600 dark:text-red-400"
+              } font-semibold`}
             >
               Spring
             </li>
             <li
-              className={`text-${
-                cloth.seasonSuitability.isAutumn ? "orange" : "red"
-              }-500 font-semibold`}
+              className={`${
+                cloth.seasonSuitability.isAutumn
+                  ? "text-orange-600 dark:text-orange-400"
+                  : "text-red-600 dark:text-red-400"
+              } font-semibold`}
             >
               Autumn
             </li>
@@ -176,42 +183,52 @@ const ClothDetail: React.FunctionComponent = () => {
 
         {/* Weather Suitability */}
         <div className="mt-6">
-          <h2 className="text-2xl font-semibold text-purple-600 mb-3">
+          <h2 className="text-2xl font-semibold text-purple-700 dark:text-purple-500 mb-3">
             Weather Suitability
           </h2>
           <ul className="list-disc pl-5">
             <li
-              className={`text-${
-                cloth.weatherSuitability.isWindSuitable ? "blue" : "red"
-              }-500 font-semibold`}
+              className={`${
+                cloth.weatherSuitability.isWindSuitable
+                  ? "text-blue-600 dark:text-blue-400"
+                  : "text-red-600 dark:text-red-400"
+              } font-semibold`}
             >
               Windy
             </li>
             <li
-              className={`text-${
-                cloth.weatherSuitability.isRainSuitable ? "blue" : "red"
-              }-500 font-semibold`}
+              className={`${
+                cloth.weatherSuitability.isRainSuitable
+                  ? "text-blue-600 dark:text-blue-400"
+                  : "text-red-600 dark:text-red-400"
+              } font-semibold`}
             >
               Rainy
             </li>
             <li
-              className={`text-${
-                cloth.weatherSuitability.isSnowySuitable ? "blue" : "red"
-              }-500 font-semibold`}
+              className={`${
+                cloth.weatherSuitability.isSnowySuitable
+                  ? "text-blue-600 dark:text-blue-400"
+                  : "text-red-600 dark:text-red-400"
+              } font-semibold`}
             >
               Snowy
             </li>
             <li
-              className={`text-${
-                cloth.weatherSuitability.isCloudySuitable ? "blue" : "red"
-              }-500 font-semibold`}
+              className={`${
+                cloth.weatherSuitability.isCloudySuitable
+                  ? "text-blue-600 dark:text-blue-400"
+                  : "text-red-600 dark:text-red-400"
+              } font-semibold`}
             >
               Cloudy
             </li>
             <li
-              className={`text-${
-                cloth.weatherSuitability.isSunnySuitable ? "yellow" : "red"
-              }-500 font-semibold`}
+              className={`${
+                cloth.weatherSuitability.isSunnySuitable
+                  ? "text-yellow-600 dark:text-yellow-400"
+                  : "text-red-600 dark:text-red-400"
+              } font-semibold`}
             >
               Sunny
             </li>
