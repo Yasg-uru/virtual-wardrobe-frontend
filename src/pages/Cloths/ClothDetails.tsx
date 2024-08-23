@@ -1,23 +1,43 @@
-import { useAppSelector } from "@/redux/hook";
+
+import { useToast } from "@/components/ui/use-toast";
+import { useAppDispatch, useAppSelector } from "@/redux/hook";
+import { GetClothDetails } from "@/redux/slices/clothSlice";
 import { IClothItem } from "@/types/clothState";
+import { Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 const ClothDetail: React.FunctionComponent = () => {
-  const [cloth, setCloth] = useState<IClothItem | null>(null);
-  const { recommandedCloths } = useAppSelector((state) => state.cloth);
+  // const [cloth, setCloth] = useState<IClothItem | null>(null);
+  const cloth = useAppSelector((state) => state.cloth.ClothInfo);
+  const { isLoading } = useAppSelector((state) => state.cloth);
   const { id } = useParams();
+  const dispatch = useAppDispatch();
+  const { toast } = useToast();
 
   useEffect(() => {
     if (id) {
-      const filtered = recommandedCloths.find(
-        (cloth) => cloth._id.toString() === id.toString()
-      );
-      if (filtered) {
-        setCloth(filtered);
-      }
+      dispatch(GetClothDetails({ id }))
+        .unwrap()
+        .then(() => {
+          toast({
+            title: "Successfull fetched cloth details",
+          });
+        })
+        .catch((error: any) => {
+          toast({
+            title: error,
+          });
+        });
     }
-  }, [id, recommandedCloths]);
+  }, [id, cloth, dispatch]);
+  // if (isLoading) {
+  //   return (
+  //     <div className="min-h-screen flex items-center justify-center p-4">
+  //       <Loader2 className="h-11 w-11 animate-spin" />
+  //     </div>
+  //   );
+  // }
 
   if (!cloth) {
     return (
@@ -30,72 +50,124 @@ const ClothDetail: React.FunctionComponent = () => {
   }
 
   return (
-    <div className="min-h-screen p-6 flex flex-col gap-6 lg:gap-8">
-      <h1 className="text-center text-3xl font-extrabold text-red-600 mb-6">
+    <div className="min-h-screen p-4 lg:p-8 flex flex-col gap-8 bg-gradient-to-b from-gray-900 to-gray-700 dark:from-gray-900 dark:to-gray-800">
+      <h1 className="text-center text-4xl font-extrabold text-purple-600 mb-6">
         Cloth Detail
       </h1>
       <div className="flex justify-center mb-6">
         <img
           src={cloth.imageurl || "https://via.placeholder.com/300"}
           alt={cloth.category}
-          className="w-full max-w-sm rounded-lg shadow-lg"
+          className="w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg rounded-xl shadow-2xl transform hover:scale-105 transition duration-500"
         />
       </div>
-      <div className="flex flex-col gap-4 bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+      <div className="flex flex-col gap-6 bg-white dark:bg-gray-900 p-6 lg:p-8 rounded-lg shadow-lg transform hover:-translate-y-2 transition duration-500">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <p className="font-semibold ">Condition</p>
-          <p>{cloth.condition}</p>
-          <p className="font-semibold ">Wear Count</p>
-          <p>{cloth.wearcount}</p>
-          <p className="font-semibold ">Last Worn</p>
-          <p>{new Date(cloth.lastWorn).toDateString()}</p>
-          <p className="font-semibold ">Favorite</p>
-          <p>{cloth.isFavorite ? "Yes" : "No"}</p>
-          <p className="font-semibold ">Archived</p>
-          <p>{cloth.isArchived ? "Yes" : "No"}</p>
-          <p className="font-semibold ">Category</p>
-          <p>{cloth.category}</p>
-          <p className="font-semibold ">Brand</p>
-          <p>{cloth.brand}</p>
-          <p className="font-semibold ">Size</p>
-          <p>{cloth.size}</p>
-          <p className="font-semibold ">Material</p>
-          <p>{cloth.material}</p>
-          <p className="font-semibold ">Purchase Date:</p>
-          <p>{new Date(cloth.purchaseDate).toDateString()}</p>
+          <div>
+            <p className="font-semibold text-gray-700 dark:text-gray-300">
+              Condition
+            </p>
+            <p className="text-gray-600 dark:text-gray-400">
+              {cloth.condition}
+            </p>
+          </div>
+          <div>
+            <p className="font-semibold text-gray-700 dark:text-gray-300">
+              Wear Count
+            </p>
+            <p className="text-gray-600 dark:text-gray-400">
+              {cloth.wearcount}
+            </p>
+          </div>
+          <div>
+            <p className="font-semibold text-gray-700 dark:text-gray-300">
+              Last Worn
+            </p>
+            <p className="text-gray-600 dark:text-gray-400">
+              {new Date(cloth.lastWorn).toDateString()}
+            </p>
+          </div>
+          <div>
+            <p className="font-semibold text-gray-700 dark:text-gray-300">
+              Favorite
+            </p>
+            <p className="text-gray-600 dark:text-gray-400">
+              {cloth.isFavorite ? "Yes" : "No"}
+            </p>
+          </div>
+          <div>
+            <p className="font-semibold text-gray-700 dark:text-gray-300">
+              Archived
+            </p>
+            <p className="text-gray-600 dark:text-gray-400">
+              {cloth.isArchived ? "Yes" : "No"}
+            </p>
+          </div>
+          <div>
+            <p className="font-semibold text-gray-700 dark:text-gray-300">
+              Category
+            </p>
+            <p className="text-gray-600 dark:text-gray-400">{cloth.category}</p>
+          </div>
+          <div>
+            <p className="font-semibold text-gray-700 dark:text-gray-300">
+              Brand
+            </p>
+            <p className="text-gray-600 dark:text-gray-400">{cloth.brand}</p>
+          </div>
+          <div>
+            <p className="font-semibold text-gray-700 dark:text-gray-300">
+              Size
+            </p>
+            <p className="text-gray-600 dark:text-gray-400">{cloth.size}</p>
+          </div>
+          <div>
+            <p className="font-semibold text-gray-700 dark:text-gray-300">
+              Material
+            </p>
+            <p className="text-gray-600 dark:text-gray-400">{cloth.material}</p>
+          </div>
+          <div>
+            <p className="font-semibold text-gray-700 dark:text-gray-300">
+              Purchase Date
+            </p>
+            <p className="text-gray-600 dark:text-gray-400">
+              {new Date(cloth.purchaseDate).toDateString()}
+            </p>
+          </div>
         </div>
 
         {/* Season Suitability */}
-        <div className="mt-4">
-          <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-2">
+        <div className="mt-6">
+          <h2 className="text-2xl font-semibold text-purple-600 mb-3">
             Season Suitability
           </h2>
           <ul className="list-disc pl-5">
             <li
               className={`text-${
                 cloth.seasonSuitability.isWinter ? "green" : "red"
-              }-500`}
+              }-500 font-semibold`}
             >
               Winter
             </li>
             <li
               className={`text-${
                 cloth.seasonSuitability.isSummer ? "yellow" : "red"
-              }-500`}
+              }-500 font-semibold`}
             >
               Summer
             </li>
             <li
               className={`text-${
                 cloth.seasonSuitability.isSpring ? "green" : "red"
-              }-500`}
+              }-500 font-semibold`}
             >
               Spring
             </li>
             <li
               className={`text-${
                 cloth.seasonSuitability.isAutumn ? "orange" : "red"
-              }-500`}
+              }-500 font-semibold`}
             >
               Autumn
             </li>
@@ -103,43 +175,43 @@ const ClothDetail: React.FunctionComponent = () => {
         </div>
 
         {/* Weather Suitability */}
-        <div className="mt-4">
-          <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-2">
+        <div className="mt-6">
+          <h2 className="text-2xl font-semibold text-purple-600 mb-3">
             Weather Suitability
           </h2>
           <ul className="list-disc pl-5">
             <li
               className={`text-${
                 cloth.weatherSuitability.isWindSuitable ? "blue" : "red"
-              }-500`}
+              }-500 font-semibold`}
             >
               Windy
             </li>
             <li
               className={`text-${
                 cloth.weatherSuitability.isRainSuitable ? "blue" : "red"
-              }-500`}
+              }-500 font-semibold`}
             >
               Rainy
             </li>
             <li
               className={`text-${
                 cloth.weatherSuitability.isSnowySuitable ? "blue" : "red"
-              }-500`}
+              }-500 font-semibold`}
             >
               Snowy
             </li>
             <li
               className={`text-${
                 cloth.weatherSuitability.isCloudySuitable ? "blue" : "red"
-              }-500`}
+              }-500 font-semibold`}
             >
               Cloudy
             </li>
             <li
               className={`text-${
                 cloth.weatherSuitability.isSunnySuitable ? "yellow" : "red"
-              }-500`}
+              }-500 font-semibold`}
             >
               Sunny
             </li>

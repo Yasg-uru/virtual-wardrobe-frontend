@@ -4,14 +4,14 @@ export interface clothState {
   searchResults: IClothItem[];
   leastWorn: IClothItem[];
   mostworn: IClothItem[];
-  underUtilizedCloths:IClothItem[];
+  underUtilizedCloths: IClothItem[];
   isLoading: boolean;
-  Notification:notificationSchema | null;
+  Notification: notificationSchema | null;
+  ClothInfo: IClothItem  | null;
 }
-export interface notificationSchema{
-  title:string ;
-  reminder:string ;
-
+export interface notificationSchema {
+  title: string;
+  reminder: string;
 }
 export interface IClothItem {
   _id: string;

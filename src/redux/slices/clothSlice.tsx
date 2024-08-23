@@ -1,4 +1,4 @@
-import { clothInstance } from "@/helper/axiosInstance";
+import { authInstance, clothInstance } from "@/helper/axiosInstance";
 import {
   Formdata,
   SeasonSuitability,
@@ -67,6 +67,7 @@ const initialState: clothState = {
   mostworn: LoadleastmostWorn().mostworn || [],
   underUtilizedCloths: LoadleastmostWorn().underutilized || [],
   Notification: null,
+  ClothInfo: null,
 };
 export const WearCloth = createAsyncThunk(
   "cloths/wear",
@@ -223,6 +224,19 @@ export const SearchCloths = createAsyncThunk(
     }
   }
 );
+export const GetClothDetails = createAsyncThunk(
+  "auth/ClothDetails",
+  async (params: { id: string }, { rejectWithValue }) => {
+    try {
+      const response = await clothInstance.get(`/cloth/details/${params.id}`, {
+        withCredentials: true,
+      });
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response.data.message);
+    }
+  }
+);
 export const GetRecommandedCloths = createAsyncThunk(
   "cloths/Recommanded",
   async (params: { lat: number; lon: number }, { rejectWithValue }) => {
@@ -360,6 +374,16 @@ const clothSlice = createSlice({
     });
     builder.addCase(AddUserCloth.pending, (state) => {
       state.isLoading = true;
+    });
+    builder.addCase(GetClothDetails.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(GetClothDetails.rejected, (state) => {
+      state.isLoading = false;
+    });
+    builder.addCase(GetClothDetails.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.ClothInfo = action.payload?.cloth;
     });
   },
 });
