@@ -46,7 +46,7 @@ const ResetPass = () => {
         toast({
           title: "Password reset successfully",
         });
-        navigate("/")
+        navigate("/");
       })
       .catch((error) => {
         toast({

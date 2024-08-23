@@ -127,7 +127,23 @@ export const ResetPassword = createAsyncThunk(
     }
   }
 );
-
+export const Logout = createAsyncThunk(
+  "auth/logout",
+  async (params: { ex: string }, { rejectWithValue }) => {
+    try {
+      const response = await authInstance.post(
+        "/user/logout",
+        {},
+        {
+          withCredentials: true,
+        }
+      );
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response.data.message);
+    }
+  }
+);
 const authSlice = createSlice({
   name: "auth",
   initialState,
@@ -170,6 +186,18 @@ const authSlice = createSlice({
     });
     builder.addCase(ResetPassword.rejected, (state) => {
       state.Loading = false;
+    });
+    builder.addCase(Logout.rejected, (state) => {
+      state.Loading = false;
+    });
+    builder.addCase(Logout.pending, (state) => {
+      state.Loading = true;
+    });
+    builder.addCase(Logout.fulfilled, (state) => {
+      state.Loading = false;
+      state.isAuthenticated = false;
+      localStorage.removeItem("user");
+      localStorage.removeItem("isAuthenticated");
     });
   },
 });

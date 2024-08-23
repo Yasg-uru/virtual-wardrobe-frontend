@@ -31,6 +31,7 @@ import { useAppDispatch, useAppSelector } from "@/redux/hook";
 import SearchBar from "./Search";
 import { GetWearAnalysis } from "@/redux/slices/clothSlice";
 import Notification from "./Notification";
+import { Logout } from "@/redux/slices/authSlice";
 
 export const Navbar: React.FunctionComponent = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -163,30 +164,30 @@ export const Navbar: React.FunctionComponent = () => {
                       <DropdownMenuItem>
                         <LogOut className="mr-2 h-4 w-4" />
                         <span
-                        //   onClick={() => {
-                        //     dispatch(Logout())
-                        //       .unwrap()
-                        //       .then(() => {
-                        //         toast({
-                        //           title: "Logged out successfully",
-                        //           variant: "default",
-                        //         });
-                        //         navigate("/Login");
-                        //       })
-                        //       .catch(() => {
-                        //         toast({
-                        //           title: "Failed to Logout ",
-                        //           description:
-                        //             "Error , Please Try again latter",
-                        //         });
-                        //       });
-                        //   }}
+                          onClick={() => {
+                            dispatch(Logout({ ex: "yash" }))
+                              .unwrap()
+                              .then(() => {
+                                toast({
+                                  title: "Logged out successfully",
+                                  variant: "default",
+                                });
+                                navigate("/auth");
+                              })
+                              .catch(() => {
+                                toast({
+                                  title: "Failed to Logout ",
+                                  description:
+                                    "Error , Please Try again latter",
+                                });
+                              });
+                          }}
                         >
-                          {/* {isLoading ? ( */}
-                          <Loader2 className="h-6 w-6 animate-spin" />
-                          {/* ) : ( */}
-                          "Log out"
-                          {/* )} */}
+                          {Loading ? (
+                            <Loader2 className="h-6 w-6 animate-spin" />
+                          ) : (
+                            "Log out"
+                          )}
                         </span>
                         <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
                       </DropdownMenuItem>
