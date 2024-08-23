@@ -131,7 +131,7 @@ export const Navbar: React.FunctionComponent = () => {
                       <DropdownMenuGroup>
                         <DropdownMenuItem>
                           <User className="mr-2 h-4 w-4" />
-                          <span>Profile</span>
+                          <Link to="/Profile">Profile</Link>
                           <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
                         </DropdownMenuItem>
                         <DropdownMenuItem>

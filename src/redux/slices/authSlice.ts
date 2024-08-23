@@ -133,7 +133,9 @@ export const Logout = createAsyncThunk(
     try {
       const response = await authInstance.post(
         "/user/logout",
-        {},
+        {
+          ex: params.ex,
+        },
         {
           withCredentials: true,
         }

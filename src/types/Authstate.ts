@@ -1,8 +1,7 @@
 export interface AuthState {
   Loading: boolean;
   userInfo: User | null;
-  isAuthenticated:boolean;
-  
+  isAuthenticated: boolean;
 }
 export interface User {
   _id: string;
@@ -21,5 +20,4 @@ export interface User {
   lastLogin: string;
   createdAt: string;
   updatedAt: string;
- 
 }

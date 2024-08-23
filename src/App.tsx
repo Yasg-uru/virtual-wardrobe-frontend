@@ -12,6 +12,7 @@ import SerachDetails from "./pages/Cloths/CothDetailBysearch";
 import WearAnalysis from "./pages/Cloths/WearAnalysis";
 import ForgotPass from "./pages/authcomponents/ForgotPass";
 import ResetPass from "./pages/authcomponents/ResetPass";
+import Profile from "./pages/authcomponents/Profile";
 
 const App: React.FunctionComponent = () => {
   return (
@@ -19,6 +20,7 @@ const App: React.FunctionComponent = () => {
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/Profile" element={<Profile />} />
         <Route path="/auth" element={<Tabcomponent />} />
         <Route path="/Reset-password/:token" element={<ResetPass />} />
         <Route path="/forgot-password" element={<ForgotPass />} />
