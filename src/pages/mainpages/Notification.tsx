@@ -49,10 +49,22 @@ const Notification: React.FunctionComponent = () => {
         </PopoverContent>
       ) : (
         <PopoverContent className="w-80 flex justify-center items-center flex-col gap-2 p-5 ">
-          <p className="font-semibold text-red-600 text-xl animate-pulse">
+          <p
+            className={`font-semibold ${
+              Notification?.title === "Seasonal Clothing Update"
+                ? "text-green-600"
+                : "text-red-600"
+            } text-xl animate-pulse`}
+          >
             {Notification?.title}
           </p>
-          <p className="text-sm font-semibold text-red-600 animate-pulse">
+          <p
+            className={`text-sm font-semibold ${
+              Notification?.title === "Seasonal Clothing Update"
+                ? "text-green-600"
+                : "text-red-600"
+            } animate-pulse`}
+          >
             {Notification?.reminder}
           </p>
         </PopoverContent>

@@ -237,7 +237,7 @@ export const Navbar: React.FunctionComponent = () => {
           >
             Support
           </Link>
-          
+
           <ModeToggle />
           {!isAuthenticated ? (
             <Button

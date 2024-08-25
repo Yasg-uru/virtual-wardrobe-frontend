@@ -11,7 +11,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import axios from "axios";
+
 import {
   Select,
   SelectContent,
@@ -22,20 +22,27 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { IClothItem } from "@/types/clothState";
+import { FaFilter } from "react-icons/fa";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { filterCloth } from "@/redux/slices/clothSlice";
-import { Checkbox } from "@/components/ui/checkbox";
 import { useAppDispatch } from "@/redux/hook";
 import { useToast } from "@/components/ui/use-toast";
+import { RefreshCcw } from "lucide-react";
 
 type Props = {
   collections: IClothItem[];
+  handleRefresh: () => void;
+  loading: boolean;
 };
 
-const FilterCompo: React.FunctionComponent<Props> = ({ collections }) => {
+const FilterCompo: React.FunctionComponent<Props> = ({
+  collections,
+  loading,
+  handleRefresh,
+}) => {
   const dispatch = useAppDispatch();
 
   const [brands, setBrands] = useState<string[]>([]);
@@ -157,7 +164,22 @@ const FilterCompo: React.FunctionComponent<Props> = ({ collections }) => {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button variant="outline">Apply Filter</Button>
+        <div className="join gap-2">
+          <Button
+            className=" btn-join bg-gradient-to-r from-pink-500 to-purple-500 text-white font-bold py-3 px-6 rounded-md shadow-md "
+            variant="outline"
+          >
+            Apply Filter <FaFilter size={30} color="white" />
+          </Button>
+
+          <Button
+            onClick={handleRefresh}
+            className="btn-join bg-gradient-to-r from-pink-500 to-purple-500 text-white font-bold py-3 px-6 rounded-md shadow-md hover:scale-105 transition duration-300"
+          >
+            Refresh
+            <RefreshCcw className={`ml-2 ${loading ? "animate-spin" : ""}`} />
+          </Button>
+        </div>
       </SheetTrigger>
       <SheetContent>
         <SheetHeader>

@@ -212,9 +212,11 @@ const CardComponent: React.FunctionComponent<props> = ({ cloth }) => {
         });
       });
   };
-
+  if (cloth.isArchived) {
+    return;
+  }
   return (
-    <Card className="w-[400px] cursor-pointer relative shadow-lg hover:shadow-2xl transition-shadow duration-300 rounded-xl overflow-hidden">
+    <Card className="w-[400px] h-[800px] cursor-pointer relative shadow-lg hover:shadow-2xl transition-shadow duration-300 rounded-xl overflow-hidden">
       <CardHeader className="p-0">
         <img
           className="h-96 w-full object-cover"
