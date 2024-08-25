@@ -52,7 +52,7 @@ export interface Formdata {
 const AddCloth: React.FunctionComponent = () => {
   const dispatch = useAppDispatch();
   const { toast } = useToast();
-const navigate=useNavigate();
+  const navigate = useNavigate();
 
   const [formData, setFormData] = useState<Formdata>({
     imageurl: null,
@@ -191,7 +191,7 @@ const navigate=useNavigate();
           isFavorite: false,
           isArchived: false,
         });
-        navigate("/collections")
+        navigate("/collections");
       })
       .catch((error: any) => {
         toast({
@@ -476,7 +476,7 @@ const navigate=useNavigate();
           className=" w-full bg-gradient-to-r from-pink-500 to-purple-500 text-white font-bold py-3 px-6 rounded-md shadow-md hover:scale-105 transition duration-300  "
           type="submit"
         >
-          {isLoading ? <Loader2 className=" animate-spin h-5 w-5" /> : "Submit"}
+          {isLoading ? <Loader2 className=" animate-spin h-5 w-5" /> : "Save"}
         </Button>
       </form>
     </div>
