@@ -247,7 +247,9 @@ const CardComponent: React.FunctionComponent<props> = ({ cloth }) => {
           <div className="flex gap-2 w-full items-center">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button className="w-full bg-red-600 opacity-85 hover:bg-red-600 text-white">Change Condition</Button>
+                <Button className="w-full bg-red-600 opacity-85 hover:bg-red-600 text-white">
+                  Change Condition
+                </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-56">
                 <DropdownMenuLabel>Condition</DropdownMenuLabel>
