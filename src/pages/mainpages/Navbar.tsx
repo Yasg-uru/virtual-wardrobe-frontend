@@ -8,9 +8,11 @@ import {
   Settings,
   User,
   Loader2,
+  Archive,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { TbBrandGoogleAnalytics } from "react-icons/tb";
+import { FaFileArchive } from "react-icons/fa";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -169,6 +171,12 @@ export const Navbar: React.FunctionComponent = () => {
                       <LifeBuoy className="mr-2 h-4 w-4" />
                       <Link to="/support">
                         <span>Support</span>
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                      <Archive className="mr-2 h-4 w-4" />
+                      <Link to="/archive">
+                        <span>Archive</span>
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />

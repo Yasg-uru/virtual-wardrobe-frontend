@@ -68,6 +68,7 @@ const initialState: clothState = {
   underUtilizedCloths: LoadleastmostWorn().underutilized || [],
   Notification: null,
   ClothInfo: null,
+  Archives: [],
 };
 export const WearCloth = createAsyncThunk(
   "cloths/wear",
@@ -305,6 +306,32 @@ export const DeleteCloth = createAsyncThunk(
     }
   }
 );
+export const GetArchives = createAsyncThunk(
+  "cloth/GetArchives",
+  async (params: { ex: string }, { rejectWithValue }) => {
+    try {
+      const response = await clothInstance.get(`/cloth/archive`, {
+        withCredentials: true,
+      });
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response.data.message);
+    }
+  }
+);
+export const RemoveFromArchive = createAsyncThunk(
+  "cloth/removeArchive",
+  async (formdata: { clothId: string }, { rejectWithValue }) => {
+    try {
+      const response = await clothInstance.put(
+        `/cloth/remove-archive/${formdata.clothId}`
+      );
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response.data.message);
+    }
+  }
+);
 const clothSlice = createSlice({
   name: "cloth",
   initialState,
@@ -384,6 +411,16 @@ const clothSlice = createSlice({
     builder.addCase(GetClothDetails.fulfilled, (state, action) => {
       state.isLoading = false;
       state.ClothInfo = action.payload?.cloth;
+    });
+    builder.addCase(GetArchives.fulfilled, (state, action) => {
+      state.Archives = action.payload?.Cloths;
+      state.isLoading = false;
+    });
+    builder.addCase(GetArchives.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(GetArchives.rejected, (state) => {
+      state.isLoading = false;
     });
   },
 });

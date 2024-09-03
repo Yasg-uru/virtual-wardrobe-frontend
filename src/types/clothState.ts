@@ -8,6 +8,7 @@ export interface clothState {
   isLoading: boolean;
   Notification: notificationSchema | null;
   ClothInfo: IClothItem  | null;
+  Archives:IClothItem[];
 }
 export interface notificationSchema {
   title: string;

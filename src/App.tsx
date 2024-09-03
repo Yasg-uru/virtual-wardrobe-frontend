@@ -15,6 +15,7 @@ import ResetPass from "./pages/authcomponents/ResetPass";
 import Profile from "./pages/authcomponents/Profile";
 import RequireAuth from "./helper/RequireAuth";
 import Support from "./pages/mainpages/Support";
+import GetArchive from "./pages/Cloths/GetArchive";
 
 const App: React.FunctionComponent = () => {
   return (
@@ -38,6 +39,7 @@ const App: React.FunctionComponent = () => {
           <Route path="/searchDetail/:clothId" element={<SerachDetails />} />
           <Route path="/wear/analysis" element={<WearAnalysis />} />
           <Route path="/support" element={<Support />} />
+          <Route path="/archive" element={<GetArchive />} />
         </Route>
       </Routes>
     </>
