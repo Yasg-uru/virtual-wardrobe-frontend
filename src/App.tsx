@@ -3,7 +3,7 @@ import { Routes, Route } from "react-router-dom";
 import Home from "./pages/mainpages/Home";
 import Navbar from "./pages/mainpages/Navbar";
 import Tabcomponent from "./pages/authcomponents/Tabcomponent";
-import Login from "./pages/authcomponents/Login";
+
 import Verify from "./pages/authcomponents/VerifyComponent";
 import ClothDetail from "./pages/Cloths/ClothDetails";
 import AddCloth from "./pages/Cloths/AddCloth";
