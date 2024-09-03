@@ -41,17 +41,15 @@ const GetArchive: React.FunctionComponent = () => {
 
   return (
     <div className="min-h-screen flex flex-col gap-2 p-4">
-        <h1 className="text-2xl text-center text-red-600 italic font-bold ">
-Archives
-        </h1>
-        <div className="flex flex-wrap gap-2 mx-auto ">
-            {
-                Archives.length>0 && Archives.map((cloth,index)=>(
-                 <CardComponent key={index} cloth={cloth} />   
-                ))
-            }
-        </div>
-
+      <h1 className="text-2xl text-center text-red-600 italic font-bold ">
+        Archives
+      </h1>
+      <div className="flex flex-wrap gap-2 mx-auto ">
+        {Archives.length > 0 &&
+          Archives.map((cloth, index) => (
+            <CardComponent key={index} cloth={cloth} />
+          ))}
+      </div>
     </div>
   );
 };
