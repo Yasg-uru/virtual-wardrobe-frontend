@@ -23,6 +23,8 @@ const App: React.FunctionComponent = () => {
       <Navbar />
       <Routes>
         <Route path="/auth" element={<Tabcomponent />} />
+        <Route path="/verify/:email" element={<Verify />} />
+        <Route path="/forgot-password" element={<ForgotPass />} />
         <Route
           element={
             <RequireAuth allowedRoles={["User", "Admin", "Moderator"]} />
@@ -31,8 +33,6 @@ const App: React.FunctionComponent = () => {
           <Route path="/" element={<Home />} />
           <Route path="/Profile" element={<Profile />} />
           <Route path="/Reset-password/:token" element={<ResetPass />} />
-          <Route path="/forgot-password" element={<ForgotPass />} />
-          <Route path="/verify/:email" element={<Verify />} />
           <Route path="/detail/:id" element={<ClothDetail />} />
           <Route path="/add" element={<AddCloth />} />
           <Route path="/collections" element={<Collections />} />
