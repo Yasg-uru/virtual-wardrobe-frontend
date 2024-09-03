@@ -1,4 +1,4 @@
-import React from "react";
+
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
@@ -13,12 +13,12 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { ForgotPasswordSchema } from "@/schema/authSchema/forgotPassword";
+
 import { useAppDispatch, useAppSelector } from "@/redux/hook";
-import { ForgotPassword, ResetPassword } from "@/redux/slices/authSlice";
+import {  ResetPassword } from "@/redux/slices/authSlice";
 import { useToast } from "@/components/ui/use-toast";
 import { Loader2 } from "lucide-react";
-import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { ResetPasswordSchema } from "@/schema/authSchema/ResetPass";
 
 const ResetPass = () => {

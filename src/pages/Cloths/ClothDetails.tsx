@@ -1,7 +1,7 @@
 import { useToast } from "@/components/ui/use-toast";
 import { useAppDispatch, useAppSelector } from "@/redux/hook";
 import { GetClothDetails } from "@/redux/slices/clothSlice";
-import { IClothItem } from "@/types/clothState";
+
 import { Loader2 } from "lucide-react";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";

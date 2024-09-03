@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { authInstance } from "@/helper/axiosInstance";
 import { z } from "zod";
-import SignUpSchema from "@/schema/authSchema/SignupSchema";
+
 import LoginSchema from "@/schema/authSchema/Login";
 import { AuthState, User } from "@/types/Authstate";
 import { VerifyFormSchema } from "@/pages/authcomponents/VerifyComponent";
@@ -162,7 +162,7 @@ const authSlice = createSlice({
     builder.addCase(userLogin.rejected, (state) => {
       state.Loading = false;
     });
-    builder.addCase(userSignUp.fulfilled, (state, action) => {
+    builder.addCase(userSignUp.fulfilled, (state) => {
       state.Loading = false;
     });
     builder.addCase(userSignUp.pending, (state) => {

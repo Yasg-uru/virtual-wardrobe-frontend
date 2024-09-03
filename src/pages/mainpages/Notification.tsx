@@ -8,7 +8,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useToast } from "@/components/ui/use-toast";
 import { useAppDispatch, useAppSelector } from "@/redux/hook";
 import { GetNotification } from "@/redux/slices/clothSlice";
-import { Loader2 } from "lucide-react";
+
 import { IoMdNotifications } from "react-icons/io";
 const Notification: React.FunctionComponent = () => {
   const dispatch = useAppDispatch();

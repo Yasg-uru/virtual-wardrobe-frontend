@@ -1,6 +1,6 @@
 import { Input } from "@/components/ui/input";
 import { useEffect, useRef, useState } from "react";
-import { useDebounce, useFavicon } from "@uidotdev/usehooks";
+import { useDebounce } from "@uidotdev/usehooks";
 import { useAppDispatch, useAppSelector } from "@/redux/hook";
 import { SearchCloths } from "@/redux/slices/clothSlice";
 import { useToast } from "@/components/ui/use-toast";

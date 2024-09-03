@@ -1,4 +1,4 @@
-import React from "react";
+
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
@@ -18,12 +18,12 @@ import { useAppDispatch, useAppSelector } from "@/redux/hook";
 import { ForgotPassword } from "@/redux/slices/authSlice";
 import { useToast } from "@/components/ui/use-toast";
 import { Loader2 } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+
 
 const ForgotPass = () => {
   const dispatch = useAppDispatch();
   const { toast } = useToast();
-  const navigate = useNavigate();
+ 
 
   const { Loading } = useAppSelector((state) => state.auth);
   const form = useForm<z.infer<typeof ForgotPasswordSchema>>({

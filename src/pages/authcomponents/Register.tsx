@@ -92,7 +92,7 @@ const SignUp: React.FunctionComponent = () => {
           <FormField
             control={form.control}
             name="profilePicture"
-            render={({ field }) => (
+            render={() => (
               <FormItem className=" flex flex-col justify-center items-center">
                 <FormLabel className="text-sm font-medium  text-gray-700 dark:text-gray-300">
                   Profile Picture

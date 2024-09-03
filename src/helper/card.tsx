@@ -152,20 +152,20 @@ import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
-  CardDescription,
+  
   CardFooter,
   CardHeader,
-  CardTitle,
+  
 } from "@/components/ui/card";
-import { MdDelete } from "react-icons/md";
+
 import { IClothItem } from "@/types/clothState";
 type props = {
   cloth: IClothItem;
 };
 import { Badge } from "@/components/ui/badge";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useState } from "react";
-import { Input } from "@/components/ui/input";
+
 import { X } from "lucide-react";
 import {
   DropdownMenu,
@@ -182,7 +182,7 @@ import DeleteDialog from "./DeleteDialog";
 const CardComponent: React.FunctionComponent<props> = ({ cloth }) => {
   const [isWear, setIsWear] = useState<boolean>(false);
   const [condition, setCondition] = useState<string>(cloth.condition);
-  const navigate = useNavigate();
+  
   const { toast } = useToast();
 
   const handleConditionChange = (condition: string) => {

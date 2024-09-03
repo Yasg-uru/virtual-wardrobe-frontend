@@ -9,7 +9,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { DatePickerDemo } from "@/components/ui/Date-picker";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+
 import { useAppDispatch, useAppSelector } from "@/redux/hook";
 import { AddUserCloth } from "@/redux/slices/clothSlice";
 import { useToast } from "@/components/ui/use-toast";

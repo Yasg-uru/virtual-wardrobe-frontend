@@ -1,14 +1,13 @@
-import { authInstance, clothInstance } from "@/helper/axiosInstance";
+import { clothInstance } from "@/helper/axiosInstance";
 import {
   Formdata,
-  SeasonSuitability,
-  WeatherSuitability,
+  
 } from "@/pages/Cloths/AddCloth";
-import clothSchema from "@/schema/clothschema/createCloth";
+
 import { clothState, IClothItem } from "@/types/clothState";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios, { AxiosError } from "axios";
-import { z } from "zod";
+
 
 const savedata = (cloths: IClothItem[]) => {
   sessionStorage.setItem("cloths", JSON.stringify(cloths));
@@ -264,6 +263,7 @@ export const GetWearAnalysis = createAsyncThunk(
   async (params: { ex: string }, { rejectWithValue }) => {
     try {
       const response = await clothInstance.get(`/cloth/wear/analysis`, {
+        params,
         withCredentials: true,
       });
       return response.data;
@@ -280,6 +280,7 @@ export const GetNotification = createAsyncThunk(
   async (params: { ex: string }, { rejectWithValue }) => {
     try {
       const response = await clothInstance.get("/cloth/reminder", {
+        params,
         withCredentials: true,
       });
       return response.data;
@@ -311,6 +312,7 @@ export const GetArchives = createAsyncThunk(
   async (params: { ex: string }, { rejectWithValue }) => {
     try {
       const response = await clothInstance.get(`/cloth/archive`, {
+        params,
         withCredentials: true,
       });
       return response.data;

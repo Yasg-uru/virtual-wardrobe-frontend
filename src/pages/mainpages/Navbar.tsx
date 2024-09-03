@@ -2,17 +2,15 @@ import { useState } from "react";
 import {
   Menu,
   X,
-  CreditCard,
   LifeBuoy,
   LogOut,
-  Settings,
   User,
   Loader2,
   Archive,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { TbBrandGoogleAnalytics } from "react-icons/tb";
-import { FaFileArchive } from "react-icons/fa";
+
 import {
   DropdownMenu,
   DropdownMenuContent,
