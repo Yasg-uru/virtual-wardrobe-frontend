@@ -27,7 +27,9 @@ const App: React.FunctionComponent = () => {
         <Route path="/forgot-password" element={<ForgotPass />} />
         <Route
           element={
-            <RequireAuth allowedRoles={["User", "Admin", "Moderator"]} />
+            <RequireAuth 
+            // allowedRoles={["User", "Admin", "Moderator"]} 
+            />
           }
         >
           <Route path="/" element={<Home />} />
