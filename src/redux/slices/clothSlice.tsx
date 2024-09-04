@@ -3,7 +3,7 @@ import { Formdata } from "@/pages/Cloths/AddCloth";
 
 import { clothState, IClothItem } from "@/types/clothState";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axios, { AxiosError } from "axios";
+import  { AxiosError } from "axios";
 
 const savedata = (cloths: IClothItem[]) => {
   sessionStorage.setItem("cloths", JSON.stringify(cloths));
@@ -166,12 +166,9 @@ export const GetCollections = createAsyncThunk(
   "cloths/collections",
   async () => {
     try {
-      const response = await clothInstance.get(
-        "/cloth/collections",
-        {
-          withCredentials: true,
-        }
-      );
+      const response = await clothInstance.get("/cloth/collections", {
+        withCredentials: true,
+      });
       console.log("this is a response data :", response.data);
       return response.data;
     } catch (error: any) {
