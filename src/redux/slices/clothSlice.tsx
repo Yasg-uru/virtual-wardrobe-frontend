@@ -166,8 +166,8 @@ export const GetCollections = createAsyncThunk(
   "cloths/collections",
   async () => {
     try {
-      const response = await axios.get(
-        "http://localhost:5001/cloth/collections",
+      const response = await clothInstance.get(
+        "/cloth/collections",
         {
           withCredentials: true,
         }

@@ -1,4 +1,3 @@
-
 import CardComponent from "@/helper/card";
 import { useAppSelector } from "@/redux/hook";
 import React, { useEffect, useRef, useState } from "react";
