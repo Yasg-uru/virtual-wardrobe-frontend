@@ -326,7 +326,12 @@ export const RemoveFromArchive = createAsyncThunk(
   async (formdata: { clothId: string }, { rejectWithValue }) => {
     try {
       const response = await clothInstance.put(
-        `/cloth/remove-archive/${formdata.clothId}`
+        `/cloth/remove-archive/${formdata.clothId}`,
+        {
+          
+        },{
+          withCredentials:true
+        }
       );
       return response.data;
     } catch (error: any) {
