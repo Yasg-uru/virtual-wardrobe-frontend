@@ -33,10 +33,10 @@ export const userSignUp = createAsyncThunk(
       });
       return response.data;
     } catch (error: any) {
-      if (error.response && error.response.data) {
-        rejectWithValue(error.response?.data?.message);
-      }
-      rejectWithValue("Unknown error");
+      // if (error.response && error.response.data) {
+      rejectWithValue(error.response.data.message);
+      // }
+      // rejectWithValue("Unknown error");
     }
   }
 );
@@ -49,10 +49,10 @@ export const userVerify = createAsyncThunk(
       });
       return response.data;
     } catch (error: any) {
-      if (error.response && error.response.data) {
-        rejectWithValue(error.response?.data?.message);
-      }
-      rejectWithValue("unknown error");
+      // if (error.response && error.response.data) {
+      rejectWithValue(error.response.data.message);
+      // }
+      // rejectWithValue("unknown error");
     }
   }
 );
@@ -66,10 +66,10 @@ export const userLogin = createAsyncThunk(
       return response.data;
     } catch (error: any) {
       console.log("this is a error :", error.response.data);
-      if (error.response && error.response.data) {
-        rejectWithValue(error.response?.data);
-      }
-      rejectWithValue("unknown error");
+      // if (error.response && error.response.data) {
+      rejectWithValue(error.response.data.error);
+      // }
+      // rejectWithValue("unknown error");
     }
   }
 );
@@ -89,13 +89,13 @@ export const ForgotPassword = createAsyncThunk(
       );
       return response.data;
     } catch (error: any) {
-      if (
-        error.response &&
-        error.response.data &&
-        error.response.data.message
-      ) {
-        return rejectWithValue(error.response.data.message);
-      }
+      // if (
+      //   error.response &&
+      //   error.response.data &&
+      //   error.response.data.message
+      // ) {
+      return rejectWithValue(error.response.data.message);
+      // }
       // return rejectWithValue("unknown error");
     }
   }
@@ -116,13 +116,13 @@ export const ResetPassword = createAsyncThunk(
       );
       return response.data;
     } catch (error: any) {
-      if (
-        error.response &&
-        error.response.data &&
-        error.response.data.message
-      ) {
-        return rejectWithValue(error.response.data.message);
-      }
+      // if (
+      //   error.response &&
+      //   error.response.data &&
+      //   error.response.data.message
+      // ) {
+      return rejectWithValue(error.response.data.message);
+      // }
       // return rejectWithValue("unknown error");
     }
   }

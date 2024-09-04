@@ -1,13 +1,9 @@
 import { clothInstance } from "@/helper/axiosInstance";
-import {
-  Formdata,
-  
-} from "@/pages/Cloths/AddCloth";
+import { Formdata } from "@/pages/Cloths/AddCloth";
 
 import { clothState, IClothItem } from "@/types/clothState";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios, { AxiosError } from "axios";
-
 
 const savedata = (cloths: IClothItem[]) => {
   sessionStorage.setItem("cloths", JSON.stringify(cloths));
@@ -327,10 +323,9 @@ export const RemoveFromArchive = createAsyncThunk(
     try {
       const response = await clothInstance.put(
         `/cloth/remove-archive/${formdata.clothId}`,
+        {},
         {
-          
-        },{
-          withCredentials:true
+          withCredentials: true,
         }
       );
       return response.data;

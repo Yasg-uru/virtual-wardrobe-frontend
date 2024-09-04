@@ -39,7 +39,7 @@ const Login: React.FunctionComponent = () => {
       })
       .catch((error) => {
         toast({
-          title: error?.message,
+          title: error,
         });
       });
   };
