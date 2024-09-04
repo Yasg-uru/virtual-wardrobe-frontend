@@ -195,7 +195,7 @@ const AddCloth: React.FunctionComponent = () => {
       })
       .catch((error: any) => {
         toast({
-          title: error.message || "An error occurred",
+          title: error,
           variant: "destructive",
         });
       });
