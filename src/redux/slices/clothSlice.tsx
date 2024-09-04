@@ -3,7 +3,7 @@ import { Formdata } from "@/pages/Cloths/AddCloth";
 
 import { clothState, IClothItem } from "@/types/clothState";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import  { AxiosError } from "axios";
+import { AxiosError } from "axios";
 
 const savedata = (cloths: IClothItem[]) => {
   sessionStorage.setItem("cloths", JSON.stringify(cloths));
@@ -261,10 +261,10 @@ export const GetWearAnalysis = createAsyncThunk(
       });
       return response.data;
     } catch (error: any) {
-      if (error.response && error.response.data) {
-        return rejectWithValue(error.response.data?.message);
-      }
-      return rejectWithValue("unkown error");
+      // if (error.response && error.response.data) {
+      return rejectWithValue(error.response.data.message);
+      // }
+      // return rejectWithValue("unkown error");
     }
   }
 );
