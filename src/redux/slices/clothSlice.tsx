@@ -155,10 +155,10 @@ export const AddUserCloth = createAsyncThunk(
     } catch (error: any) {
       console.log("this is a error :", error);
 
-      // if (error.response && error.response.data) {
+      if (error.response && error.response.data) {
       return rejectWithValue(error.response.data.message);
-      // }
-      // return rejectWithValue("Unkown error");
+      }
+      return rejectWithValue("Unkown error");
     }
   }
 );
