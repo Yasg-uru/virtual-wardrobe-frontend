@@ -34,9 +34,9 @@ const Home: React.FunctionComponent = () => {
               "Successfully fetched clothes according to the weather conditions.",
           });
         })
-        .catch(() => {
+        .catch((error) => {
           toast({
-            title: "Sorry, no clothes found.",
+            title: error,
             variant: "destructive",
           });
         });

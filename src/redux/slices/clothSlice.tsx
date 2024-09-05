@@ -156,7 +156,7 @@ export const AddUserCloth = createAsyncThunk(
       console.log("this is a error :", error);
 
       if (error.response && error.response.data) {
-      return rejectWithValue(error.response.data.message);
+        return rejectWithValue(error.response.data.message);
       }
       return rejectWithValue("Unkown error");
     }
@@ -247,7 +247,7 @@ export const GetRecommandedCloths = createAsyncThunk(
 
       return response.data;
     } catch (error: any) {
-      rejectWithValue("unkown error");
+      return rejectWithValue(error.response.data.message);
     }
   }
 );
