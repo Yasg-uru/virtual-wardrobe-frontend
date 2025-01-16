@@ -31,7 +31,7 @@ const Login: React.FunctionComponent = () => {
     },
   });
   const onSubmit = (data: z.infer<typeof LoginSchema>) => {
-    dispatch(userLogin(data))
+    dispatch(userLogin(data)).unwrap()
       .then(() => {
         toast({
           title: "Logged in successfully",

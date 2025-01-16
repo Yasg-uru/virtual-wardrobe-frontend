@@ -1,4 +1,4 @@
-import { clothInstance } from "@/helper/axiosInstance";
+import { axiosInstance } from "@/helper/axiosInstance";
 import { Formdata } from "@/pages/Cloths/AddCloth";
 
 import { clothState, IClothItem } from "@/types/clothState";
@@ -70,7 +70,7 @@ export const WearCloth = createAsyncThunk(
   async (params: { condition: string; id: string }, { rejectWithValue }) => {
     try {
       const { condition, id } = params;
-      const response = await clothInstance.post(
+      const response = await axiosInstance.post(
         `/cloth/wear/${id}`,
         { condition },
         {
@@ -144,7 +144,7 @@ export const AddUserCloth = createAsyncThunk(
       );
 
       console.log("this is a formdata: ", formData);
-      const response = await clothInstance.post(
+      const response = await axiosInstance.post(
         "/cloth/create",
         formDataToSend,
         {
@@ -166,7 +166,7 @@ export const GetCollections = createAsyncThunk(
   "cloths/collections",
   async () => {
     try {
-      const response = await clothInstance.get("/cloth/collections", {
+      const response = await axiosInstance.get("/cloth/collections", {
         withCredentials: true,
       });
       console.log("this is a response data :", response.data);
@@ -184,7 +184,7 @@ export const filterCloth = createAsyncThunk(
   "cloths/filter",
   async (formData: any, { rejectWithValue }) => {
     try {
-      const response = await clothInstance.get(`/cloth/filter`, {
+      const response = await axiosInstance.get(`/cloth/filter`, {
         params: formData,
         withCredentials: true,
       });
@@ -203,7 +203,7 @@ export const SearchCloths = createAsyncThunk(
   async (params: { searchQuery: string }, { rejectWithValue }) => {
     try {
       const { searchQuery } = params;
-      const response = await clothInstance.get(
+      const response = await axiosInstance.get(
         `/cloth/search?searchQuery=${searchQuery}`,
         {
           withCredentials: true,
@@ -221,7 +221,7 @@ export const GetClothDetails = createAsyncThunk(
   "auth/ClothDetails",
   async (params: { id: string }, { rejectWithValue }) => {
     try {
-      const response = await clothInstance.get(`/cloth/details/${params.id}`, {
+      const response = await axiosInstance.get(`/cloth/details/${params.id}`, {
         withCredentials: true,
       });
       return response.data;
@@ -237,7 +237,7 @@ export const GetRecommandedCloths = createAsyncThunk(
       const { lat, lon } = params;
       console.log("this is a lat and lon :", lat, lon);
 
-      const response = await clothInstance.get(
+      const response = await axiosInstance.get(
         `/cloth/?lat=${lat}&lon=${lon}`,
         {
           withCredentials: true,
@@ -255,7 +255,7 @@ export const GetWearAnalysis = createAsyncThunk(
   "cloths/wearanlysis",
   async (params: { ex: string }, { rejectWithValue }) => {
     try {
-      const response = await clothInstance.get(`/cloth/wear/analysis`, {
+      const response = await axiosInstance.get(`/cloth/wear/analysis`, {
         params,
         withCredentials: true,
       });
@@ -272,7 +272,7 @@ export const GetNotification = createAsyncThunk(
   "cloths/notifications",
   async (params: { ex: string }, { rejectWithValue }) => {
     try {
-      const response = await clothInstance.get("/cloth/reminder", {
+      const response = await axiosInstance.get("/cloth/reminder", {
         params,
         withCredentials: true,
       });
@@ -290,7 +290,7 @@ export const DeleteCloth = createAsyncThunk(
   async (params: { clothId: string }, { rejectWithValue }) => {
     try {
       const { clothId } = params;
-      const response = await clothInstance.delete(`/${clothId}`);
+      const response = await axiosInstance.delete(`/${clothId}`);
       return response.data;
     } catch (error: any) {
       if (error.response && error.response.data) {
@@ -304,7 +304,7 @@ export const GetArchives = createAsyncThunk(
   "cloth/GetArchives",
   async (params: { ex: string }, { rejectWithValue }) => {
     try {
-      const response = await clothInstance.get(`/cloth/archive`, {
+      const response = await axiosInstance.get(`/cloth/archive`, {
         params,
         withCredentials: true,
       });
@@ -318,7 +318,7 @@ export const RemoveFromArchive = createAsyncThunk(
   "cloth/removeArchive",
   async (formdata: { clothId: string }, { rejectWithValue }) => {
     try {
-      const response = await clothInstance.put(
+      const response = await axiosInstance.put(
         `/cloth/remove-archive/${formdata.clothId}`,
         {},
         {

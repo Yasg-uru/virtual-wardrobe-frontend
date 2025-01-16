@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { authInstance } from "@/helper/axiosInstance";
+
 import { z } from "zod";
 
 import LoginSchema from "@/schema/authSchema/Login";
@@ -7,6 +7,8 @@ import { AuthState, User } from "@/types/Authstate";
 import { VerifyFormSchema } from "@/pages/authcomponents/VerifyComponent";
 import { ForgotPasswordSchema } from "@/schema/authSchema/forgotPassword";
 import { ResetPasswordSchema } from "@/schema/authSchema/ResetPass";
+import { axiosInstance } from "@/helper/axiosInstance";
+import { AxiosError } from "axios";
 const LoadData = (): User | null => {
   const data = localStorage.getItem("user");
   if (data) {
@@ -24,19 +26,23 @@ const initialState: AuthState = {
   userInfo: LoadData(),
   isAuthenticated: localStorage.getItem("isAuthenticated") === "true" || false,
 };
+
+type axiosError =AxiosError<{message:string}>
 export const userSignUp = createAsyncThunk(
   "auth/register",
   async (formdata: any, { rejectWithValue }) => {
     try {
-      const response = await authInstance.post("/user/create", formdata, {
+      const response = await axiosInstance.post("/user/create", formdata, {
         withCredentials: true,
       });
       return response.data;
     } catch (error: any) {
-      // if (error.response && error.response.data) {
-      rejectWithValue(error.response.data.message);
-      // }
-      // rejectWithValue("Unknown error");
+      const err:axiosError=error as axiosError;
+
+      if (err.response && err.response.data && err.response.data.message) {
+      return rejectWithValue(error.response.data.message);
+      }
+      return rejectWithValue("Unknown error");
     }
   }
 );
@@ -44,15 +50,17 @@ export const userVerify = createAsyncThunk(
   "auth/verify",
   async (params: z.infer<typeof VerifyFormSchema>, { rejectWithValue }) => {
     try {
-      const response = await authInstance.post("/user/verify", params, {
+      const response = await axiosInstance.post("/user/verify", params, {
         withCredentials: true,
       });
       return response.data;
     } catch (error: any) {
-      // if (error.response && error.response.data) {
-      rejectWithValue(error.response.data.message);
-      // }
-      // rejectWithValue("unknown error");
+      const err:axiosError=error as axiosError;
+
+      if (err.response && err.response.data && err.response.data.message) {
+      return rejectWithValue(error.response.data.message);
+      }
+      return rejectWithValue("Unknown error");
     }
   }
 );
@@ -60,16 +68,17 @@ export const userLogin = createAsyncThunk(
   "auth/login",
   async (formdata: z.infer<typeof LoginSchema>, { rejectWithValue }) => {
     try {
-      const response = await authInstance.post("/user/Login", formdata, {
+      const response = await axiosInstance.post("/user/Login", formdata, {
         withCredentials: true,
       });
       return response.data;
     } catch (error: any) {
-      console.log("this is a error :", error.response.data);
-      // if (error.response && error.response.data) {
-      rejectWithValue(error.response.data.error);
-      // }
-      // rejectWithValue("unknown error");
+      const err:axiosError=error as axiosError;
+      console.log('error in login :',error)
+      if (err.response && err.response.data && err.response.data.message) {
+      return rejectWithValue(error.response.data.message);
+      }
+      return rejectWithValue("Unknown error");
     }
   }
 );
@@ -80,7 +89,7 @@ export const ForgotPassword = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-      const response = await authInstance.post(
+      const response = await axiosInstance.post(
         `/user/forgotpassword/${formdata.email}`,
         {},
         {
@@ -89,14 +98,12 @@ export const ForgotPassword = createAsyncThunk(
       );
       return response.data;
     } catch (error: any) {
-      // if (
-      //   error.response &&
-      //   error.response.data &&
-      //   error.response.data.message
-      // ) {
+      const err:axiosError=error as axiosError;
+
+      if (err.response && err.response.data && err.response.data.message) {
       return rejectWithValue(error.response.data.message);
-      // }
-      // return rejectWithValue("unknown error");
+      }
+      return rejectWithValue("Unknown error");
     }
   }
 );
@@ -107,7 +114,7 @@ export const ResetPassword = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-      const response = await authInstance.post(
+      const response = await axiosInstance.post(
         `/user/reset/${formdata.token}`,
         { password: formdata.newPassword },
         {
@@ -116,14 +123,12 @@ export const ResetPassword = createAsyncThunk(
       );
       return response.data;
     } catch (error: any) {
-      // if (
-      //   error.response &&
-      //   error.response.data &&
-      //   error.response.data.message
-      // ) {
+      const err:axiosError=error as axiosError;
+
+      if (err.response && err.response.data && err.response.data.message) {
       return rejectWithValue(error.response.data.message);
-      // }
-      // return rejectWithValue("unknown error");
+      }
+      return rejectWithValue("Unknown error");
     }
   }
 );
@@ -131,7 +136,7 @@ export const Logout = createAsyncThunk(
   "auth/logout",
   async (params: { ex: string }, { rejectWithValue }) => {
     try {
-      const response = await authInstance.post(
+      const response = await axiosInstance.post(
         "/user/logout",
         {
           ex: params.ex,
@@ -142,7 +147,12 @@ export const Logout = createAsyncThunk(
       );
       return response.data;
     } catch (error: any) {
+      const err:axiosError=error as axiosError;
+
+      if (err.response && err.response.data && err.response.data.message) {
       return rejectWithValue(error.response.data.message);
+      }
+      return rejectWithValue("Unknown error");
     }
   }
 );
