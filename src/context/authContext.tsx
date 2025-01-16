@@ -13,7 +13,7 @@ const authContext = createContext<authContextProps | undefined>(undefined);
 export const AuthProvider: React.FunctionComponent<{
   children: React.ReactNode;
 }> = ({ children }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(true);
   const [AuthUser, setAuthUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 

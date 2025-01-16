@@ -1,9 +1,10 @@
 import { axiosInstance } from "@/helper/axiosInstance";
-import { Formdata } from "@/pages/Cloths/AddCloth";
+import { formSchema } from "@/pages/Cloths/AddCloth";
 
 import { clothState, IClothItem } from "@/types/clothState";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { AxiosError } from "axios";
+import { z } from "zod";
 
 const savedata = (cloths: IClothItem[]) => {
   sessionStorage.setItem("cloths", JSON.stringify(cloths));
@@ -88,13 +89,13 @@ export const WearCloth = createAsyncThunk(
 );
 export const AddUserCloth = createAsyncThunk(
   "cloth/AddCloth",
-  async (formData: Formdata, { rejectWithValue }) => {
+  async (formData: z.infer<typeof formSchema>, { rejectWithValue }) => {
     try {
       const formDataToSend = new FormData();
 
       // Append image file
-      if (formData.imageurl) {
-        formDataToSend.append("imageurl", formData.imageurl);
+      if (formData.imageUrl) {
+        formDataToSend.append("imageurl", formData.imageUrl);
       }
 
       // Append the date as a string (if present)
