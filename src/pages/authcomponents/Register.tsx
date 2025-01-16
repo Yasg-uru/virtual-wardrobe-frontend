@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -83,10 +83,9 @@ const SignUp: React.FunctionComponent = () => {
   };
 
   return (
-    <div className="w-full max-w-md p-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
-      <h2 className="text-2xl font-bold mb-6 text-center text-gray-800 dark:text-gray-200">
-        Sign Up
-      </h2>
+    <Fragment>
+
+
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           <FormField
@@ -218,7 +217,7 @@ const SignUp: React.FunctionComponent = () => {
           </Link>
         </span>
       </div>
-    </div>
+      </Fragment>
   );
 };
 

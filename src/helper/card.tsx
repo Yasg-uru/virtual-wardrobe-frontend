@@ -1,322 +1,160 @@
-// import { Button } from "@/components/ui/button";
-// import {
-//   Card,
-//   CardContent,
-//   CardDescription,
-//   CardFooter,
-//   CardHeader,
-//   CardTitle,
-// } from "@/components/ui/card";
-// import { MdDelete } from "react-icons/md";
-// import { IClothItem } from "@/types/clothState";
-// type props = {
-//   cloth: IClothItem;
-// };
-// import { Badge } from "@/components/ui/badge";
-// import { Link, useNavigate } from "react-router-dom";
-// import { useState } from "react";
-// import { Input } from "@/components/ui/input";
-// import { X } from "lucide-react";
-// import {
-//   DropdownMenu,
-//   DropdownMenuContent,
-//   DropdownMenuItem,
-//   DropdownMenuLabel,
-//   DropdownMenuTrigger,
-// } from "@/components/ui/dropdown-menu";
-// import { useAppDispatch } from "@/redux/hook";
-// import { WearCloth } from "@/redux/slices/clothSlice";
-// import { useToast } from "@/components/ui/use-toast";
-// import DeleteDialog from "./DeleteDialog";
-// const CardComponent: React.FunctionComponent<props> = ({ cloth }) => {
-//   const [isWear, setIsWear] = useState<boolean>(false);
-//   const [condition, setCondition] = useState<string>(cloth.condition);
-//   const navigate = useNavigate();
-//   const { toast } = useToast();
 
-//   const handleConditionChange = (condition: string) => {
-//     setCondition(condition);
-//   };
-//   const dispatch = useAppDispatch();
-
-//   const wearCloth = () => {
-//     dispatch(WearCloth({ condition, id: cloth._id }))
-//       .then(() => {
-//         toast({
-//           title: "weared successfully ",
-//         });
-//       })
-//       .catch((error: any) => {
-//         toast({
-//           title: error,
-//         });
-//       });
-//   };
-//   return (
-//     <Card className="w-[400px] cursor-pointer relative">
-//       <CardHeader>
-//         <img
-//           className="h-96"
-//           src={
-//             cloth.imageurl ||
-//             "https://m.media-amazon.com/images/I/51sheCOwk3L._SY879_.jpg"
-//           }
-//           alt=""
-//         />
-//       </CardHeader>
-//       <CardContent className="flex flex-col gap-2 w-full">
-//         {isWear === false ? (
-//           <div className="join w-full">
-//             <Button
-//               onClick={wearCloth}
-//               className="w-full join-item bg-gradient-to-r from-pink-500 to-purple-500 text-white font-bold py-3 px-6 rounded-md shadow-md hover:scale-105 transition duration-300"
-//             >
-//               Wear
-//             </Button>
-//             <Button
-//               onClick={() => setIsWear(true)}
-//               className="w-full join-item bg-gradient-to-r from-pink-500 to-purple-500 text-white font-bold py-3 px-6 rounded-md shadow-md hover:scale-105 transition duration-300"
-//             >
-//               Wear with Change Condition
-//             </Button>
-//           </div>
-//         ) : (
-//           <div className="flex gap-2 w-full items-center">
-//             <DropdownMenu>
-//               <DropdownMenuTrigger asChild>
-//                 <Button className="w-full bg-gradient-to-r from-pink-500 to-purple-500 text-white font-bold py-3 px-6 rounded-md shadow-md hover:scale-105 transition duration-300">
-//                   {condition}
-//                 </Button>
-//               </DropdownMenuTrigger>
-//               <DropdownMenuContent className="w-56">
-//                 <DropdownMenuLabel>Condition</DropdownMenuLabel>
-//                 <DropdownMenuItem onClick={() => handleConditionChange("New")}>
-//                   New
-//                 </DropdownMenuItem>
-//                 <DropdownMenuItem onClick={() => handleConditionChange("Good")}>
-//                   Good
-//                 </DropdownMenuItem>
-//                 <DropdownMenuItem onClick={() => handleConditionChange("Worn")}>
-//                   Worn
-//                 </DropdownMenuItem>
-//                 <DropdownMenuItem
-//                   onClick={() => handleConditionChange("Needs Repair")}
-//                 >
-//                   Needs Repair
-//                 </DropdownMenuItem>
-//               </DropdownMenuContent>
-//             </DropdownMenu>
-//             <Button
-//               size="sm"
-//               onClick={wearCloth}
-//               className="bg-gradient-to-r from-pink-500 to-purple-500 text-white font-bold py-3 px-6 rounded-md shadow-md hover:scale-105 transition duration-300"
-//             >
-//               change and Wear
-//             </Button>
-//             <X
-//               className="w-10 h-10 cursor-pointer"
-//               onClick={() => setIsWear(false)}
-//             />
-//           </div>
-//         )}
-
-//         <p className="font-semibold text-red-500 ">Brand : {cloth.brand}</p>
-//         <p className="font-semibold text-red-500 ">Color : {cloth.color}</p>
-//         <p className="font-semibold text-red-500 ">
-//           Wearcount : {cloth.wearcount}
-//         </p>
-//         <p className="font-semibold text-green-500 ">
-//           Lastworn : {new Date(cloth.lastWorn).toDateString()}
-//         </p>
-//       </CardContent>
-//       <CardFooter className=" flex flex-col gap-1 relative">
-//         {cloth.isFavorite && (
-//           <p className="font-semibold text-green-500">Favourate</p>
-//         )}
-//         <br />
-//         <div className="flex gap-1 flex-wrap ">
-//           {cloth.tags.length > 0 &&
-//             cloth.tags.map((tag) => <Badge variant="outline">{tag}</Badge>)}
-//         </div>
-
-//         <Link className="mt-10" to={`/detail/${cloth._id}`}>
-//           View Detail
-//         </Link>
-//       </CardFooter>
-//       <DeleteDialog Brand={cloth.brand} clothId={cloth._id} />
-//     </Card>
-//   );
-// };
-// export default CardComponent;
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  
-  CardFooter,
-  CardHeader,
-  
-} from "@/components/ui/card";
-
-import { IClothItem } from "@/types/clothState";
-type props = {
-  cloth: IClothItem;
-};
-import { Badge } from "@/components/ui/badge";
-import { Link } from "react-router-dom";
 import { useState } from "react";
 
-import { X } from "lucide-react";
+import {Link} from 'react-router-dom'
+import { motion, AnimatePresence } from "framer-motion";
+import { useToast } from "@/components/ui/use-toast";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Heart, Trash2, X, ChevronDown, Loader2 } from "lucide-react";
+import { IClothItem } from "@/types/clothState";
 import { useAppDispatch } from "@/redux/hook";
 import { WearCloth } from "@/redux/slices/clothSlice";
-import { useToast } from "@/components/ui/use-toast";
-import DeleteDialog from "./DeleteDialog";
+import { DeleteDialog } from "./DeleteDialog";
 
-const CardComponent: React.FunctionComponent<props> = ({ cloth }) => {
-  const [isWear, setIsWear] = useState<boolean>(false);
-  const [condition, setCondition] = useState<string>(cloth.condition);
-  
+
+interface ClothCardProps {
+  cloth: IClothItem;
+}
+
+const conditions = ["New", "Good", "Worn", "Needs Repair"];
+
+export function ClothCard({ cloth }: ClothCardProps) {
+  const [isWear, setIsWear] = useState(false);
+  const [condition, setCondition] = useState(cloth.condition);
+  const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
-
-  const handleConditionChange = (condition: string) => {
-    setCondition(condition);
-  };
   const dispatch = useAppDispatch();
 
-  const wearCloth = () => {
+  const handleWear = async () => {
     if (condition === cloth.condition) {
       toast({
-        title: "Please Select Another condition ",
+        title: "Please select a different condition",
         variant: "destructive",
       });
       return;
     }
-    dispatch(WearCloth({ condition, id: cloth._id }))
-      .then(() => {
-        toast({
-          title: "Worn successfully!",
-        });
-      })
-      .catch((error: any) => {
-        toast({
-          title: "Error",
-          description: error.message,
-          variant: "destructive",
-        });
+    setIsLoading(true);
+    try {
+      await dispatch(WearCloth({ condition, id: cloth._id })).unwrap();
+      toast({ title: "Worn successfully!" });
+      setIsWear(false);
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message,
+        variant: "destructive",
       });
+    } finally {
+      setIsLoading(false);
+    }
   };
-  if (cloth.isArchived) {
-    return;
-  }
+
+  if (cloth.isArchived) return null;
+
   return (
-    <Card className="w-[400px] h-[800px] cursor-pointer relative shadow-lg hover:shadow-2xl transition-shadow duration-300 rounded-xl overflow-hidden">
-      <CardHeader className="p-0">
+    <Card className="w-full max-w-sm mx-auto overflow-hidden transition-all duration-300 transform hover:scale-105 hover:shadow-xl dark:bg-gray-800">
+      <div className="relative aspect-square">
         <img
-          className="h-96 w-full object-cover"
-          src={
-            cloth.imageurl ||
-            "https://m.media-amazon.com/images/I/51sheCOwk3L._SY879_.jpg"
-          }
-          alt=""
+          src={cloth.imageurl || "/placeholder.svg"}
+          alt={cloth.brand}
+          // layout="fill"
+          // objectFit="cover"
+          className="transition-opacity duration-300 hover:opacity-90"
         />
-      </CardHeader>
-      <CardContent className="flex flex-col gap-4 p-4">
-        {isWear === false ? (
-          <div className="w-full flex items-center justify-center">
-            <button
-              type="button"
-              onClick={wearCloth}
-              className="w-full join-item bg-gradient-to-r from-purple-600 via-pink-500 to-red-500 text-white font-bold  shadow-md hover:scale-105 transition transform duration-300 mt-2 rounded-bl-2xl rounded-tr-2xl h-10"
-            >
-              Wear Now
-            </button>
-            <button
-              type="button"
-              onClick={() => setIsWear(true)}
-              className="w-full join-item bg-gradient-to-r from-purple-600 via-pink-500 to-red-500 text-white font-bold  shadow-md hover:scale-105 transition transform duration-300 mt-2 rounded-tr-2xl rounded-bl-2xl text-sm h-10"
-            >
-              Wear & Change Condition
-            </button>
-          </div>
-        ) : (
-          <div className="flex gap-2 w-full items-center">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button className="w-full bg-red-600 opacity-85 hover:bg-red-600 text-white">
-                  Change Condition
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-56">
-                <DropdownMenuLabel>Condition</DropdownMenuLabel>
-                <DropdownMenuItem onClick={() => handleConditionChange("New")}>
-                  New
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => handleConditionChange("Good")}>
-                  Good
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => handleConditionChange("Worn")}>
-                  Worn
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  onClick={() => handleConditionChange("Needs Repair")}
-                >
-                  Needs Repair
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-            <Button
-              size="sm"
-              onClick={wearCloth}
-              className="bg-gradient-to-r from-purple-600 via-pink-500 to-red-500 text-white font-bold py-3 px-6 rounded-lg shadow-md hover:scale-105 transition transform duration-300"
-            >
-              Change & Wear
-            </Button>
-            <X
-              className="w-10 h-10 cursor-pointer text-gray-500 hover:text-gray-700 transition duration-300"
-              onClick={() => setIsWear(false)}
-            />
-          </div>
-        )}
-        <div className="text-center">
-          <p className="font-semibold text-purple-600">Brand: {cloth.brand}</p>
-          <p className="font-semibold text-purple-600">Color: {cloth.color}</p>
-          <p className="font-semibold text-purple-600">
-            Wear Count: {cloth.wearcount}
-          </p>
-          <p className="font-semibold text-green-500">
-            Last Worn: {new Date(cloth.lastWorn).toDateString()}
-          </p>
-        </div>
-      </CardContent>
-      <CardFooter className="flex flex-col gap-1 p-4">
         {cloth.isFavorite && (
-          <p className="font-semibold text-green-500">Favorite</p>
+          <div className="absolute top-2 right-2">
+            <Badge variant="secondary" className="bg-white dark:bg-gray-700">
+              <Heart className="w-4 h-4 text-red-500 mr-1" /> Favorite
+            </Badge>
+          </div>
         )}
-        <div className="flex gap-2 flex-wrap mt-4">
-          {cloth.tags.length > 0 &&
-            cloth.tags.map((tag) => (
-              <Badge key={tag} variant="outline" className="text-purple-600">
-                {tag}
-              </Badge>
-            ))}
+      </div>
+      <CardContent className="p-4">
+        <h3 className="text-lg font-semibold mb-2 text-primary">
+          {cloth.brand}
+        </h3>
+        <p className="text-sm text-muted-foreground mb-4">{cloth.color}</p>
+        <div className="flex justify-between items-center mb-4">
+          <span className="text-sm font-medium">
+            Worn {cloth.wearcount} times
+          </span>
+          <span className="text-sm text-muted-foreground">
+            Last: {new Date(cloth.lastWorn).toLocaleDateString()}
+          </span>
         </div>
-        <Link
-          className="mt-4 inline-block bg-purple-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-purple-700 transition duration-300 text-center"
-          to={`/detail/${cloth._id}`}
-        >
-          View Detail
-        </Link>
+        <AnimatePresence mode="wait">
+          {isWear ? (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              className="flex gap-2 items-center"
+            >
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" className="w-full">
+                    {condition} <ChevronDown className="ml-2 h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  {conditions.map((c) => (
+                    <DropdownMenuItem key={c} onSelect={() => setCondition(c)}>
+                      {c}
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+              <Button onClick={handleWear} disabled={isLoading}>
+                {isLoading ? (
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                ) : (
+                  "Wear"
+                )}
+              </Button>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setIsWear(false)}
+              >
+                <X className="h-4 w-4" />
+              </Button>
+            </motion.div>
+          ) : (
+            <motion.div
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 20 }}
+            >
+              <Button onClick={() => setIsWear(true)} className="w-full">
+                Wear Now
+              </Button>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </CardContent>
+      <CardFooter className="p-4 bg-muted/50">
+        <div className="flex flex-wrap gap-2 mb-4">
+          {cloth.tags.map((tag) => (
+            <Badge key={tag} variant="secondary">
+              {tag}
+            </Badge>
+          ))}
+        </div>
+        <div className="flex justify-between items-center w-full">
+          <Link to={`/detail/${cloth._id}`} >
+            <Button variant="link">View Details</Button>
+          </Link>
+          <DeleteDialog clothId={cloth._id} brand={cloth.brand} />
+        </div>
       </CardFooter>
-      <DeleteDialog Brand={cloth.brand} clothId={cloth._id} />
     </Card>
   );
-};
-
-export default CardComponent;
+}

@@ -1,4 +1,5 @@
-import CardComponent from "@/helper/card";
+
+import { ClothCard } from "@/helper/card";
 import { useAppSelector } from "@/redux/hook";
 import React, { useEffect, useRef, useState } from "react";
 import { AiOutlineArrowUp, AiOutlineWarning } from "react-icons/ai";
@@ -65,7 +66,7 @@ const WearAnalysis: React.FunctionComponent = () => {
         <div className="flex gap-6 flex-wrap justify-center">
           {mostworn.length > 0 ? (
             mostworn.map((worn) => (
-              <CardComponent key={worn._id} cloth={worn} />
+              <ClothCard key={worn._id} cloth={worn} />
             ))
           ) : (
             <div className="flex items-center justify-center w-full p-6 bg-gradient-to-br from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-800 rounded-lg shadow-lg">
@@ -87,7 +88,7 @@ const WearAnalysis: React.FunctionComponent = () => {
         <div className="flex gap-6 flex-wrap justify-center">
           {leastWorn.length > 0 ? (
             leastWorn.map((worn) => (
-              <CardComponent key={worn._id} cloth={worn} />
+              <ClothCard key={worn._id} cloth={worn} />
             ))
           ) : (
             <div className="flex items-center justify-center w-full p-6 bg-gradient-to-br from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-800 rounded-lg shadow-lg">
@@ -109,7 +110,7 @@ const WearAnalysis: React.FunctionComponent = () => {
         <div className="flex gap-6 flex-wrap justify-center">
           {underUtilizedCloths.length > 0 ? (
             underUtilizedCloths.map((worn) => (
-              <CardComponent key={worn._id} cloth={worn} />
+              <ClothCard key={worn._id} cloth={worn} />
             ))
           ) : (
             <div className="flex items-center justify-center w-full p-6 bg-gradient-to-br from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-800 rounded-lg shadow-lg">

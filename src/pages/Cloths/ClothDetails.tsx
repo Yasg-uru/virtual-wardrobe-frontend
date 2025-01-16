@@ -1,17 +1,35 @@
-import { useToast } from "@/components/ui/use-toast";
-import { useAppDispatch, useAppSelector } from "@/redux/hook";
-import { GetClothDetails } from "@/redux/slices/clothSlice";
+import { useEffect, useState } from "react";
 
-import { Loader2 } from "lucide-react";
-import { useEffect } from "react";
+import { useToast } from "@/components/ui/use-toast";
+import {
+  Loader2,
+  Heart,
+  Archive,
+  Sun,
+  Cloud,
+  Umbrella,
+  Wind,
+  Snowflake,
+} from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { IClothItem } from "@/types/clothState";
+import { useAppDispatch, useAppSelector, useAppStore } from "@/redux/hook";
+import { GetClothDetails } from "@/redux/slices/clothSlice";
 import { useParams } from "react-router-dom";
 
-const ClothDetail: React.FunctionComponent = () => {
-  const cloth = useAppSelector((state) => state.cloth.ClothInfo);
-  const { isLoading } = useAppSelector((state) => state.cloth);
-  const { id } = useParams();
-  const dispatch = useAppDispatch();
+export default function ClothDetail() {
   const { toast } = useToast();
+  const { ClothInfo: cloth, isLoading } = useAppSelector(
+    (state) => state.cloth
+  );
+  const dispatch = useAppDispatch();
+
+  const [isFavorite, setIsFavorite] = useState<boolean>(false);
+  const [isArchived, setIsArchived] = useState<boolean>(false);
+  const { id } = useParams();
 
   useEffect(() => {
     if (id) {
@@ -19,21 +37,27 @@ const ClothDetail: React.FunctionComponent = () => {
         .unwrap()
         .then(() => {
           toast({
-            title: "Successfully fetched cloth details",
+            title: "fetched successfully",
           });
         })
-        .catch((error: any) => {
+        .catch((error) => {
           toast({
             title: error,
+            variant: "destructive",
           });
         });
     }
-  }, [id, dispatch, toast]);
-
+  }, [id]);
+  useEffect(() => {
+    if (cloth) {
+      setIsArchived(cloth.isArchived);
+      setIsFavorite(cloth.isFavorite);
+    }
+  }, [cloth]);
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center p-4">
-        <Loader2 className="h-10 w-10 animate-spin text-purple-600 dark:text-purple-400" />
+        <Loader2 className="h-10 w-10 animate-spin text-primary" />
       </div>
     );
   }
@@ -41,202 +65,203 @@ const ClothDetail: React.FunctionComponent = () => {
   if (!cloth) {
     return (
       <div className="min-h-screen flex items-center justify-center p-4">
-        <p className="text-gray-600 dark:text-gray-300 text-lg font-semibold">
+        <p className="text-muted-foreground text-lg font-semibold">
           No results found
         </p>
       </div>
     );
   }
 
+  const toggleFavorite = () => {
+    setIsFavorite(!isFavorite);
+    toast({
+      title: isFavorite ? "Removed from favorites" : "Added to favorites",
+      duration: 2000,
+    });
+  };
+
+  const toggleArchive = () => {
+    setIsArchived(!isArchived);
+    toast({
+      title: isArchived ? "Unarchived" : "Archived",
+      duration: 2000,
+    });
+  };
+
   return (
-    <div className="min-h-screen p-4 lg:p-8 flex flex-col gap-8 bg-gradient-to-b from-gray-100 to-gray-300 dark:from-gray-900 dark:to-gray-800">
-      <h1 className="text-center text-4xl font-extrabold text-purple-700 dark:text-purple-500 mb-6">
-        Cloth Detail
-      </h1>
-      <div className="flex justify-center mb-6">
-        <img
-          src={cloth.imageurl || "https://via.placeholder.com/300"}
-          alt={cloth.category}
-          className="w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg rounded-xl shadow-2xl transform hover:scale-105 transition duration-500"
-        />
-      </div>
-      <div className="flex flex-col gap-6 bg-white dark:bg-gray-900 p-6 lg:p-8 rounded-lg shadow-lg transform hover:-translate-y-2 transition duration-500">
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div>
-            <p className="font-semibold text-gray-700 dark:text-gray-300">
-              Condition
-            </p>
-            <p className="text-gray-600 dark:text-gray-400">
-              {cloth.condition}
-            </p>
+    <div className="min-h-screen mx-auto px-4 py-8 dark:bg-black">
+      <Card className="overflow-hidden dark:bg-black">
+        <CardHeader className="pb-0">
+          <CardTitle className="text-3xl font-bold text-center">
+            {cloth.category}
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="p-6">
+          <div className="flex flex-col md:flex-row gap-8">
+            <div className="w-full md:w-1/2">
+              <div className="relative aspect-square overflow-hidden rounded-lg">
+                <img
+                  src={cloth.imageurl || "/placeholder.svg"}
+                  alt={cloth.category}
+                  // objectFit="cover"
+                  className="transition-transform duration-300 hover:scale-105"
+                />
+              </div>
+              <div className="flex justify-center mt-4 space-x-4">
+                <Button
+                  variant={isFavorite ? "default" : "outline"}
+                  size="sm"
+                  onClick={toggleFavorite}
+                >
+                  <Heart
+                    className={`mr-2 h-4 w-4 ${
+                      isFavorite ? "fill-current" : ""
+                    }`}
+                  />
+                  {isFavorite ? "Favorited" : "Add to Favorites"}
+                </Button>
+                <Button
+                  variant={isArchived ? "default" : "outline"}
+                  size="sm"
+                  onClick={toggleArchive}
+                >
+                  <Archive className="mr-2 h-4 w-4" />
+                  {isArchived ? "Archived" : "Archive"}
+                </Button>
+              </div>
+            </div>
+            <div className="w-full md:w-1/2">
+              <Tabs defaultValue="details">
+                <TabsList className="grid w-full grid-cols-3">
+                  <TabsTrigger value="details">Details</TabsTrigger>
+                  <TabsTrigger value="seasons">Seasons</TabsTrigger>
+                  <TabsTrigger value="weather">Weather</TabsTrigger>
+                </TabsList>
+                <TabsContent value="details" className="mt-4">
+                  <dl className="grid grid-cols-2 gap-4">
+                    <DetailItem label="Brand" value={cloth.brand} />
+                    <DetailItem label="Size" value={cloth.size} />
+                    <DetailItem label="Color" value={cloth.color} />
+                    <DetailItem label="Material" value={cloth.material} />
+                    <DetailItem label="Condition" value={cloth.condition} />
+                    <DetailItem
+                      label="Wear Count"
+                      value={cloth.wearcount.toString()}
+                    />
+                    <DetailItem
+                      label="Last Worn"
+                      value={new Date(cloth.lastWorn).toLocaleDateString()}
+                    />
+                    <DetailItem
+                      label="Purchase Date"
+                      value={new Date(cloth.purchaseDate).toLocaleDateString()}
+                    />
+                    <DetailItem
+                      label="Cost"
+                      value={`$${cloth.cost.toFixed(2)}`}
+                    />
+                  </dl>
+                </TabsContent>
+                <TabsContent value="seasons" className="mt-4">
+                  <div className="grid grid-cols-2 gap-4">
+                    <SeasonBadge
+                      season="Winter"
+                      suitable={cloth.seasonSuitability.isWinter}
+                    />
+                    <SeasonBadge
+                      season="Summer"
+                      suitable={cloth.seasonSuitability.isSummer}
+                    />
+                    <SeasonBadge
+                      season="Spring"
+                      suitable={cloth.seasonSuitability.isSpring}
+                    />
+                    <SeasonBadge
+                      season="Autumn"
+                      suitable={cloth.seasonSuitability.isAutumn}
+                    />
+                  </div>
+                </TabsContent>
+                <TabsContent value="weather" className="mt-4">
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                    <WeatherBadge
+                      weather="Windy"
+                      suitable={cloth.weatherSuitability.isWindSuitable}
+                      icon={Wind}
+                    />
+                    <WeatherBadge
+                      weather="Rainy"
+                      suitable={cloth.weatherSuitability.isRainSuitable}
+                      icon={Umbrella}
+                    />
+                    <WeatherBadge
+                      weather="Snowy"
+                      suitable={cloth.weatherSuitability.isSnowySuitable}
+                      icon={Snowflake}
+                    />
+                    <WeatherBadge
+                      weather="Cloudy"
+                      suitable={cloth.weatherSuitability.isCloudySuitable}
+                      icon={Cloud}
+                    />
+                    <WeatherBadge
+                      weather="Sunny"
+                      suitable={cloth.weatherSuitability.isSunnySuitable}
+                      icon={Sun}
+                    />
+                  </div>
+                </TabsContent>
+              </Tabs>
+            </div>
           </div>
-          <div>
-            <p className="font-semibold text-gray-700 dark:text-gray-300">
-              Wear Count
-            </p>
-            <p className="text-gray-600 dark:text-gray-400">
-              {cloth.wearcount}
-            </p>
-          </div>
-          <div>
-            <p className="font-semibold text-gray-700 dark:text-gray-300">
-              Last Worn
-            </p>
-            <p className="text-gray-600 dark:text-gray-400">
-              {new Date(cloth.lastWorn).toDateString()}
-            </p>
-          </div>
-          <div>
-            <p className="font-semibold text-gray-700 dark:text-gray-300">
-              Favorite
-            </p>
-            <p className="text-gray-600 dark:text-gray-400">
-              {cloth.isFavorite ? "Yes" : "No"}
-            </p>
-          </div>
-          <div>
-            <p className="font-semibold text-gray-700 dark:text-gray-300">
-              Archived
-            </p>
-            <p className="text-gray-600 dark:text-gray-400">
-              {cloth.isArchived ? "Yes" : "No"}
-            </p>
-          </div>
-          <div>
-            <p className="font-semibold text-gray-700 dark:text-gray-300">
-              Category
-            </p>
-            <p className="text-gray-600 dark:text-gray-400">{cloth.category}</p>
-          </div>
-          <div>
-            <p className="font-semibold text-gray-700 dark:text-gray-300">
-              Brand
-            </p>
-            <p className="text-gray-600 dark:text-gray-400">{cloth.brand}</p>
-          </div>
-          <div>
-            <p className="font-semibold text-gray-700 dark:text-gray-300">
-              Size
-            </p>
-            <p className="text-gray-600 dark:text-gray-400">{cloth.size}</p>
-          </div>
-          <div>
-            <p className="font-semibold text-gray-700 dark:text-gray-300">
-              Material
-            </p>
-            <p className="text-gray-600 dark:text-gray-400">{cloth.material}</p>
-          </div>
-          <div>
-            <p className="font-semibold text-gray-700 dark:text-gray-300">
-              Purchase Date
-            </p>
-            <p className="text-gray-600 dark:text-gray-400">
-              {new Date(cloth.purchaseDate).toDateString()}
-            </p>
-          </div>
-        </div>
-
-        {/* Season Suitability */}
-        <div className="mt-6">
-          <h2 className="text-2xl font-semibold text-purple-700 dark:text-purple-500 mb-3">
-            Season Suitability
-          </h2>
-          <ul className="list-disc pl-5">
-            <li
-              className={`${
-                cloth.seasonSuitability.isWinter
-                  ? "text-green-600 dark:text-green-400"
-                  : "text-red-600 dark:text-red-400"
-              } font-semibold`}
-            >
-              Winter
-            </li>
-            <li
-              className={`${
-                cloth.seasonSuitability.isSummer
-                  ? "text-yellow-600 dark:text-yellow-400"
-                  : "text-red-600 dark:text-red-400"
-              } font-semibold`}
-            >
-              Summer
-            </li>
-            <li
-              className={`${
-                cloth.seasonSuitability.isSpring
-                  ? "text-green-600 dark:text-green-400"
-                  : "text-red-600 dark:text-red-400"
-              } font-semibold`}
-            >
-              Spring
-            </li>
-            <li
-              className={`${
-                cloth.seasonSuitability.isAutumn
-                  ? "text-orange-600 dark:text-orange-400"
-                  : "text-red-600 dark:text-red-400"
-              } font-semibold`}
-            >
-              Autumn
-            </li>
-          </ul>
-        </div>
-
-        {/* Weather Suitability */}
-        <div className="mt-6">
-          <h2 className="text-2xl font-semibold text-purple-700 dark:text-purple-500 mb-3">
-            Weather Suitability
-          </h2>
-          <ul className="list-disc pl-5">
-            <li
-              className={`${
-                cloth.weatherSuitability.isWindSuitable
-                  ? "text-blue-600 dark:text-blue-400"
-                  : "text-red-600 dark:text-red-400"
-              } font-semibold`}
-            >
-              Windy
-            </li>
-            <li
-              className={`${
-                cloth.weatherSuitability.isRainSuitable
-                  ? "text-blue-600 dark:text-blue-400"
-                  : "text-red-600 dark:text-red-400"
-              } font-semibold`}
-            >
-              Rainy
-            </li>
-            <li
-              className={`${
-                cloth.weatherSuitability.isSnowySuitable
-                  ? "text-blue-600 dark:text-blue-400"
-                  : "text-red-600 dark:text-red-400"
-              } font-semibold`}
-            >
-              Snowy
-            </li>
-            <li
-              className={`${
-                cloth.weatherSuitability.isCloudySuitable
-                  ? "text-blue-600 dark:text-blue-400"
-                  : "text-red-600 dark:text-red-400"
-              } font-semibold`}
-            >
-              Cloudy
-            </li>
-            <li
-              className={`${
-                cloth.weatherSuitability.isSunnySuitable
-                  ? "text-yellow-600 dark:text-yellow-400"
-                  : "text-red-600 dark:text-red-400"
-              } font-semibold`}
-            >
-              Sunny
-            </li>
-          </ul>
-        </div>
-      </div>
+        </CardContent>
+      </Card>
     </div>
   );
-};
+}
 
-export default ClothDetail;
+function DetailItem({ label, value }: { label: string; value: string }) {
+  return (
+    <div>
+      <dt className="font-medium text-muted-foreground">{label}</dt>
+      <dd className="mt-1">{value}</dd>
+    </div>
+  );
+}
+
+function SeasonBadge({
+  season,
+  suitable,
+}: {
+  season: string;
+  suitable: boolean;
+}) {
+  return (
+    <Badge
+      variant={suitable ? "default" : "secondary"}
+      className="w-full justify-center py-2"
+    >
+      {season}
+    </Badge>
+  );
+}
+
+function WeatherBadge({
+  weather,
+  suitable,
+  icon: Icon,
+}: {
+  weather: string;
+  suitable: boolean;
+  icon: React.ElementType;
+}) {
+  return (
+    <Badge
+      variant={suitable ? "default" : "secondary"}
+      className="w-full justify-center py-2"
+    >
+      <Icon className="mr-2 h-4 w-4" />
+      {weather}
+    </Badge>
+  );
+}

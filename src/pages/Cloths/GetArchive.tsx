@@ -4,7 +4,7 @@ import React, { useEffect } from "react";
 import SkeletonCard from "@/helper/SkeletonCard";
 import { GetArchives } from "@/redux/slices/clothSlice"; // Replace with your actual import path
 import { useToast } from "@/components/ui/use-toast";
-import CardComponent from "@/helper/card";
+import { ClothCard } from "@/helper/card";
 
 const GetArchive: React.FunctionComponent = () => {
   const dispatch = useAppDispatch();
@@ -47,7 +47,7 @@ const GetArchive: React.FunctionComponent = () => {
       <div className="flex flex-wrap gap-2 mx-auto ">
         {Archives.length > 0 &&
           Archives.map((cloth, index) => (
-            <CardComponent key={index} cloth={cloth} />
+            <ClothCard key={index} cloth={cloth} />
           ))}
       </div>
     </div>

@@ -31,7 +31,8 @@ const Login: React.FunctionComponent = () => {
     },
   });
   const onSubmit = (data: z.infer<typeof LoginSchema>) => {
-    dispatch(userLogin(data)).unwrap()
+    dispatch(userLogin(data))
+      .unwrap()
       .then(() => {
         toast({
           title: "Logged in successfully",
@@ -44,10 +45,7 @@ const Login: React.FunctionComponent = () => {
       });
   };
   return (
-    <div className="w-full max-w-md p-8 bg-white rounded-lg shadow-md dark:bg-slate-900">
-      <h2 className="text-2xl font-bold mb-6 text-center text-gray-800 dark:text-gray-200">
-        Login
-      </h2>
+    <>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           <FormField
@@ -125,7 +123,7 @@ const Login: React.FunctionComponent = () => {
           </Link>
         </span>
       </div>
-    </div>
+    </>
   );
 };
 export default Login;

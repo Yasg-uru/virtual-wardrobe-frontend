@@ -1,12 +1,13 @@
 
 import { useToast } from "@/components/ui/use-toast";
-import CardComponent from "@/helper/card";
+
 import SkeletonCard from "@/helper/SkeletonCard";
 import { useAppDispatch, useAppSelector } from "@/redux/hook";
 import { GetRecommandedCloths } from "@/redux/slices/clothSlice";
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { ClothCard } from "@/helper/card";
 
 const Home: React.FunctionComponent = () => {
   const [lat, setLat] = useState<number | null>(null);
@@ -78,7 +79,7 @@ const Home: React.FunctionComponent = () => {
                 transition={{ duration: 0.4, ease: "easeOut" }}
                 className="flex-shrink-0"
               >
-                <CardComponent cloth={cloth} />
+                <ClothCard cloth={cloth} />
               </motion.div>
             ))}
         </div>
