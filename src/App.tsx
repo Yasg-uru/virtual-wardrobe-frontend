@@ -12,10 +12,11 @@ import SerachDetails from "./pages/Cloths/CothDetailBysearch";
 import WearAnalysis from "./pages/Cloths/WearAnalysis";
 import ForgotPass from "./pages/authcomponents/ForgotPass";
 import ResetPass from "./pages/authcomponents/ResetPass";
-import Profile from "./pages/authcomponents/Profile";
+
 import RequireAuth from "./helper/RequireAuth";
 import Support from "./pages/mainpages/Support";
 import GetArchive from "./pages/Cloths/GetArchive";
+import Profile from "./pages/authcomponents/profile/profile";
 
 const App: React.FunctionComponent = () => {
   return (
