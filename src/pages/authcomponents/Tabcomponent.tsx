@@ -9,9 +9,9 @@ const AuthTabs: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'login' | 'register'>('login')
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-6 bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-900 dark:to-gray-800">
+    <div className="min-h-screen flex items-center justify-center p-6  dark:bg-black">
       <div className="w-full max-w-md">
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden">
+        <div className="bg-white dark:bg-black rounded-xl shadow-lg overflow-hidden">
           <div className="relative">
             <div className="flex">
               <button
