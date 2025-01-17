@@ -27,6 +27,7 @@ import {
   Grid,
   Menu,
   X,
+  ChartLine,
 } from "lucide-react";
 import { TbBrandGoogleAnalytics } from "react-icons/tb";
 import Notification from "./Notification";
@@ -251,6 +252,14 @@ const MobileTabBar: React.FC = () => {
                   Collections
                 </Link>
                 <Link
+                  to="/analysis"
+                  className="flex items-center py-2 text-sm"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  <ChartLine className="mr-3 h-4 w-4" />
+                  Stats
+                </Link>
+                <Link
                   to="/support"
                   className="flex items-center py-2 text-sm"
                   onClick={() => setIsMenuOpen(false)}
@@ -292,12 +301,19 @@ const MobileTabBar: React.FC = () => {
             <span className="text-xs text-muted-foreground">Collections</span>
           </Link>
           <Link
+            to="/analysis"
+            className="inline-flex flex-col items-center justify-center px-5 hover:bg-muted/50"
+          >
+            <ChartLine className="w-5 h-5 mb-1 text-muted-foreground" />
+            <span className="text-xs text-muted-foreground">Collections</span>
+          </Link>
+          {/* <Link
             to="/support"
             className="inline-flex flex-col items-center justify-center px-5 hover:bg-muted/50"
           >
             <LifeBuoy className="w-5 h-5 mb-1 text-muted-foreground" />
             <span className="text-xs text-muted-foreground">Support</span>
-          </Link>
+          </Link> */}
           <Link
             to="/profile"
             className="inline-flex flex-col items-center justify-center px-5 hover:bg-muted/50"
