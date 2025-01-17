@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useAppSelector, useAppDispatch } from "@/redux/hook";
+import {  useAppDispatch } from "@/redux/hook";
 import { useNavigate } from "react-router-dom";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -25,10 +25,12 @@ import { Logout } from "@/redux/slices/authSlice";
 import { useToast } from "@/components/ui/use-toast";
 import { ProfileInfo } from "./profile-info";
 import { EditProfileDialog } from "./edit-profile";
+import { useAuthContext } from "@/context/authContext";
 
 const Profile: React.FC = () => {
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
-  const user = useAppSelector((state) => state.auth.userInfo);
+  const { AuthUser: user } = useAuthContext();
+
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { toast } = useToast();

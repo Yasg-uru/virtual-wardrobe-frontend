@@ -27,6 +27,7 @@ interface ClothCardProps {
 const conditions = ["New", "Good", "Worn", "Needs Repair"];
 
 export function ClothCard({ cloth }: ClothCardProps) {
+  console.log('this is cloth card for the archive cloths :',cloth)
   const [isWear, setIsWear] = useState(false);
   const [condition, setCondition] = useState(cloth.condition);
   const [isLoading, setIsLoading] = useState(false);

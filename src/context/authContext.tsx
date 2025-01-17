@@ -8,6 +8,8 @@ interface authContextProps {
   isAuthenticated: boolean;
   AuthUser: User | null;
   isLoading: boolean;
+  checkAuth:()=>void;
+
 }
 const authContext = createContext<authContextProps | undefined>(undefined);
 export const AuthProvider: React.FunctionComponent<{
@@ -18,7 +20,7 @@ export const AuthProvider: React.FunctionComponent<{
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const { toast } = useToast();
-  const checkAuth = async () => {
+   const checkAuth = async () => {
     try {
       setIsLoading(true);
 
@@ -43,7 +45,7 @@ export const AuthProvider: React.FunctionComponent<{
     checkAuth();
   }, []);
   return (
-    <authContext.Provider value={{ isLoading, isAuthenticated, AuthUser }}>
+    <authContext.Provider value={{ isLoading, isAuthenticated, AuthUser,checkAuth }}>
       {children}
     </authContext.Provider>
   );

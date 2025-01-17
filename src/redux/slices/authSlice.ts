@@ -27,7 +27,7 @@ const initialState: AuthState = {
   isAuthenticated: localStorage.getItem("isAuthenticated") === "true" || false,
 };
 
-type axiosError =AxiosError<{message:string}>
+type axiosError = AxiosError<{ message: string }>;
 export const userSignUp = createAsyncThunk(
   "auth/register",
   async (formdata: any, { rejectWithValue }) => {
@@ -37,10 +37,10 @@ export const userSignUp = createAsyncThunk(
       });
       return response.data;
     } catch (error: any) {
-      const err:axiosError=error as axiosError;
+      const err: axiosError = error as axiosError;
 
       if (err.response && err.response.data && err.response.data.message) {
-      return rejectWithValue(error.response.data.message);
+        return rejectWithValue(error.response.data.message);
       }
       return rejectWithValue("Unknown error");
     }
@@ -55,10 +55,10 @@ export const userVerify = createAsyncThunk(
       });
       return response.data;
     } catch (error: any) {
-      const err:axiosError=error as axiosError;
+      const err: axiosError = error as axiosError;
 
       if (err.response && err.response.data && err.response.data.message) {
-      return rejectWithValue(error.response.data.message);
+        return rejectWithValue(error.response.data.message);
       }
       return rejectWithValue("Unknown error");
     }
@@ -73,10 +73,10 @@ export const userLogin = createAsyncThunk(
       });
       return response.data;
     } catch (error: any) {
-      const err:axiosError=error as axiosError;
-      console.log('error in login :',error)
+      const err: axiosError = error as axiosError;
+      console.log("error in login :", error);
       if (err.response && err.response.data && err.response.data.message) {
-      return rejectWithValue(error.response.data.message);
+        return rejectWithValue(error.response.data.message);
       }
       return rejectWithValue("Unknown error");
     }
@@ -98,10 +98,10 @@ export const ForgotPassword = createAsyncThunk(
       );
       return response.data;
     } catch (error: any) {
-      const err:axiosError=error as axiosError;
+      const err: axiosError = error as axiosError;
 
       if (err.response && err.response.data && err.response.data.message) {
-      return rejectWithValue(error.response.data.message);
+        return rejectWithValue(error.response.data.message);
       }
       return rejectWithValue("Unknown error");
     }
@@ -123,10 +123,10 @@ export const ResetPassword = createAsyncThunk(
       );
       return response.data;
     } catch (error: any) {
-      const err:axiosError=error as axiosError;
+      const err: axiosError = error as axiosError;
 
       if (err.response && err.response.data && err.response.data.message) {
-      return rejectWithValue(error.response.data.message);
+        return rejectWithValue(error.response.data.message);
       }
       return rejectWithValue("Unknown error");
     }
@@ -147,10 +147,28 @@ export const Logout = createAsyncThunk(
       );
       return response.data;
     } catch (error: any) {
-      const err:axiosError=error as axiosError;
+      const err: axiosError = error as axiosError;
 
       if (err.response && err.response.data && err.response.data.message) {
-      return rejectWithValue(error.response.data.message);
+        return rejectWithValue(err.response.data.message);
+      }
+      return rejectWithValue("Unknown error");
+    }
+  }
+);
+export const editProfile = createAsyncThunk(
+  "auth/editprofile",
+  async (data: FormData, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.put("/user/edit-profile", data, {
+        withCredentials: true,
+      });
+      return response.data;
+    } catch (error) {
+      const err: axiosError = error as axiosError;
+
+      if (err.response && err.response.data && err.response.data.message) {
+        return rejectWithValue(err.response.data.message);
       }
       return rejectWithValue("Unknown error");
     }
