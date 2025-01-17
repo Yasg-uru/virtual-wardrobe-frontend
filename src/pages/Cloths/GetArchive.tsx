@@ -47,25 +47,25 @@ const GetArchive: React.FunctionComponent = () => {
     fetchArchives();
   }, []);
 
-  // if (isLoading) {
-  //   return (
-  //     <div className="min-h-screen flex items-center justify-center">
-  //       <div className="flex flex-wrap gap-4 mx-auto justify-center">
-  //         {Array.from({ length: 6 }).map((_, index) => (
-  //           <SkeletonCard key={index} />
-  //         ))}
-  //       </div>
-  //     </div>
-  //   );
-  // }
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="flex flex-wrap gap-4 mx-auto justify-center">
+          {Array.from({ length: 6 }).map((_, index) => (
+            <SkeletonCard key={index} />
+          ))}
+        </div>
+      </div>
+    );
+  }
 
-  // if (archives.length === 0) {
-  //   return (
-  //     <div className="min-h-screen flex items-center justify-center">
-  //       <h1>No Archived Clothes</h1>
-  //     </div>
-  //   );
-  // }
+  if (archives.length === 0) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <h1>No Archived Clothes</h1>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen p-4">
