@@ -17,6 +17,7 @@ import RequireAuth from "./helper/RequireAuth";
 import Support from "./pages/mainpages/Support";
 import GetArchive from "./pages/Cloths/GetArchive";
 import Profile from "./pages/authcomponents/profile/profile";
+import WardrobeAnalysisPage from "./pages/statistics/main";
 
 const App: React.FunctionComponent = () => {
   return (
@@ -33,6 +34,7 @@ const App: React.FunctionComponent = () => {
             />
           }
         >
+          <Route path="/analysis" element={<WardrobeAnalysisPage/>}/>
           <Route path="/" element={<Home />} />
           <Route path="/Profile" element={<Profile />} />
           <Route path="/Reset-password/:token" element={<ResetPass />} />

@@ -23,6 +23,7 @@
       {
         "dlitem": "off"
       }
-    ]
+    ],
+    "no-inline-styles": "off"
   }
 }
