@@ -97,6 +97,12 @@ const Navbar: React.FC = () => {
                   + Add Cloth
                 </Link>
                 <Link
+                  to="/analysis"
+                  className="text-sm font-medium hover:text-primary transition-colors"
+                >
+                  Stats
+                </Link>
+                <Link
                   to="/collections"
                   className="text-sm font-medium hover:text-primary transition-colors"
                 >
@@ -305,7 +311,7 @@ const MobileTabBar: React.FC = () => {
             className="inline-flex flex-col items-center justify-center px-5 hover:bg-muted/50"
           >
             <ChartLine className="w-5 h-5 mb-1 text-muted-foreground" />
-            <span className="text-xs text-muted-foreground">Collections</span>
+            <span className="text-xs text-muted-foreground">Stats</span>
           </Link>
           {/* <Link
             to="/support"
