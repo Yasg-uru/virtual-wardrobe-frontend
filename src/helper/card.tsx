@@ -88,7 +88,7 @@ export function ClothCard({ cloth }: ClothCardProps) {
           <span className="text-sm text-muted-foreground">
             {cloth.lastWorn
               ? "Last:" + new Date(cloth.lastWorn).toLocaleDateString()
-              : "Un Used"}
+              : "Brand New"}
           </span>
         </div>
         <AnimatePresence mode="wait">

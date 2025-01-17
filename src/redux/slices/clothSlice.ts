@@ -170,7 +170,7 @@ export const AddUserCloth = createAsyncThunk(
 );
 export const GetCollections = createAsyncThunk(
   "cloths/collections",
-  async (_,{rejectWithValue}) => {
+  async (_, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.get("/cloth/collections", {
         withCredentials: true,
@@ -239,6 +239,46 @@ export const GetClothDetails = createAsyncThunk(
       });
       return response.data;
     } catch (error: any) {
+      const err: axiosError = error as axiosError;
+
+      if (err.response && err.response.data && err.response.data.message) {
+        return rejectWithValue(err.response.data.message);
+      }
+      return rejectWithValue("Unknown error");
+    }
+  }
+);
+export const ToggleArchive = createAsyncThunk(
+  "cloths/togglearchive",
+  async (clothId: string, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.put(
+        `/cloth/toggle-archive/${clothId}`,
+        {},
+        { withCredentials: true }
+      );
+      return response.data;
+    } catch (error) {
+      const err: axiosError = error as axiosError;
+
+      if (err.response && err.response.data && err.response.data.message) {
+        return rejectWithValue(err.response.data.message);
+      }
+      return rejectWithValue("Unknown error");
+    }
+  }
+);
+export const ToggleFavourate = createAsyncThunk(
+  "cloths/togglefavourate",
+  async (clothId: string, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.put(
+        `/cloth/toggle-favourate/${clothId}`,
+        {},
+        { withCredentials: true }
+      );
+      return response.data;
+    } catch (error) {
       const err: axiosError = error as axiosError;
 
       if (err.response && err.response.data && err.response.data.message) {
@@ -317,12 +357,12 @@ export const DeleteCloth = createAsyncThunk(
   async (params: { clothId: string }, { rejectWithValue }) => {
     try {
       const { clothId } = params;
-      const response = await axiosInstance.delete(`/cloth/${clothId}`,{
-        withCredentials:true
+      const response = await axiosInstance.delete(`/cloth/${clothId}`, {
+        withCredentials: true,
       });
       return response.data;
     } catch (error: any) {
-      console.log('this is error in product deletion :',error)
+      console.log("this is error in product deletion :", error);
       const err: axiosError = error as axiosError;
 
       if (err.response && err.response.data && err.response.data.message) {
@@ -460,9 +500,16 @@ const clothSlice = createSlice({
     builder.addCase(GetArchives.pending, (state) => {
       state.isLoading = true;
     });
-    builder.addCase(GetArchives.rejected, (state) => {
-      state.isLoading = false;
-    });
+    builder
+      .addCase(GetArchives.rejected, (state) => {
+        state.isLoading = false;
+      })
+      .addCase(ToggleArchive.fulfilled, (state, action) => {
+        state.ClothInfo = action.payload.cloth;
+      })
+      .addCase(ToggleFavourate.fulfilled, (state, action) => {
+        state.ClothInfo = action.payload.cloth;
+      });
   },
 });
 export const {} = clothSlice.actions;

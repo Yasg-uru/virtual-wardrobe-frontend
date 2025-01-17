@@ -17,7 +17,11 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import { useAppDispatch, useAppSelector } from "@/redux/hook";
-import { GetClothDetails } from "@/redux/slices/clothSlice";
+import {
+  GetClothDetails,
+  ToggleArchive,
+  ToggleFavourate,
+} from "@/redux/slices/clothSlice";
 import { useParams } from "react-router-dom";
 
 export default function ClothDetail() {
@@ -72,20 +76,40 @@ export default function ClothDetail() {
     );
   }
 
-  const toggleFavorite = () => {
-    setIsFavorite(!isFavorite);
-    toast({
-      title: isFavorite ? "Removed from favorites" : "Added to favorites",
-      duration: 2000,
-    });
+  const handleToggleArchive = () => {
+    if (id) {
+      dispatch(ToggleArchive(id))
+        .unwrap()
+        .then((data) => {
+          toast({
+            title: data.message,
+          });
+        })
+        .catch((error) => {
+          toast({
+            title: error,
+            variant: "destructive",
+          });
+        });
+    }
   };
 
-  const toggleArchive = () => {
-    setIsArchived(!isArchived);
-    toast({
-      title: isArchived ? "Unarchived" : "Archived",
-      duration: 2000,
-    });
+  const toggleFavourate = () => {
+    if (id) {
+      dispatch(ToggleFavourate(id))
+        .unwrap()
+        .then((data) => {
+          toast({
+            title: data.message,
+          });
+        })
+        .catch((error) => {
+          toast({
+            title: error,
+            variant: "destructive",
+          });
+        });
+    }
   };
 
   return (
@@ -111,7 +135,7 @@ export default function ClothDetail() {
                 <Button
                   variant={isFavorite ? "default" : "outline"}
                   size="sm"
-                  onClick={toggleFavorite}
+                  onClick={toggleFavourate}
                 >
                   <Heart
                     className={`mr-2 h-4 w-4 ${
@@ -123,7 +147,7 @@ export default function ClothDetail() {
                 <Button
                   variant={isArchived ? "default" : "outline"}
                   size="sm"
-                  onClick={toggleArchive}
+                  onClick={handleToggleArchive}
                 >
                   <Archive className="mr-2 h-4 w-4" />
                   {isArchived ? "Archived" : "Archive"}
@@ -150,7 +174,11 @@ export default function ClothDetail() {
                     />
                     <DetailItem
                       label="Last Worn"
-                      value={new Date(cloth.lastWorn).toLocaleDateString()}
+                      value={
+                        cloth.lastWorn
+                          ? new Date(cloth.lastWorn).toLocaleDateString()
+                          : "Brand New"
+                      }
                     />
                     <DetailItem
                       label="Purchase Date"
