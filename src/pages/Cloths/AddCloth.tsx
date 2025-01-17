@@ -103,9 +103,10 @@ export function AddClothForm() {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setIsLoading(true);
-    
-      dispatch(AddUserCloth(values)).unwrap().then(()=>{
-        
+
+    dispatch(AddUserCloth(values))
+      .unwrap()
+      .then(() => {
         toast({
           title: "Cloth added successfully",
           description: "Your new item has been added to your virtual wardrobe.",
@@ -113,15 +114,18 @@ export function AddClothForm() {
         form.reset();
         setImagePreview(null);
         setStep(1);
-      }).catch((error)=>{
+      })
+      .catch((error) => {
         toast({
           title: error,
-          description: "There was a problem adding your cloth. Please try again.",
+          description:
+            "There was a problem adding your cloth. Please try again.",
           variant: "destructive",
         });
-      }).finally(()=>{
-        setIsLoading(false);
       })
+      .finally(() => {
+        setIsLoading(false);
+      });
   };
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {

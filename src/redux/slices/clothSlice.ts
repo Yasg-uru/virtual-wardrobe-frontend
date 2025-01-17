@@ -5,6 +5,7 @@ import { clothState, IClothItem } from "@/types/clothState";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { AxiosError } from "axios";
 import { z } from "zod";
+import { axiosError } from "./authSlice";
 
 const savedata = (cloths: IClothItem[]) => {
   sessionStorage.setItem("cloths", JSON.stringify(cloths));
@@ -80,10 +81,12 @@ export const WearCloth = createAsyncThunk(
       );
       return response.data;
     } catch (error: any) {
-      if (error.response && error.response.data) {
-        rejectWithValue(error.response?.data?.message);
+      const err: axiosError = error as axiosError;
+
+      if (err.response && err.response.data && err.response.data.message) {
+        return rejectWithValue(err.response.data.message);
       }
-      rejectWithValue("Unkown error");
+      return rejectWithValue("Unknown error");
     }
   }
 );
@@ -156,16 +159,18 @@ export const AddUserCloth = createAsyncThunk(
     } catch (error: any) {
       console.log("this is a error :", error);
 
-      if (error.response && error.response.data) {
-        return rejectWithValue(error.response.data.message);
+      const err: axiosError = error as axiosError;
+
+      if (err.response && err.response.data && err.response.data.message) {
+        return rejectWithValue(err.response.data.message);
       }
-      return rejectWithValue("Unkown error");
+      return rejectWithValue("Unknown error");
     }
   }
 );
 export const GetCollections = createAsyncThunk(
   "cloths/collections",
-  async () => {
+  async (_,{rejectWithValue}) => {
     try {
       const response = await axiosInstance.get("/cloth/collections", {
         withCredentials: true,
@@ -173,11 +178,12 @@ export const GetCollections = createAsyncThunk(
       console.log("this is a response data :", response.data);
       return response.data;
     } catch (error: any) {
-      // if (error.response && error.response.data) {
-      //   rejectWithValue(error.response?.data?.message);
-      // }
-      // rejectWithValue("Unkown error");
-      throw error;
+      const err: axiosError = error as axiosError;
+
+      if (err.response && err.response.data && err.response.data.message) {
+        return rejectWithValue(err.response.data.message);
+      }
+      return rejectWithValue("Unknown error");
     }
   }
 );
@@ -192,10 +198,12 @@ export const filterCloth = createAsyncThunk(
       return response.data;
     } catch (error: any) {
       console.log("this is a error :", error);
-      if (error.response && error.response.data) {
-        return rejectWithValue(error.response?.data?.message);
+      const err: axiosError = error as axiosError;
+
+      if (err.response && err.response.data && err.response.data.message) {
+        return rejectWithValue(err.response.data.message);
       }
-      return rejectWithValue("unkown error");
+      return rejectWithValue("Unknown error");
     }
   }
 );
@@ -213,8 +221,12 @@ export const SearchCloths = createAsyncThunk(
       return response.data;
     } catch (error: any) {
       console.log("this is a error:", AxiosError);
-      return rejectWithValue(error.response.data.message);
-      // rejectWithValue("unkown error ");
+      const err: axiosError = error as axiosError;
+
+      if (err.response && err.response.data && err.response.data.message) {
+        return rejectWithValue(err.response.data.message);
+      }
+      return rejectWithValue("Unknown error");
     }
   }
 );
@@ -227,7 +239,12 @@ export const GetClothDetails = createAsyncThunk(
       });
       return response.data;
     } catch (error: any) {
-      return rejectWithValue(error.response.data.message);
+      const err: axiosError = error as axiosError;
+
+      if (err.response && err.response.data && err.response.data.message) {
+        return rejectWithValue(err.response.data.message);
+      }
+      return rejectWithValue("Unknown error");
     }
   }
 );
@@ -248,7 +265,12 @@ export const GetRecommandedCloths = createAsyncThunk(
 
       return response.data;
     } catch (error: any) {
-      return rejectWithValue(error.response.data.message);
+      const err: axiosError = error as axiosError;
+
+      if (err.response && err.response.data && err.response.data.message) {
+        return rejectWithValue(err.response.data.message);
+      }
+      return rejectWithValue("Unknown error");
     }
   }
 );
@@ -262,10 +284,12 @@ export const GetWearAnalysis = createAsyncThunk(
       });
       return response.data;
     } catch (error: any) {
-      // if (error.response && error.response.data) {
-      return rejectWithValue(error.response.data.message);
-      // }
-      // return rejectWithValue("unkown error");
+      const err: axiosError = error as axiosError;
+
+      if (err.response && err.response.data && err.response.data.message) {
+        return rejectWithValue(err.response.data.message);
+      }
+      return rejectWithValue("Unknown error");
     }
   }
 );
@@ -279,10 +303,12 @@ export const GetNotification = createAsyncThunk(
       });
       return response.data;
     } catch (error: any) {
-      if (error.response && error.response.data) {
-        return rejectWithValue(error.response.data.message);
+      const err: axiosError = error as axiosError;
+
+      if (err.response && err.response.data && err.response.data.message) {
+        return rejectWithValue(err.response.data.message);
       }
-      return rejectWithValue("unkown error");
+      return rejectWithValue("Unknown error");
     }
   }
 );
@@ -294,10 +320,12 @@ export const DeleteCloth = createAsyncThunk(
       const response = await axiosInstance.delete(`/${clothId}`);
       return response.data;
     } catch (error: any) {
-      if (error.response && error.response.data) {
-        return rejectWithValue(error.response.data.message);
+      const err: axiosError = error as axiosError;
+
+      if (err.response && err.response.data && err.response.data.message) {
+        return rejectWithValue(err.response.data.message);
       }
-      return rejectWithValue("Unkown error");
+      return rejectWithValue("Unknown error");
     }
   }
 );
@@ -311,7 +339,12 @@ export const GetArchives = createAsyncThunk(
       });
       return response.data;
     } catch (error: any) {
-      return rejectWithValue(error.response.data.message);
+      const err: axiosError = error as axiosError;
+
+      if (err.response && err.response.data && err.response.data.message) {
+        return rejectWithValue(err.response.data.message);
+      }
+      return rejectWithValue("Unknown error");
     }
   }
 );
@@ -328,7 +361,12 @@ export const RemoveFromArchive = createAsyncThunk(
       );
       return response.data;
     } catch (error: any) {
-      return rejectWithValue(error.response.data.message);
+      const err: axiosError = error as axiosError;
+
+      if (err.response && err.response.data && err.response.data.message) {
+        return rejectWithValue(err.response.data.message);
+      }
+      return rejectWithValue("Unknown error");
     }
   }
 );

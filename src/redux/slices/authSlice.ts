@@ -27,7 +27,7 @@ const initialState: AuthState = {
   isAuthenticated: localStorage.getItem("isAuthenticated") === "true" || false,
 };
 
-type axiosError = AxiosError<{ message: string }>;
+export type axiosError = AxiosError<{ message: string }>;
 export const userSignUp = createAsyncThunk(
   "auth/register",
   async (formdata: any, { rejectWithValue }) => {
