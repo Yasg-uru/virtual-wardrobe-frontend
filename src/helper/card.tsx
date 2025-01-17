@@ -1,7 +1,6 @@
-
 import { useState } from "react";
 
-import {Link} from 'react-router-dom'
+import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useToast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
@@ -13,12 +12,11 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Heart,  X, ChevronDown, Loader2 } from "lucide-react";
+import { Heart, X, ChevronDown, Loader2 } from "lucide-react";
 import { IClothItem } from "@/types/clothState";
 import { useAppDispatch } from "@/redux/hook";
 import { WearCloth } from "@/redux/slices/clothSlice";
 import { DeleteDialog } from "./DeleteDialog";
-
 
 interface ClothCardProps {
   cloth: IClothItem;
@@ -27,7 +25,7 @@ interface ClothCardProps {
 const conditions = ["New", "Good", "Worn", "Needs Repair"];
 
 export function ClothCard({ cloth }: ClothCardProps) {
-  console.log('this is cloth card for the archive cloths :',cloth)
+  console.log("this is cloth card for the archive cloths :", cloth);
   const [isWear, setIsWear] = useState(false);
   const [condition, setCondition] = useState(cloth.condition);
   const [isLoading, setIsLoading] = useState(false);
@@ -68,7 +66,7 @@ export function ClothCard({ cloth }: ClothCardProps) {
           alt={cloth.brand}
           // layout="fill"
           // objectFit="cover"
-          className="transition-opacity duration-300 hover:opacity-90"
+          className="transition-opacity duration-300 hover:opacity-90 h-96 w-full"
         />
         {cloth.isFavorite && (
           <div className="absolute top-2 right-2">
@@ -88,7 +86,9 @@ export function ClothCard({ cloth }: ClothCardProps) {
             Worn {cloth.wearcount} times
           </span>
           <span className="text-sm text-muted-foreground">
-            Last: {new Date(cloth.lastWorn).toLocaleDateString()}
+            {cloth.lastWorn
+              ? "Last:" + new Date(cloth.lastWorn).toLocaleDateString()
+              : "Un Used"}
           </span>
         </div>
         <AnimatePresence mode="wait">
@@ -150,7 +150,7 @@ export function ClothCard({ cloth }: ClothCardProps) {
           ))}
         </div>
         <div className="flex justify-between items-center w-full">
-          <Link to={`/detail/${cloth._id}`} >
+          <Link to={`/detail/${cloth._id}`}>
             <Button variant="link">View Details</Button>
           </Link>
           <DeleteDialog clothId={cloth._id} brand={cloth.brand} />

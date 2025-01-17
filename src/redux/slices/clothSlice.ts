@@ -317,9 +317,12 @@ export const DeleteCloth = createAsyncThunk(
   async (params: { clothId: string }, { rejectWithValue }) => {
     try {
       const { clothId } = params;
-      const response = await axiosInstance.delete(`/${clothId}`);
+      const response = await axiosInstance.delete(`/cloth/${clothId}`,{
+        withCredentials:true
+      });
       return response.data;
     } catch (error: any) {
+      console.log('this is error in product deletion :',error)
       const err: axiosError = error as axiosError;
 
       if (err.response && err.response.data && err.response.data.message) {

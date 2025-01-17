@@ -16,12 +16,13 @@ import LoginSchema from "@/schema/authSchema/Login";
 import { Loader2 } from "lucide-react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { z } from "zod";
 
 const Login: React.FunctionComponent = () => {
   const dispatch = useAppDispatch();
   const { toast } = useToast();
+  const navigate = useNavigate();
   const Loading = useAppSelector((state) => state.auth.Loading);
   const form = useForm<z.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),
@@ -37,6 +38,7 @@ const Login: React.FunctionComponent = () => {
         toast({
           title: "Logged in successfully",
         });
+        navigate("/");
       })
       .catch((error) => {
         toast({

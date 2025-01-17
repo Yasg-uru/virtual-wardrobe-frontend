@@ -1,5 +1,7 @@
+import { toast } from "@/components/ui/use-toast";
 import { ClothCard } from "@/helper/card";
-import { useAppSelector } from "@/redux/hook";
+import { useAppDispatch, useAppSelector } from "@/redux/hook";
+import { GetWearAnalysis } from "@/redux/slices/clothSlice";
 import React, { useEffect, useRef, useState } from "react";
 import { AiOutlineArrowUp, AiOutlineWarning } from "react-icons/ai";
 
@@ -7,6 +9,7 @@ const WearAnalysis: React.FunctionComponent = () => {
   const { leastWorn, mostworn, underUtilizedCloths } = useAppSelector(
     (state) => state.cloth
   );
+  const dispatch=useAppDispatch();
   const MostWornRef = useRef<HTMLDivElement>(null);
   const LeastWornRef = useRef<HTMLDivElement>(null);
   const underutilizedRef = useRef<HTMLDivElement>(null);
@@ -20,6 +23,17 @@ const WearAnalysis: React.FunctionComponent = () => {
   const scrollToTop = () => {
     window.scroll({ top: 0, behavior: "smooth" });
   };
+  useEffect(()=>{
+    dispatch(GetWearAnalysis({ex:""})).unwrap().then(()=>{
+      toast({
+        title :'fetched wear analysis successfully'
+      })
+    }).catch((error)=>{
+      toast({
+        title :error
+      })
+    })
+  },[])
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 300) {

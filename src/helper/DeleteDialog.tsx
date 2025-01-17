@@ -1,8 +1,8 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { useToast } from "@/components/ui/use-toast"
-import { Button } from "@/components/ui/button"
+import { useState } from "react";
+import { useToast } from "@/components/ui/use-toast";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -11,38 +11,43 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog"
-import { Trash2, Loader2 } from 'lucide-react'
-import { useAppDispatch } from "@/redux/hook"
-import { DeleteCloth } from "@/redux/slices/clothSlice"
+} from "@/components/ui/dialog";
+import { Trash2, Loader2 } from "lucide-react";
+import { useAppDispatch } from "@/redux/hook";
+import { DeleteCloth } from "@/redux/slices/clothSlice";
 
 interface DeleteDialogProps {
-  clothId: string
-  brand: string
+  clothId: string;
+  brand: string;
 }
 
 export function DeleteDialog({ clothId, brand }: DeleteDialogProps) {
-  const [isOpen, setIsOpen] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
-  const { toast } = useToast()
-  const dispatch = useAppDispatch()
+  console.log("this is cloth Id :", clothId, brand);
+  const [isOpen, setIsOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const { toast } = useToast();
+  const dispatch = useAppDispatch();
 
   const handleDelete = async () => {
-    setIsLoading(true)
-    try {
-      await dispatch(DeleteCloth({clothId})).unwrap()
-      toast({ title: "Cloth deleted successfully" })
-      setIsOpen(false)
-    } catch (error: any) {
-      toast({
-        title: "Error deleting cloth",
-        description: error.message,
-        variant: "destructive",
+    setIsLoading(true);
+    dispatch(DeleteCloth({ clothId }))
+      .unwrap()
+      .then(() => {
+        toast({
+          title: "successfully deleted your cloth",
+        });
       })
-    } finally {
-      setIsLoading(false)
-    }
-  }
+      .catch((error) => {
+        toast({
+          title: error,
+
+          variant: "destructive",
+        });
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  };
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -63,13 +68,20 @@ export function DeleteDialog({ clothId, brand }: DeleteDialogProps) {
           <Button variant="outline" onClick={() => setIsOpen(false)}>
             Cancel
           </Button>
-          <Button variant="destructive" onClick={handleDelete} disabled={isLoading}>
-            {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Trash2 className="mr-2 h-4 w-4" />}
+          <Button
+            variant="destructive"
+            onClick={handleDelete}
+            disabled={isLoading}
+          >
+            {isLoading ? (
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            ) : (
+              <Trash2 className="mr-2 h-4 w-4" />
+            )}
             Delete
           </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  )
+  );
 }
-
