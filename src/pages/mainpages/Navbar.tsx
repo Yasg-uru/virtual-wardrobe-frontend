@@ -75,7 +75,11 @@ const Navbar: React.FC = () => {
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center">
             <Link to="/" className="flex-shrink-0">
-              <img className="h-8 w-auto" src="https://cdn3d.iconscout.com/3d/premium/thumb/wardrobe-5849594-4898100.png" alt="Logo" />
+              <img
+                className="h-8 w-auto"
+                src="https://cdn3d.iconscout.com/3d/premium/thumb/wardrobe-5849594-4898100.png"
+                alt="Logo"
+              />
             </Link>
             <div className="hidden md:block ml-10">
               <div className="flex items-baseline space-x-4">
@@ -187,7 +191,11 @@ const MobileTabBar: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <Link to="/" className="flex-shrink-0">
-              <img className="h-8 w-auto" src="https://cdn3d.iconscout.com/3d/premium/thumb/wardrobe-5849594-4898100.png" alt="Logo" />
+              <img
+                className="h-8 w-auto"
+                src="https://cdn3d.iconscout.com/3d/premium/thumb/wardrobe-5849594-4898100.png"
+                alt="Logo"
+              />
             </Link>
             <div className="flex items-center">
               <SearchBar />
