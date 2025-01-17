@@ -6,7 +6,7 @@ import Tabcomponent from "./pages/authcomponents/Tabcomponent";
 
 import Verify from "./pages/authcomponents/VerifyComponent";
 import ClothDetail from "./pages/Cloths/ClothDetails";
-import {AddClothForm} from "./pages/Cloths/AddCloth";
+import { AddClothForm } from "./pages/Cloths/AddCloth";
 import Collections from "./pages/Cloths/Collections";
 import SerachDetails from "./pages/Cloths/CothDetailBysearch";
 import WearAnalysis from "./pages/Cloths/WearAnalysis";
@@ -27,8 +27,8 @@ const App: React.FunctionComponent = () => {
         <Route path="/forgot-password" element={<ForgotPass />} />
         <Route
           element={
-            <RequireAuth 
-            // allowedRoles={["User", "Admin", "Moderator"]} 
+            <RequireAuth
+            // allowedRoles={["User", "Admin", "Moderator"]}
             />
           }
         >

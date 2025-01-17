@@ -1,4 +1,3 @@
-
 import { ClothCard } from "@/helper/card";
 import { useAppSelector } from "@/redux/hook";
 import React, { useEffect, useRef, useState } from "react";
@@ -35,7 +34,7 @@ const WearAnalysis: React.FunctionComponent = () => {
     };
   }, []);
   return (
-    <div className="min-h-screen flex flex-col gap-16 p-8 bg-gradient-to-br from-gray-100 via-gray-200 to-gray-300 dark:from-gray-800 dark:via-gray-900 dark:to-black">
+    <div className="min-h-screen flex flex-col gap-16 p-8 dark:bg-black">
       <div className="flex gap-3">
         <button
           type="button"
@@ -65,9 +64,7 @@ const WearAnalysis: React.FunctionComponent = () => {
         </h2>
         <div className="flex gap-6 flex-wrap justify-center">
           {mostworn.length > 0 ? (
-            mostworn.map((worn) => (
-              <ClothCard key={worn._id} cloth={worn} />
-            ))
+            mostworn.map((worn) => <ClothCard key={worn._id} cloth={worn} />)
           ) : (
             <div className="flex items-center justify-center w-full p-6 bg-gradient-to-br from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-800 rounded-lg shadow-lg">
               <AiOutlineWarning className="text-gray-600 dark:text-gray-400 text-3xl mr-3 animate-bounce" />
@@ -87,9 +84,7 @@ const WearAnalysis: React.FunctionComponent = () => {
         </h2>
         <div className="flex gap-6 flex-wrap justify-center">
           {leastWorn.length > 0 ? (
-            leastWorn.map((worn) => (
-              <ClothCard key={worn._id} cloth={worn} />
-            ))
+            leastWorn.map((worn) => <ClothCard key={worn._id} cloth={worn} />)
           ) : (
             <div className="flex items-center justify-center w-full p-6 bg-gradient-to-br from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-800 rounded-lg shadow-lg">
               <AiOutlineWarning className="text-gray-600 dark:text-gray-400 text-3xl mr-3 animate-bounce" />

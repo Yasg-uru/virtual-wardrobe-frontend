@@ -15,8 +15,8 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { IClothItem } from "@/types/clothState";
-import { useAppDispatch, useAppSelector, useAppStore } from "@/redux/hook";
+
+import { useAppDispatch, useAppSelector } from "@/redux/hook";
 import { GetClothDetails } from "@/redux/slices/clothSlice";
 import { useParams } from "react-router-dom";
 

@@ -1,572 +1,249 @@
-import React, { useEffect, useState } from "react";
-import { Button } from "@/components/ui/button";
-import "./Custom.css";
-import {
-  Sheet,
-  SheetClose,
-  SheetContent,
-  SheetDescription,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
 
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { IClothItem } from "@/types/clothState";
-import { FaFilter } from "react-icons/fa";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Label } from "@/components/ui/label";
-import { Slider } from "@/components/ui/slider";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { filterCloth } from "@/redux/slices/clothSlice";
-import { useAppDispatch } from "@/redux/hook";
-import { useToast } from "@/components/ui/use-toast";
-import { RefreshCcw } from "lucide-react";
+import { useState, useEffect } from 'react'
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger, SheetFooter } from "@/components/ui/sheet"
+import { Button } from "@/components/ui/button"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Checkbox } from "@/components/ui/checkbox"
+import { Label } from "@/components/ui/label"
+import { Slider } from "@/components/ui/slider"
+import { ScrollArea } from "@/components/ui/scroll-area"
+import { FaFilter } from "react-icons/fa"
+import { IClothItem } from '@/types/clothState'
 
-type Props = {
-  collections: IClothItem[];
-  handleRefresh: () => void;
-  loading: boolean;
-};
 
-const FilterCompo: React.FunctionComponent<Props> = ({
-  collections,
-  loading,
-  handleRefresh,
-}) => {
-  const dispatch = useAppDispatch();
+interface FilterDrawerProps {
+  collections: IClothItem[]
+  onFilter: (filteredItems: IClothItem[]) => void
+}
 
-  const [brands, setBrands] = useState<string[]>([]);
-  const [sizes, setSizes] = useState<string[]>([]);
-  const [material, setMaterial] = useState<string[]>([]);
-  const [maxcost, setMaxCost] = useState<number>(0);
-  const [mincost, setMinCost] = useState<number>(0);
-  const [minWearCount, setMinWearCount] = useState<number>(0);
-  const [maxWearCount, setMaxWearCount] = useState<number>(0);
-  const [colors, setColors] = useState<string[]>([]);
-  const [includeCost, setIncludeCost] = useState<boolean>(false);
-  const [includeWearCount, setIncludeWearCount] = useState<boolean>(false);
-
+export function FilterDrawer({ collections, onFilter }: FilterDrawerProps) {
   const [filters, setFilters] = useState({
-    category: "",
-    color: "",
-    size: "",
-    brand: "",
-    material: "",
-    condition: "",
-    isRainSuitable: false,
-    isWindSuitable: false,
-    isSunnySuitable: false,
-    isCloudySuitable: false,
-    isSnowySuitable: false,
-    isSummer: false,
-    isWinter: false,
-    isSpring: false,
-    isAutumn: false,
+    category: '',
+    condition: '',
+    brand: '',
+    size: '',
+    material: '',
+    color: '',
+    season: '',
+    weather: '',
     isFavorite: false,
     isArchived: false,
     minCost: 0,
-    maxCost: 0,
-    maxWearCount: 0,
+    maxCost: 1000,
     minWearCount: 0,
-  });
+    maxWearCount: 100,
+  })
+
+  const [uniqueValues, setUniqueValues] = useState({
+    brands: [] as string[],
+    sizes: [] as string[],
+    materials: [] as string[],
+    colors: [] as string[],
+  })
 
   useEffect(() => {
-    if (collections.length > 0) {
-      const uniqueBrands = [
-        ...new Set(collections.map((collection) => collection.brand)),
-      ];
-      const UniqueSizes = [
-        ...new Set(collections.map((collection) => collection.size)),
-      ];
-      const UniqueMaterials = [
-        ...new Set(collections.map((collection) => collection.material)),
-      ];
-      const UniqueColors = [
-        ...new Set(collections.map((collection) => collection.color)),
-      ];
-      let maxCost: number = Number.MIN_SAFE_INTEGER;
-      let minCost: number = Number.MAX_SAFE_INTEGER;
-      let maxWear: number = Number.MIN_SAFE_INTEGER;
-      let minwear: number = Number.MAX_SAFE_INTEGER;
-      collections.forEach((collection) => {
-        maxCost = Math.max(collection.cost, maxcost);
-        minCost = Math.min(minCost, collection.cost);
-        minwear = Math.min(minwear, collection.wearcount);
-        maxWear = Math.max(maxWear, collection.wearcount);
-      });
-      setColors(UniqueColors);
+    const brands = [...new Set(collections.map((item) => item.brand))]
+    const sizes = [...new Set(collections.map((item) => item.size))]
+    const materials = [...new Set(collections.map((item) => item.material))]
+    const colors = [...new Set(collections.map((item) => item.color))]
 
-      setMaxWearCount(maxWear);
-      setMinCost(minCost);
-      setMinWearCount(minwear);
-      setMaxCost(maxCost);
-      setMaterial(UniqueMaterials);
-      setSizes(UniqueSizes);
-      setBrands(uniqueBrands);
-    }
-  }, [collections]);
-  const { toast } = useToast();
-  const handleSubmit = async () => {
-    //now we need to filter the things
-    const updatedFilters: any = { ...filters };
-    if (!includeCost) {
-      updatedFilters["minCost"] = undefined;
-      updatedFilters["maxCost"] = undefined;
-    }
-    if (!includeWearCount) {
-      updatedFilters["maxWearCount"] = undefined;
-      updatedFilters["minWearCount"] = undefined;
-    }
-    updatedFilters.isSummer = filters.isSummer ? true : undefined;
-    updatedFilters.isWinter = filters.isWinter ? true : undefined;
-    updatedFilters.isSpring = filters.isSpring ? true : undefined;
-    updatedFilters.isAutumn = filters.isAutumn ? true : undefined;
-    updatedFilters.isRainSuitable = filters.isRainSuitable ? true : undefined;
-    updatedFilters.isWindSuitable = filters.isWindSuitable ? true : undefined;
-    updatedFilters.isSunnySuitable = filters.isSunnySuitable ? true : undefined;
-    updatedFilters.isCloudySuitable = filters.isCloudySuitable
-      ? true
-      : undefined;
-    updatedFilters.isSnowySuitable = filters.isSnowySuitable ? true : undefined;
-    updatedFilters.isFavorite = filters.isFavorite ? true : undefined;
-    updatedFilters.isArchived = filters.isArchived ? true : undefined;
-    dispatch(filterCloth(updatedFilters))
-      .then(() => {
-        toast({
-          title: "Filtered succcessfully",
-        });
-      })
-      .catch((error) => {
-        toast({
-          title: error,
-          variant: "destructive",
-        });
-      });
-  };
-  const HandleCheckBoxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, checked } = event.target;
+    setUniqueValues({ brands, sizes, materials, colors })
+  }, [collections])
 
-    setFilters((prev) => ({ ...prev, [name]: checked }));
+  const handleFilterChange = (key: string, value: any) => {
+    setFilters((prev) => ({ ...prev, [key]: value }))
+  }
 
-    console.log("this is a filters  in the archive andn favourate:", filters);
-  };
+  const applyFilters = () => {
+    const filteredItems = collections.filter((item) => {
+      return (
+        (filters.category === '' || item.category === filters.category) &&
+        (filters.condition === '' || item.condition === filters.condition) &&
+        (filters.brand === '' || item.brand === filters.brand) &&
+        (filters.size === '' || item.size === filters.size) &&
+        (filters.material === '' || item.material === filters.material) &&
+        (filters.color === '' || item.color === filters.color) &&
+        (filters.season === '' || item.seasonSuitability[filters.season as keyof typeof item.seasonSuitability]) &&
+        (filters.weather === '' || item.weatherSuitability[filters.weather as keyof typeof item.weatherSuitability]) &&
+        (!filters.isFavorite || item.isFavorite) &&
+        (!filters.isArchived || item.isArchived) &&
+        item.cost >= filters.minCost &&
+        item.cost <= filters.maxCost &&
+        item.wearcount >= filters.minWearCount &&
+        item.wearcount <= filters.maxWearCount
+      )
+    })
+
+    onFilter(filteredItems)
+  }
 
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <div className="join gap-2">
-          <Button
-            className=" btn-join bg-gradient-to-r from-pink-500 to-purple-500 text-white font-bold py-3 px-6 rounded-md shadow-md "
-            variant="outline"
-          >
-            Apply Filter <FaFilter size={30} color="white" />
-          </Button>
-
-          <Button
-            onClick={handleRefresh}
-            className="btn-join bg-gradient-to-r from-pink-500 to-purple-500 text-white font-bold py-3 px-6 rounded-md shadow-md hover:scale-105 transition duration-300"
-          >
-            Refresh
-            <RefreshCcw className={`ml-2 ${loading ? "animate-spin" : ""}`} />
-          </Button>
-        </div>
+        <Button className="bg-gradient-to-r from-pink-500 to-purple-500 text-white font-bold py-2 px-4 rounded-md shadow-md hover:shadow-lg transition duration-300">
+          Apply Filter <FaFilter className="ml-2" />
+        </Button>
       </SheetTrigger>
       <SheetContent>
         <SheetHeader>
-          <SheetTitle>Filter</SheetTitle>
+          <SheetTitle>Filter Your Wardrobe</SheetTitle>
           <SheetDescription>
-            Apply filters to find your cloth easily from your wardrobe.
+            Apply filters to find your clothes easily.
           </SheetDescription>
         </SheetHeader>
-        <ScrollArea className="h-[60vh] rounded-md border p-4 scrollbar-custom">
-          {/* Section for Category and Condition Filters */}
-          <div className="w-full p-4 space-y-6">
-            <div className="flex gap-2 flex-wrap justify-between">
-              <Select
-                onValueChange={(value) =>
-                  setFilters((prev) => ({ ...prev, category: value }))
-                }
-              >
-                <SelectTrigger className="w-[180px]">
-                  <SelectValue placeholder="Select Category" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectLabel>Category</SelectLabel>
-                    <SelectItem value="Top">Top</SelectItem>
-                    <SelectItem value="Bottom">Bottom</SelectItem>
-                    <SelectItem value="Accessory">Accessory</SelectItem>
-                    <SelectItem value="Footwear">Footwear</SelectItem>
-                    <SelectItem value="Outerwear">Outerwear</SelectItem>
-                    <SelectItem value="Other">Other</SelectItem>
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-
-              <Select
-                onValueChange={(value) =>
-                  setFilters((prev) => ({ ...prev, condition: value }))
-                }
-              >
-                <SelectTrigger className="w-[180px]">
-                  <SelectValue placeholder="Select Condition" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectLabel>Condition</SelectLabel>
-                    <SelectItem value="New">New</SelectItem>
-                    <SelectItem value="Good">Good</SelectItem>
-                    <SelectItem value="Worn">Worn</SelectItem>
-                    <SelectItem value="Needs Repair">Needs Repair</SelectItem>
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-            </div>
-
-            {/* Horizontal line */}
-            <hr className="border-t border-gray-300" />
-
-            {/* Section for Brand and Size Filters */}
-            <div className="flex gap-2 flex-wrap justify-between">
-              <Select
-                onValueChange={(value) =>
-                  setFilters((prev) => ({ ...prev, brand: value }))
-                }
-              >
-                <SelectTrigger className="w-[180px]">
-                  <SelectValue placeholder="Select Brand" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectLabel>Brands</SelectLabel>
-                    {brands.map((brand, index) => (
-                      <SelectItem key={index} value={brand}>
-                        {brand}
-                      </SelectItem>
-                    ))}
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-
-              <Select
-                onValueChange={(value) =>
-                  setFilters((prev) => ({ ...prev, size: value }))
-                }
-              >
-                <SelectTrigger className="w-[180px]">
-                  <SelectValue placeholder="Select Size" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectLabel>Sizes</SelectLabel>
-                    {sizes.length > 0 &&
-                      sizes.map((size, index) => (
-                        <SelectItem key={index} value={size}>
-                          {size}
-                        </SelectItem>
-                      ))}
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-            </div>
-
-            {/* Horizontal line */}
-            <hr className="border-t border-gray-300" />
-
-            {/* Section for Material Filter */}
-            <div className="flex flex-col space-y-2">
-              <h2 className="text-sm font-semibold">Material</h2>
-              <RadioGroup
-                className="flex gap-2 flex-wrap"
-                onValueChange={(value) =>
-                  setFilters((prev) => ({ ...prev, material: value }))
-                }
-              >
-                {material.length > 0 &&
-                  material.map((material, index) => (
-                    <div key={index} className="flex items-center space-x-2">
-                      <RadioGroupItem
-                        value={material}
-                        id={`material${index}`}
-                      />
-                      <Label htmlFor={`material${index}`}>{material}</Label>
-                    </div>
-                  ))}
-              </RadioGroup>
-            </div>
-            <hr className="border-t border-gray-300" />
-
-            {/* Section for Material Filter */}
-            <div className="flex flex-col space-y-2">
-              <h2 className="text-sm font-semibold">Colors</h2>
-              <RadioGroup
-                className="flex flex-wrap gap-2"
-                onValueChange={(value) =>
-                  setFilters((prev) => ({ ...prev, color: value }))
-                }
-              >
-                {colors.length > 0 &&
-                  colors.map((color, index) => (
-                    <div key={index} className="flex items-center space-x-2">
-                      <RadioGroupItem value={color} id={`color${index}`} />
-                      <Label htmlFor={`material${index}`}>{color}</Label>
-                    </div>
-                  ))}
-              </RadioGroup>
-            </div>
-
-            {/* Horizontal line */}
-            <hr className="border-t border-gray-300" />
-            <div className="flex flex-col space-y-2">
-              <h2 className="text-sm font-semibold">Season Sustainability</h2>
-              <RadioGroup
-                className="flex flex-wrap gap-2"
-                onValueChange={(value) =>
-                  setFilters((prev) => {
-                    return {
-                      ...prev,
-                      isSummer: value === "Summer",
-                      isWinter: value === "Winter",
-                      isSpring: value === "Spring",
-                      isAutumn: value === "Autumn",
-                    };
-                  })
-                }
-              >
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="Summer" id="season-summer" />
-                  <Label htmlFor="season-summer">Summer</Label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="Winter" id="season-winter" />
-                  <Label htmlFor="season-winter">Winter</Label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="Spring" id="season-spring" />
-                  <Label htmlFor="season-spring">Spring</Label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="Autumn" id="season-autumn" />
-                  <Label htmlFor="season-autumn">Autumn</Label>
-                </div>
-              </RadioGroup>
-            </div>
-            <hr className="border-t border-gray-300" />
-            <div className="flex flex-col w-full gap-2">
-              <h1 className="text-sm font-semibold">By Preference</h1>
-              <div className="flex gap-2">
-                <div className="flex items-center space-x-2">
-                  <input
-                    type="checkbox"
-                    id="isArchived"
-                    name="isArchived"
-                    checked={filters.isArchived}
-                    onChange={HandleCheckBoxChange}
-                  />
-                  <label
-                    htmlFor="isArchived"
-                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                  >
-                    by Archive
-                  </label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <input
-                    type="checkbox"
-                    id="isFavorite"
-                    name="isFavorite"
-                    checked={filters.isFavorite}
-                    onChange={HandleCheckBoxChange}
-                  />
-                  <label
-                    htmlFor="isFavorite"
-                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                  >
-                    By Favourate
-                  </label>
-                </div>
+        <ScrollArea className="h-[calc(100vh-10rem)] mt-4">
+          <div className="space-y-6">
+            <FilterSelect
+              label="Category"
+              value={filters.category}
+              onChange={(value) => handleFilterChange('category', value)}
+              options={['Top', 'Bottom', 'Accessory', 'Footwear', 'Outerwear', 'Other']}
+            />
+            <FilterSelect
+              label="Condition"
+              value={filters.condition}
+              onChange={(value) => handleFilterChange('condition', value)}
+              options={['New', 'Good', 'Worn', 'Needs Repair']}
+            />
+            <FilterSelect
+              label="Brand"
+              value={filters.brand}
+              onChange={(value) => handleFilterChange('brand', value)}
+              options={uniqueValues.brands}
+            />
+            <FilterSelect
+              label="Size"
+              value={filters.size}
+              onChange={(value) => handleFilterChange('size', value)}
+              options={uniqueValues.sizes}
+            />
+            <FilterSelect
+              label="Material"
+              value={filters.material}
+              onChange={(value) => handleFilterChange('material', value)}
+              options={uniqueValues.materials}
+            />
+            <FilterSelect
+              label="Color"
+              value={filters.color}
+              onChange={(value) => handleFilterChange('color', value)}
+              options={uniqueValues.colors}
+            />
+            <FilterSelect
+              label="Season"
+              value={filters.season}
+              onChange={(value) => handleFilterChange('season', value)}
+              options={['isWinter', 'isSummer', 'isSpring', 'isAutumn']}
+            />
+            <FilterSelect
+              label="Weather"
+              value={filters.weather}
+              onChange={(value) => handleFilterChange('weather', value)}
+              options={['isWindSuitable', 'isRainSuitable', 'isSnowySuitable', 'isCloudySuitable', 'isSunnySuitable']}
+            />
+            <div className="space-y-2">
+              <Label>Preferences</Label>
+              <div className="flex space-x-4">
+                <Checkbox
+                  id="isFavorite"
+                  checked={filters.isFavorite}
+                  onCheckedChange={(checked) => handleFilterChange('isFavorite', checked)}
+                />
+                <Label htmlFor="isFavorite">Favorites</Label>
+                <Checkbox
+                  id="isArchived"
+                  checked={filters.isArchived}
+                  onCheckedChange={(checked) => handleFilterChange('isArchived', checked)}
+                />
+                <Label htmlFor="isArchived">Archived</Label>
               </div>
             </div>
-            <hr className="border-t border-gray-300" />
-            {/* Section for Weather Sustainability */}
-            <div className="flex flex-col space-y-2">
-              <h2 className="text-sm font-semibold">Weather Sustainability</h2>
-              <RadioGroup
-                className="flex flex-wrap gap-2"
-                onValueChange={(value) =>
-                  setFilters((prev) => {
-                    return {
-                      ...prev,
-                      isRainSuitable: value === "Rainy",
-                      isWindSuitable: value === "Windy",
-                      isSunnySuitable: value === "Sunny",
-                      isCloudySuitable: value === "Cloudy",
-                      isSnowySuitable: value === "Snowy",
-                    };
-                  })
-                }
-              >
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="Rainy" id="weather-rainy" />
-                  <Label htmlFor="weather-rainy">Rainy</Label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="Windy" id="weather-windy" />
-                  <Label htmlFor="weather-windy">Windy</Label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="Sunny" id="weather-sunny" />
-                  <Label htmlFor="weather-sunny">Sunny</Label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="Cloudy" id="weather-cloudy" />
-                  <Label htmlFor="weather-cloudy">Cloudy</Label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="Snowy" id="weather-snowy" />
-                  <Label htmlFor="weather-snowy">Snowy</Label>
-                </div>
-              </RadioGroup>
-            </div>
-            <hr className="border-t border-gray-300" />
-            <div className="flex flex-col space-y-2">
-              <h2 className="text-sm font-semibold">Include Filters</h2>
+            <div className="space-y-2">
+              <Label>Cost Range</Label>
               <div className="flex items-center space-x-2">
                 <input
-                  type="checkbox"
-                  id="includeCost"
-                  checked={includeCost}
-                  onChange={(e) => setIncludeCost(e.target.checked)}
+                  type="number"
+                  value={filters.minCost}
+                  onChange={(e) => handleFilterChange('minCost', Number(e.target.value))}
+                  className="w-20 p-1 border rounded"
                 />
-                <Label htmlFor="includeCost">Include Cost</Label>
-              </div>
-              <div className="flex items-center space-x-2">
+                <Slider
+                  min={0}
+                  max={1000}
+                  step={10}
+                  value={[filters.minCost, filters.maxCost]}
+                  onValueChange={([min, max]) => {
+                    handleFilterChange('minCost', min)
+                    handleFilterChange('maxCost', max)
+                  }}
+                  className="w-full"
+                />
                 <input
-                  type="checkbox"
-                  id="includeWearCount"
-                  checked={includeWearCount}
-                  onChange={(e) => setIncludeWearCount(e.target.checked)}
+                  type="number"
+                  value={filters.maxCost}
+                  onChange={(e) => handleFilterChange('maxCost', Number(e.target.value))}
+                  className="w-20 p-1 border rounded"
                 />
-                <Label htmlFor="includeWearCount">Include Wear Count</Label>
               </div>
             </div>
-            {/* Section for Cost and Wear Count Filters */}
-            <div className="space-y-4">
-              {includeCost && (
-                <div className="flex flex-col space-y-2">
-                  <h2 className="text-sm font-semibold">Cost</h2>
-                  <div className="flex gap-2">
-                    <div className="flex flex-col gap-3 w-1/2">
-                      <Label>Min Cost</Label>
-                      <Slider
-                        defaultValue={[mincost]}
-                        onValueChange={(value) =>
-                          setFilters((prev) => ({ ...prev, minCost: value[0] }))
-                        }
-                        max={maxcost}
-                        step={1}
-                      />
-                      <p className="text-xs">
-                        ₹{filters.minCost === 0 ? mincost : filters.minCost}
-                      </p>
-                    </div>
-                    <div className="flex flex-col gap-3 w-1/2">
-                      <Label>Max Cost</Label>
-                      <Slider
-                        defaultValue={[maxcost]}
-                        onValueChange={(value) =>
-                          setFilters((prev) => ({ ...prev, maxCost: value[0] }))
-                        }
-                        max={maxcost}
-                        step={1}
-                      />
-                      <p className="text-xs">
-                        ₹{filters.maxCost === 0 ? maxcost : filters.maxCost}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {/* Horizontal line */}
-              {includeWearCount && (
-                <>
-                  <hr className="border-t border-gray-300" />
-
-                  <div className="flex flex-col space-y-2">
-                    <h2 className="text-sm font-semibold">Wear Count</h2>
-                    <div className="flex gap-2">
-                      <div className="flex flex-col gap-3 w-1/2">
-                        <Label>Min Wear</Label>
-                        <Slider
-                          defaultValue={[minWearCount]}
-                          onValueChange={(value) =>
-                            setFilters((prev) => ({
-                              ...prev,
-                              minWearCount: value[0],
-                            }))
-                          }
-                          max={maxWearCount}
-                          step={1}
-                        />
-                        <p className="text-xs">
-                          {filters.minWearCount === 0
-                            ? minWearCount
-                            : filters.minWearCount}{" "}
-                          times
-                        </p>
-                      </div>
-                      <div className="flex flex-col gap-3 w-1/2">
-                        <Label>Max Wear</Label>
-                        <Slider
-                          defaultValue={[maxWearCount]}
-                          onValueChange={(value) =>
-                            setFilters((prev) => ({
-                              ...prev,
-                              maxWearCount: value[0],
-                            }))
-                          }
-                          max={maxWearCount}
-                          step={1}
-                        />
-                        <p className="text-xs">
-                          {filters.maxWearCount === 0
-                            ? maxWearCount
-                            : filters.maxWearCount}{" "}
-                          times
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </>
-              )}
+            <div className="space-y-2">
+              <Label>Wear Count Range</Label>
+              <div className="flex items-center space-x-2">
+                <input
+                  type="number"
+                  value={filters.minWearCount}
+                  onChange={(e) => handleFilterChange('minWearCount', Number(e.target.value))}
+                  className="w-20 p-1 border rounded"
+                />
+                <Slider
+                  min={0}
+                  max={100}
+                  step={1}
+                  value={[filters.minWearCount, filters.maxWearCount]}
+                  onValueChange={([min, max]) => {
+                    handleFilterChange('minWearCount', min)
+                    handleFilterChange('maxWearCount', max)
+                  }}
+                  className="w-full"
+                />
+                <input
+                  type="number"
+                  value={filters.maxWearCount}
+                  onChange={(e) => handleFilterChange('maxWearCount', Number(e.target.value))}
+                  className="w-20 p-1 border rounded"
+                />
+              </div>
             </div>
           </div>
         </ScrollArea>
-        <SheetFooter className="p-2">
-          <SheetClose asChild>
-            <Button
-              variant="outline"
-              className=" w-full bg-gradient-to-r from-pink-500 to-purple-500 text-white font-bold py-3 px-6 rounded-md shadow-md hover:scale-105 transition duration-300"
-              onClick={handleSubmit}
-            >
-              Apply
-            </Button>
-          </SheetClose>
+        <SheetFooter className="mt-4">
+          <Button onClick={applyFilters} className="w-full bg-gradient-to-r from-pink-500 to-purple-500 text-white">
+            Apply Filters
+          </Button>
         </SheetFooter>
       </SheetContent>
     </Sheet>
-  );
-};
+  )
+}
 
-export default FilterCompo;
+function FilterSelect({ label, value, onChange, options }: { label: string; value: string; onChange: (value: string) => void; options: string[] }) {
+  return (
+    <div className="space-y-2">
+      <Label>{label}</Label>
+      <Select value={value} onValueChange={onChange}>
+        <SelectTrigger>
+          <SelectValue placeholder={`Select ${label}`} />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="all">{/* Changed default value to "all" */ }All {label}s</SelectItem>
+          {options.map((option) => (
+            <SelectItem key={option} value={option}>
+              {option}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+    </div>
+  )
+}
+

@@ -1,16 +1,7 @@
-import { useState } from "react";
-import {
-  Menu,
-  X,
-  LifeBuoy,
-  LogOut,
-  User,
-  Loader2,
-  Archive,
-} from "lucide-react";
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { TbBrandGoogleAnalytics } from "react-icons/tb";
-
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -18,53 +9,39 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { ModeToggle } from "@/components/mode-toggle";
-
-import { Link, useNavigate } from "react-router-dom";
-
-import { useToast } from "@/components/ui/use-toast";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useAppDispatch, useAppSelector } from "@/redux/hook";
-import SearchBar from "./Search";
-import Notification from "./Notification";
-import { GetWearAnalysis } from "@/redux/slices/clothSlice";
 import { Logout } from "@/redux/slices/authSlice";
+import { useToast } from "@/components/ui/use-toast";
+import { useNavigate } from "react-router-dom";
+import {
+  User,
+  LifeBuoy,
+  LogOut,
+  Loader2,
+  Archive,
+  PlusCircle,
+  Home,
+  Grid,
+  Menu,
+  X,
+} from "lucide-react";
+import { TbBrandGoogleAnalytics } from "react-icons/tb";
+import Notification from "./Notification";
+
 import { useMediaQuery } from "@uidotdev/usehooks";
-export const Navbar: React.FunctionComponent = () => {
+import SearchBar from "./Search";
+
+const Navbar: React.FC = () => {
   const isMobile = useMediaQuery("(max-width: 768px)");
-
-  const [isOpen, setIsOpen] = useState(false);
-  const navigate = useNavigate();
   const dispatch = useAppDispatch();
-
+  const navigate = useNavigate();
   const { toast } = useToast();
-
   const { isAuthenticated, Loading, userInfo } = useAppSelector(
     (state) => state.auth
   );
-  const toggleMenu = () => {
-    setIsOpen(!isOpen);
-  };
-  const handleWearAnalysis = () => {
-    dispatch(GetWearAnalysis({ ex: "" }))
-      .unwrap()
-      .then(() => {
-        toast({
-          title: "Fetched your analysis successfully",
-        });
-        navigate("/wear/analysis");
-      })
-      .catch((error: any) => {
-        console.log("This is an error in the action dispatch:", error);
-        toast({
-          title: error,
-          variant: "destructive",
-        });
-      });
-  };
 
   const handleLogout = () => {
     dispatch(Logout({ ex: "yash" }))
@@ -83,185 +60,78 @@ export const Navbar: React.FunctionComponent = () => {
         });
       });
   };
-  console.log("this is a mobile or not :", isMobile);
+
+  const handleWearAnalysis = () => {
+    navigate("/wear/analysis");
+  };
+
+  if (isMobile) {
+    return <MobileTabBar />;
+  }
 
   return (
-    <nav className="bg-white dark:bg-gray-800 shadow-lg">
+    <nav className="bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-40 w-full border-b border-border">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center">
-            <div className="flex-shrink-0">
-              <img className="h-8 w-8" src={"procoders"} alt="Logo" />
-            </div>
-            <div className="hidden md:block">
-              <div className="ml-10 flex items-baseline space-x-4">
-                <Link to="/">Home</Link>
-
+            <Link to="/" className="flex-shrink-0">
+              <img className="h-8 w-auto" src="/logo.svg" alt="Logo" />
+            </Link>
+            <div className="hidden md:block ml-10">
+              <div className="flex items-baseline space-x-4">
+                <Link
+                  to="/"
+                  className="text-sm font-medium hover:text-primary transition-colors"
+                >
+                  Home
+                </Link>
                 <Link
                   to="/add"
-                  className="text-gray-900 dark:text-white hover:bg-gray-700 dark:hover:bg-gray-900 px-3 py-2 rounded-md text-sm font-medium"
+                  className="text-sm font-medium hover:text-primary transition-colors"
                 >
                   + Add Cloth
                 </Link>
                 <Link
                   to="/collections"
-                  className="text-gray-900 dark:text-white hover:bg-gray-700 dark:hover:bg-gray-900 px-3 py-2 rounded-md text-sm font-medium"
+                  className="text-sm font-medium hover:text-primary transition-colors"
                 >
                   Collections
                 </Link>
                 <Link
                   to="/support"
-                  className="text-gray-900 dark:text-white hover:bg-gray-700 dark:hover:bg-gray-900 px-3 py-2 rounded-md text-sm font-medium"
+                  className="text-sm font-medium hover:text-primary transition-colors"
                 >
                   Support
                 </Link>
-                <SearchBar />
               </div>
             </div>
           </div>
-          <div className="hidden md:block">
-            <div className="ml-4 flex items-center gap-6 md:ml-6">
-              <ModeToggle />
-              <Notification />
-              {!isAuthenticated ? (
-                <Button
-                  className="bg-gradient-to-r from-pink-500 to-purple-500 text-white font-bold py-3 px-6 rounded-md shadow-md hover:scale-105 transition duration-300 animate-bounce hover:animate-none"
-                  size="sm"
-                  onClick={() => navigate("/auth")}
-                >
-                  Sign In
-                </Button>
-              ) : (
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Avatar>
-                      <AvatarImage
-                        src={"profileUrl"}
-                        alt={userInfo?.username}
-                      />
-                      <AvatarFallback className="font-bold text-xl dark:bg-black bg-red-400 cursor-pointer">
-                        {userInfo?.username.split(" ")[0][0].toUpperCase()}
-                        {userInfo?.username.split(" ")[1]?.[0]?.toUpperCase()}
-                      </AvatarFallback>
-                    </Avatar>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent className="w-56">
-                    <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuGroup>
-                      <DropdownMenuItem>
-                        <User className="mr-2 h-4 w-4" />
-                        <Link to="/profile">Profile</Link>
-                        <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
-                      </DropdownMenuItem>
-
-                      <DropdownMenuItem
-                        className="space-x-2"
-                        onClick={handleWearAnalysis}
-                      >
-                        <TbBrandGoogleAnalytics size={26} color="green" />
-                        <span>Wear Analysis</span>
-                        <DropdownMenuShortcut>⌘W</DropdownMenuShortcut>
-                      </DropdownMenuItem>
-                    </DropdownMenuGroup>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem>
-                      <LifeBuoy className="mr-2 h-4 w-4" />
-                      <Link to="/support">
-                        <span>Support</span>
-                      </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>
-                      <Archive className="mr-2 h-4 w-4" />
-                      <Link to="/archive">
-                        <span>Archive</span>
-                      </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem onClick={handleLogout}>
-                      <LogOut className="mr-2 h-4 w-4" />
-                      <span>
-                        {Loading ? (
-                          <Loader2 className="h-6 w-6 animate-spin" />
-                        ) : (
-                          "Log Out"
-                        )}
-                      </span>
-                      <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              )}
-            </div>
-          </div>
-          {isMobile && <SearchBar />}
-          <div className="-mr-2 flex md:hidden">
-            <Button
-              variant="outline"
-              size="icon"
-              onClick={toggleMenu}
-              aria-controls="mobile-menu"
-              aria-expanded={isOpen}
-            >
-              {isOpen ? (
-                <X className="h-6 w-6" aria-hidden="true" />
-              ) : (
-                <Menu className="h-6 w-6" aria-hidden="true" />
-              )}
-              <span className="sr-only">Open main menu</span>
-            </Button>
-          </div>
-        </div>
-      </div>
-
-      <div
-        className={`${isOpen ? "block" : "hidden"} md:hidden`}
-        id="mobile-menu"
-      >
-        <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-          <Link
-            to="/"
-            className="text-gray-900 dark:text-white hover:bg-gray-700 dark:hover:bg-gray-900 block px-3 py-2 rounded-md text-base font-medium"
-          >
-            Home
-          </Link>
-          <Link
-            to="/add"
-            className="text-gray-900 dark:text-white hover:bg-gray-700 dark:hover:bg-gray-900 block px-3 py-2 rounded-md text-base font-medium"
-          >
-            + Add Cloth
-          </Link>
-          <Link
-            to="/collections"
-            className="text-gray-900 dark:text-white hover:bg-gray-700 dark:hover:bg-gray-900 block px-3 py-2 rounded-md text-base font-medium"
-          >
-            Collections
-          </Link>
-          <Link
-            to="/support"
-            className="text-gray-900 dark:text-white hover:bg-gray-700 dark:hover:bg-gray-900 block px-3 py-2 rounded-md text-base font-medium"
-          >
-            Support
-          </Link>
-
-          <ModeToggle />
-          {!isAuthenticated ? (
-            <Button
-              className="bg-gradient-to-r from-pink-500 to-purple-500 text-white font-bold py-3 px-6 rounded-md shadow-md hover:scale-105 transition duration-300"
-              size="sm"
-              onClick={() => navigate("/auth")}
-            >
-              Sign In
-            </Button>
-          ) : (
-            <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-4">
+            <SearchBar />
+            <ModeToggle />
+            <Notification />
+            {!isAuthenticated ? (
+              <Button
+                className="bg-primary text-primary-foreground hover:bg-primary/90"
+                size="sm"
+                onClick={() => navigate("/auth")}
+              >
+                Sign In
+              </Button>
+            ) : (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Avatar>
-                    <AvatarImage src={"profileUrl"} alt={userInfo?.username} />
-                    <AvatarFallback className="font-bold text-xl dark:bg-black bg-red-400 cursor-pointer">
-                      {userInfo?.username.split(" ")[0][0].toUpperCase()}
-                      {userInfo?.username.split(" ")[1]?.[0]?.toUpperCase()}
+                  <Avatar className="cursor-pointer">
+                    <AvatarImage
+                      src={userInfo?.profileUrl || ""}
+                      alt={userInfo?.username}
+                    />
+                    <AvatarFallback className="bg-primary text-primary-foreground">
+                      {userInfo?.username
+                        .split(" ")
+                        .map((n) => n[0])
+                        .join("")
+                        .toUpperCase()}
                     </AvatarFallback>
                   </Avatar>
                 </DropdownMenuTrigger>
@@ -269,57 +139,168 @@ export const Navbar: React.FunctionComponent = () => {
                   <DropdownMenuLabel>My Account</DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   <DropdownMenuGroup>
-                    <DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => navigate("/profile")}>
                       <User className="mr-2 h-4 w-4" />
-                      <Link to="/profile">Profile</Link>
-                      <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
+                      <span>Profile</span>
                     </DropdownMenuItem>
-
-                    <DropdownMenuItem
-                      className="space-x-2"
-                      onClick={handleWearAnalysis}
-                    >
-                      <TbBrandGoogleAnalytics size={26} color="green" />
+                    <DropdownMenuItem onClick={handleWearAnalysis}>
+                      <TbBrandGoogleAnalytics className="mr-2 h-4 w-4" />
                       <span>Wear Analysis</span>
-                      <DropdownMenuShortcut>⌘W</DropdownMenuShortcut>
                     </DropdownMenuItem>
                   </DropdownMenuGroup>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate("/support")}>
                     <LifeBuoy className="mr-2 h-4 w-4" />
-                    <Link to="/support">
-                      <span>Support</span>
-                    </Link>
+                    <span>Support</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate("/archive")}>
+                    <Archive className="mr-2 h-4 w-4" />
+                    <span>Archive</span>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={handleLogout}>
                     <LogOut className="mr-2 h-4 w-4" />
                     <span>
                       {Loading ? (
-                        <Loader2 className="h-6 w-6 animate-spin" />
+                        <Loader2 className="h-4 w-4 animate-spin" />
                       ) : (
                         "Log Out"
                       )}
                     </span>
-                    <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
-              <Button onClick={handleLogout}>
-                <LogOut className="mr-2 h-4 w-4" />
-                <span>
-                  {Loading ? (
-                    <Loader2 className="h-6 w-6 animate-spin" />
-                  ) : (
-                    "Log Out"
-                  )}
-                </span>
-              </Button>
-            </div>
-          )}
+            )}
+          </div>
         </div>
       </div>
     </nav>
   );
 };
+
+const MobileTabBar: React.FC = () => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  return (
+    <>
+      <nav className="fixed top-0 left-0 right-0 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-border z-40">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16">
+            <Link to="/" className="flex-shrink-0">
+              <img className="h-8 w-auto" src="/logo.svg" alt="Logo" />
+            </Link>
+            <div className="flex items-center">
+              <SearchBar />
+              <Button
+                variant="ghost"
+                size="icon"
+                className="ml-2"
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+              >
+                <Menu className="h-5 w-5" />
+              </Button>
+            </div>
+          </div>
+        </div>
+      </nav>
+      {isMenuOpen && (
+        <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50">
+          <div className="fixed inset-y-0 right-0 w-full max-w-sm bg-background p-6 shadow-lg">
+            <div className="flex flex-col h-full">
+              <div className="flex items-center justify-between mb-8">
+                <h2 className="text-lg font-semibold">Menu</h2>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  <X className="h-5 w-5" />
+                </Button>
+              </div>
+              <div className="flex-grow">
+                <Link
+                  to="/"
+                  className="flex items-center py-2 text-sm"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  <Home className="mr-3 h-4 w-4" />
+                  Home
+                </Link>
+                <Link
+                  to="/add"
+                  className="flex items-center py-2 text-sm"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  <PlusCircle className="mr-3 h-4 w-4" />
+                  Add Cloth
+                </Link>
+                <Link
+                  to="/collections"
+                  className="flex items-center py-2 text-sm"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  <Grid className="mr-3 h-4 w-4" />
+                  Collections
+                </Link>
+                <Link
+                  to="/support"
+                  className="flex items-center py-2 text-sm"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  <LifeBuoy className="mr-3 h-4 w-4" />
+                  Support
+                </Link>
+              </div>
+              <div>
+                <ModeToggle />
+                <Notification />
+                {/* Add user menu here */}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      <div className="fixed bottom-0 left-0 z-50 w-full h-16 bg-background border-t border-border">
+        <div className="grid h-full max-w-lg grid-cols-5 mx-auto">
+          <Link
+            to="/"
+            className="inline-flex flex-col items-center justify-center px-5 hover:bg-muted/50"
+          >
+            <Home className="w-5 h-5 mb-1 text-muted-foreground" />
+            <span className="text-xs text-muted-foreground">Home</span>
+          </Link>
+          <Link
+            to="/add"
+            className="inline-flex flex-col items-center justify-center px-5 hover:bg-muted/50"
+          >
+            <PlusCircle className="w-5 h-5 mb-1 text-muted-foreground" />
+            <span className="text-xs text-muted-foreground">Add</span>
+          </Link>
+          <Link
+            to="/collections"
+            className="inline-flex flex-col items-center justify-center px-5 hover:bg-muted/50"
+          >
+            <Grid className="w-5 h-5 mb-1 text-muted-foreground" />
+            <span className="text-xs text-muted-foreground">Collections</span>
+          </Link>
+          <Link
+            to="/support"
+            className="inline-flex flex-col items-center justify-center px-5 hover:bg-muted/50"
+          >
+            <LifeBuoy className="w-5 h-5 mb-1 text-muted-foreground" />
+            <span className="text-xs text-muted-foreground">Support</span>
+          </Link>
+          <Link
+            to="/profile"
+            className="inline-flex flex-col items-center justify-center px-5 hover:bg-muted/50"
+          >
+            <User className="w-5 h-5 mb-1 text-muted-foreground" />
+            <span className="text-xs text-muted-foreground">Profile</span>
+          </Link>
+        </div>
+      </div>
+    </>
+  );
+};
+
 export default Navbar;

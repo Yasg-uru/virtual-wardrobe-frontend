@@ -5,7 +5,7 @@ import { Outlet, useNavigate } from "react-router-dom";
 
 const RequireAuth: React.FC = () => {
   const { toast } = useToast();
-  const { isAuthenticated, AuthUser, isLoading } = useAuthContext();
+  const { isAuthenticated, isLoading } = useAuthContext();
   const navigate = useNavigate();
 
   useEffect(() => {

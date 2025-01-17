@@ -1,13 +1,12 @@
-
 import { useToast } from "@/components/ui/use-toast";
 
-import SkeletonCard from "@/helper/SkeletonCard";
 import { useAppDispatch, useAppSelector } from "@/redux/hook";
 import { GetRecommandedCloths } from "@/redux/slices/clothSlice";
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { ClothCard } from "@/helper/card";
+import { ClothCardSkeleton } from "@/helper/skeleton";
 
 const Home: React.FunctionComponent = () => {
   const [lat, setLat] = useState<number | null>(null);
@@ -45,15 +44,16 @@ const Home: React.FunctionComponent = () => {
   }, [lat, lon, isLocationSet, toast, dispatch]);
 
   return (
-    <div className="min-h-screen flex flex-col gap-4 p-5 bg-gradient-to-r from-blue-100 to-pink-100 dark:from-gray-900 dark:to-gray-800">
+    <div className="min-h-screen flex flex-col gap-4 p-5 dark:bg-black">
       <motion.h1
-        className="text-3xl font-bold text-red-600 text-center mb-4 dark:text-red-400"
-        initial={{ opacity: 0, y: -20 }}
+        className="text-3xl font-semibold text-white  mb-4"
+        initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
+        transition={{ duration: 0.3 }}
       >
         Recommended Clothes According to Weather
       </motion.h1>
+
       {isLoading ? (
         <div className="flex flex-wrap gap-2 mx-auto ">
           {Array.from({ length: 6 }).map((_, index) => (
@@ -64,7 +64,7 @@ const Home: React.FunctionComponent = () => {
               transition={{ duration: 0.4, delay: index * 0.1 }}
               className="flex-shrink-0"
             >
-              <SkeletonCard />
+              <ClothCardSkeleton />
             </motion.div>
           ))}
         </div>

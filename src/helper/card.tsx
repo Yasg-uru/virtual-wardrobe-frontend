@@ -13,7 +13,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Heart, Trash2, X, ChevronDown, Loader2 } from "lucide-react";
+import { Heart,  X, ChevronDown, Loader2 } from "lucide-react";
 import { IClothItem } from "@/types/clothState";
 import { useAppDispatch } from "@/redux/hook";
 import { WearCloth } from "@/redux/slices/clothSlice";
@@ -60,7 +60,7 @@ export function ClothCard({ cloth }: ClothCardProps) {
   if (cloth.isArchived) return null;
 
   return (
-    <Card className="w-full max-w-sm mx-auto overflow-hidden transition-all duration-300 transform hover:scale-105 hover:shadow-xl dark:bg-gray-800">
+    <Card className="w-full max-w-sm mx-auto overflow-hidden transition-all duration-300 transform hover:scale-105 hover:shadow-xl dark:bg-black">
       <div className="relative aspect-square">
         <img
           src={cloth.imageurl || "/placeholder.svg"}
@@ -77,7 +77,7 @@ export function ClothCard({ cloth }: ClothCardProps) {
           </div>
         )}
       </div>
-      <CardContent className="p-4">
+      <CardContent className="p-4 dark:bg-black">
         <h3 className="text-lg font-semibold mb-2 text-primary">
           {cloth.brand}
         </h3>
@@ -140,7 +140,7 @@ export function ClothCard({ cloth }: ClothCardProps) {
           )}
         </AnimatePresence>
       </CardContent>
-      <CardFooter className="p-4 bg-muted/50">
+      <CardFooter className="p-4 bg-muted/50 dark:bg-black">
         <div className="flex flex-wrap gap-2 mb-4">
           {cloth.tags.map((tag) => (
             <Badge key={tag} variant="secondary">
